@@ -3,6 +3,8 @@ Korzystając z PHP8 i Composera, zainstaluj zależności komendą
 `composer install`. Skopiuj plik .env do pliku .env.local i uzupełnij plik
 .env.local o dane swojej bazy danych (pod kluczem DATABASE_URL).
 
+By zapełnić bazę testowymi danymi, użyj polecenia app:fixtures:load.
+
 Po skonfigurowaniu aplikacji w ten sposób możesz uruchomić ją poleceniem
 `php -S 127.0.0.1:8000 -t public`. Aplikacja będzie wtedy dostępna pod adresem
 127.0.0.1, na porcie 8000.
