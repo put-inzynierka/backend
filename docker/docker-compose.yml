@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  nginx:
+    build: ./nginx
+    container_name: core-nginx
+    ports:
+      - ${APP_PORT}:80
+    volumes:
+      - ..:/var/www/vhosts/core
+      - ./nginx/core.conf:/etc/nginx/conf.d/core.conf
+    depends_on:
+      - php
+
+  php:
+    container_name: core-php
+    build: ./php
+    volumes:
+      - ..:/var/www/vhosts/core
+
+  postgres:
+    container_name: core-postgres
+    image: postgres:${POSTGRES_VERSION:-13}-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ChangeMe}
+      POSTGRES_USER: ${POSTGRES_USER:-symfony}
+    volumes:
+      - db-data:/var/lib/postgresql/data:rw
+    ports:
+      - "5432:5432"
+
+volumes:
+  db-data:
+
+networks:
+  default:
+    external:
+      name: core

@@ -1,0 +1,18 @@
+League\Bundle\OAuth2ServerBundle\Model\Grant:
+  password-grant:
+    __construct: ['password']
+
+League\Bundle\OAuth2ServerBundle\Model\Scope:
+  api-scope:
+    __construct: ['api']
+
+League\Bundle\OAuth2ServerBundle\Model\Client:
+  web:
+    __construct:
+      - 'web'
+      - 'd6d826494d65fd561e57af060abff898'
+      - '79d528a1143b170edcd0a648d2fb9956842ba84fa32867f2c7be64d49dbd24bb7212d6c10a4d46fdf54f2a0c34bf270cf0941124a82c4d3aceeff4da899be4ad'
+    grants: '@password-grant'
+    scopes: '@api-scope'
+    active: true
+    allow_plain_text_pkce: false

@@ -1,0 +1,39 @@
+league_oauth2_server:
+  authorization_server:
+
+    # How to generate a private key: https://oauth2.thephpleague.com/installation/#generating-public-and-private-keys
+    private_key: '%kernel.project_dir%/config/oauth_keys/private.key'
+    private_key_passphrase: null
+    encryption_key: '%env(OAUTH_ENCRYPTION_KEY)%'
+    encryption_key_type:  plain
+    access_token_ttl:     PT12H
+    refresh_token_ttl:    P1M
+    auth_code_ttl:        PT10M
+    enable_client_credentials_grant: false
+    enable_password_grant: true
+    enable_refresh_token_grant: true
+    enable_auth_code_grant: false
+    require_code_challenge_for_public_clients: false
+    persist_access_token: true
+
+  resource_server:
+
+    # How to generate a public key: https://oauth2.thephpleague.com/installation/#generating-public-and-private-keys
+    public_key: '%kernel.project_dir%/config/oauth_keys/public.key'
+
+  scopes:
+
+    available: ['api']
+    default: ['api']
+
+  persistence:
+
+    doctrine:
+      entity_manager:       default
+
+  # Set a custom prefix that replaces the default 'ROLE_OAUTH2_' role prefix
+  role_prefix:          ROLE_OAUTH2_
+
+  client:
+    # Set a custom client class. Must be a League\Bundle\OAuth2ServerBundle\Model\Client
+    classname:        League\Bundle\OAuth2ServerBundle\Model\Client

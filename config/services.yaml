@@ -1,0 +1,54 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+            - '../src/Repository/EntityRepository.php'
+
+    Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter: '@serializer.name_converter.camel_case_to_snake_case'
+
+    App\EventListener\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, priority: 64 }
+
+    App\EventListener\ClassMetadataListener:
+        tags:
+            - { name: doctrine.event_listener, event: loadClassMetadata, priority: 64 }
+
+    App\EventListener\KernelRequestListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 4 }
+
+    App\Command\LoadFixtures:
+        arguments:
+            $fixturesDirectory: '%kernel.project_dir%/fixtures'
+
+    App\Repository\RepositoryFactory:
+        arguments:
+            $container: '@service_container'
+
+    App\Repository\SecurityUserRepository: ~
+    League\OAuth2\Server\Repositories\UserRepositoryInterface: '@App\Repository\SecurityUserRepository'
+
+    League\Bundle\OAuth2ServerBundle\Security\Authenticator\OAuth2Authenticator:
+        arguments:
+            $httpMessageFactory: '@league.oauth2_server.factory.psr_http'
+            $userProvider: '@security.user.provider.concrete.app_user_provider'
+            $rolePrefix: 'ROLE_OAUTH2_'
