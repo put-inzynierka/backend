@@ -1,13 +1,17 @@
 ### Uruchamianie projektu
-Korzystając z PHP8 i Composera, zainstaluj zależności komendą
-`composer install`. Skopiuj plik .env do pliku .env.local i uzupełnij plik
-.env.local o dane swojej bazy danych (pod kluczem DATABASE_URL).
+Utwórz plik `.env.local` na podstawie pliku `.env` oraz plik `./docker/.env`
+na podstawie pliku `./docker/.env.dist`. Zbuduj kontenery dockerowe poleceniem
+`docker-compose up -d --build`.
 
-By zapełnić bazę testowymi danymi, użyj polecenia app:fixtures:load.
+Wewnątrz kontenera core-php (możesz do niego wejść poleceniem `docke exec -it
+core-php bash`), korzystając z PHP8 i Composera, zainstaluj zależności
+komendą `composer install`.
 
-Po skonfigurowaniu aplikacji w ten sposób możesz uruchomić ją poleceniem
-`php -S 127.0.0.1:8000 -t public`. Aplikacja będzie wtedy dostępna pod adresem
-127.0.0.1, na porcie 8000.
+By zapełnić bazę testowymi danymi, wykonaj wewnątrz kontenera polecenie
+`bin/console app:fixtures:load`.
+
+Po skonfigurowaniu aplikacji w ten sposób będziesz mieć do niej dostęp pod
+adresem 127.0.0.1, na porcie 8000.
 
 ### Zadanie
 Zapoznaj się z design patternem Factory, a następnie zaproponuj implementację
