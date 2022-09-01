@@ -43,7 +43,7 @@ class Key extends AbstractEntity
     ])]
     private Game $game;
 
-    #[ORM\ManyToOne(targetEntity: Game::class)]
+    #[ORM\ManyToOne(targetEntity: Platform::class)]
     #[ORM\JoinColumn]
     #[Groups([
         KeyGroups::SHOW,
