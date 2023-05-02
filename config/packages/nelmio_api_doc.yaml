@@ -2,8 +2,8 @@ nelmio_api_doc:
     models: { use_jms: false }
     documentation:
         info:
-            title: My App
-            description: This is an awesome app!
+            title: Game DB API
+            description: What an app!
             version: 1.0.0
     areas: # to filter documented areas
         path_patterns:

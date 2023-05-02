@@ -25,6 +25,10 @@ class KeyController extends AbstractController
         name: 'index_game_keys',
         requirements: ['id' => '\d+']
     )]
+    #[Param\Path(
+        name: 'id',
+        description: 'The ID of the game',
+    )]
     #[Param\Limit]
     #[Param\Page]
     #[ParamConverter(data: ['name' => 'game'], class: Game::class)]
@@ -58,6 +62,14 @@ class KeyController extends AbstractController
             'id' => '\d+'
         ]
     )]
+    #[Param\Path(
+        name: 'game_id',
+        description: 'The ID of the game',
+    )]
+    #[Param\Path(
+        name: 'id',
+        description: 'The ID of the key',
+    )]
     #[ParamConverter(data: ['name' => 'key'], class: Key::class)]
     #[Resp\ObjectResponse(
         description: 'Shows the specific key for the game',
@@ -76,6 +88,10 @@ class KeyController extends AbstractController
         path: '/games/{id}/keys',
         name: 'store_game_key',
         requirements: ['id' => '\d+']
+    )]
+    #[Param\Path(
+        name: 'id',
+        description: 'The ID of the game',
     )]
     #[Param\Instance(Key::class, KeyGroups::CREATE)]
     #[ParamConverter(data: ['name' => 'game'], class: Game::class)]
@@ -119,6 +135,14 @@ class KeyController extends AbstractController
             'id' => '\d+'
         ]
     )]
+    #[Param\Path(
+        name: 'game_id',
+        description: 'The ID of the game',
+    )]
+    #[Param\Path(
+        name: 'id',
+        description: 'The ID of the key',
+    )]
     #[Param\Instance(Key::class, KeyGroups::UPDATE)]
     #[ParamConverter(data: ['name' => 'game'], class: Game::class, options: ['id' => 'game_id'])]
     #[ParamConverter(data: ['name' => 'key'], class: Key::class)]
@@ -155,6 +179,14 @@ class KeyController extends AbstractController
             'game_id' => '\d+',
             'id' => '\d+'
         ]
+    )]
+    #[Param\Path(
+        name: 'game_id',
+        description: 'The ID of the game',
+    )]
+    #[Param\Path(
+        name: 'id',
+        description: 'The ID of the key',
     )]
     #[ParamConverter(data: ['name' => 'game'], class: Game::class, options: ['id' => 'game_id'])]
     #[ParamConverter(data: ['name' => 'key'], class: Key::class)]
