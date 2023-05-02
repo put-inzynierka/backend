@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Component\Attribute;
+namespace App\Component\Attribute\Param;
 
 use Attribute;
-use Symfony\Component\HttpFoundation\Request;
-use FOS\RestBundle\Validator\Constraints\Regex;
 use FOS\RestBundle\Controller\Annotations\ParamInterface;
+use FOS\RestBundle\Validator\Constraints\Regex;
+use Symfony\Component\HttpFoundation\Request;
 
 #[Attribute(Attribute::TARGET_METHOD)]
 class Limit extends Param implements ParamInterface

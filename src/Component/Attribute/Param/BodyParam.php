@@ -1,29 +1,23 @@
 <?php
 
-namespace App\Component\Attribute;
+namespace App\Component\Attribute\Param;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints\NotNull;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use FOS\RestBundle\Controller\Annotations\ParamInterface;
 use OpenApi\Attributes as OA;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
-abstract class Param extends OA\Parameter implements ParamInterface
+abstract class BodyParam extends OA\RequestBody implements ParamInterface
 {
     public function __construct(
-        string $name,
-        string $in,
+        protected string $name,
         string $description,
-        bool $required = false,
-        bool $allowEmptyValue = false,
-        protected $default = null
+        OA\Attachable $schema,
     ) {
         parent::__construct(
-            name: $name,
             description: $description,
-            in: $in,
-            required: $required,
-            allowEmptyValue: $allowEmptyValue,
+            attachables: [$schema],
         );
     }
     public function getName(): string
@@ -33,7 +27,7 @@ abstract class Param extends OA\Parameter implements ParamInterface
 
     public function getDefault(): mixed
     {
-        return $this->default;
+        return null;
     }
 
     public function getDescription(): string
@@ -66,8 +60,8 @@ abstract class Param extends OA\Parameter implements ParamInterface
         return false;
     }
 
-    public function getValue(Request $request, $default): mixed
+    public function getValue(Request $request, $default): string
     {
-        return $request->query->get($this->name, $default);
+        return $request->getContent() !== '' ? $request->getContent() : '{}';
     }
 }

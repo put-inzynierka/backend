@@ -7,6 +7,7 @@ use App\Enum\SerializationGroup\Game\GameGroups;
 use App\Enum\SerializationGroup\Game\KeyGroups;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Attributes\Property;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints;
@@ -28,6 +29,10 @@ class Platform extends AbstractEntity
         KeyGroups::INDEX,
         KeyGroups::SHOW,
     ])]
+    #[Property(
+        description: 'The name of the platform',
+        example: 'Steam',
+    )]
     private string $name;
 
     public function getName(): string

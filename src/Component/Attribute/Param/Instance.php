@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Component\Attribute;
+namespace App\Component\Attribute\Param;
 
 use Attribute;
+use FOS\RestBundle\Controller\Annotations\ParamInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\HttpFoundation\Request;
-use FOS\RestBundle\Controller\Annotations\ParamInterface;
 
 #[Attribute(Attribute::TARGET_METHOD)]
 class Instance extends BodyParam implements ParamInterface

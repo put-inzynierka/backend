@@ -6,6 +6,8 @@ use App\Entity\AbstractEntity;
 use App\Enum\SerializationGroup\Game\KeyGroups;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use OpenApi\Attributes\Property;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints;
@@ -26,6 +28,10 @@ class Key extends AbstractEntity
         KeyGroups::INDEX,
         KeyGroups::UPDATE,
     ])]
+    #[Property(
+        description: 'The value of the key',
+        example: 'AAAAA-BBBBB-CCCCC-DDDDD-EEEEE',
+    )]
     private string $value;
 
     #[ORM\Column(type: Types::BOOLEAN, length: 255)]
@@ -33,6 +39,10 @@ class Key extends AbstractEntity
         KeyGroups::SHOW,
         KeyGroups::INDEX,
     ])]
+    #[Property(
+        description: 'Whether the key has been redeemed',
+        example: false,
+    )]
     private bool $redeemed = false;
 
     #[ORM\ManyToOne(targetEntity: Game::class)]
@@ -41,6 +51,7 @@ class Key extends AbstractEntity
         KeyGroups::SHOW,
         KeyGroups::INDEX,
     ])]
+    #[Property(description: 'The game the key is for')]
     private Game $game;
 
     #[ORM\ManyToOne(targetEntity: Platform::class)]
@@ -49,6 +60,7 @@ class Key extends AbstractEntity
         KeyGroups::SHOW,
         KeyGroups::INDEX,
     ])]
+    #[Property(description: 'The platform the key is for')]
     private Platform $platform;
 
     public function getValue(): string

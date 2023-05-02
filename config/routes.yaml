@@ -9,9 +9,3 @@ kernel:
 oauth2:
     resource: '@LeagueOAuth2ServerBundle/Resources/config/routes.php'
     type: php
-
-app.swagger:
-    path: /api/doc.json
-    methods: GET
-    defaults: { _controller: nelmio_api_doc.controller.swagger }
-

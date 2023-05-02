@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use League\OAuth2\Server\Entities\UserEntityInterface;
+use OpenApi\Attributes\Property;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -32,6 +33,10 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
         UserGroups::INDEX,
         UserGroups::UPDATE,
     ])]
+    #[Property(
+        description: 'The email of the user',
+        example: 'test@gmail.com',
+    )]
     private string $email;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
@@ -42,6 +47,10 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
         UserGroups::CREATE,
         UserGroups::UPDATE,
     ])]
+    #[Property(
+        description: 'The password of the user',
+        example: 'password1',
+    )]
     private string $password;
 
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Game::class)]

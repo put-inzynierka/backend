@@ -2,7 +2,8 @@
 
 namespace App\Controller;
 
-use App\Component\Attribute as Param;
+use App\Component\Attribute\Param as Param;
+use App\Component\Attribute\Response as Resp;
 use App\Entity\Game\Game;
 use App\Enum\SerializationGroup\Game\GameGroups;
 use App\Helper\Paginator;
@@ -20,6 +21,11 @@ class GameController extends AbstractController
     #[Rest\Get(path: '/games', name: 'index_games')]
     #[Param\Limit]
     #[Param\Page]
+    #[Resp\PageResponse(
+        description: 'Returns the list of games',
+        class: Game::class,
+        group: GameGroups::INDEX,
+    )]
     public function index(
         ParamFetcherInterface $paramFetcher,
         RepositoryFactory $repositoryFactory
@@ -42,6 +48,11 @@ class GameController extends AbstractController
         requirements: ['id' => '\d+']
     )]
     #[ParamConverter(data: ['name' => 'game'], class: Game::class)]
+    #[Resp\ObjectResponse(
+        description: 'Returns the specific game',
+        class: Game::class,
+        group: GameGroups::SHOW,
+    )]
     public function show(
         Game $game
     ): Response {
@@ -50,6 +61,12 @@ class GameController extends AbstractController
 
     #[Rest\Post(path: '/games', name: 'store_game')]
     #[Param\Instance(Game::class, GameGroups::CREATE)]
+    #[Resp\ObjectResponse(
+        description: 'Creates a new game',
+        class: Game::class,
+        group: GameGroups::SHOW,
+        status: 201,
+    )]
     public function store(
         Instantiator $instantiator,
         ParamFetcherInterface $paramFetcher,
@@ -82,6 +99,11 @@ class GameController extends AbstractController
     )]
     #[Param\Instance(Game::class, GameGroups::UPDATE)]
     #[ParamConverter(data: ['name' => 'game'], class: Game::class)]
+    #[Resp\ObjectResponse(
+        description: 'Updates the specific game',
+        class: Game::class,
+        group: GameGroups::SHOW,
+    )]
     public function update(
         Instantiator $instantiator,
         ParamFetcherInterface $paramFetcher,
@@ -109,6 +131,10 @@ class GameController extends AbstractController
         requirements: ['id' => '\d+']
     )]
     #[ParamConverter(data: ['name' => 'game'], class: Game::class)]
+    #[Resp\EmptyResponse(
+        description: 'Removes the specific game',
+        status: 204,
+    )]
     public function remove(
         EntityManagerInterface $manager,
         Game $game

@@ -8,6 +8,7 @@ use App\Enum\SerializationGroup\Game\GameGroups;
 use App\Enum\SerializationGroup\Game\KeyGroups;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Attributes\Property;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints;
@@ -27,6 +28,10 @@ class Game extends AbstractEntity
         GameGroups::INDEX,
         GameGroups::UPDATE,
     ])]
+    #[Property(
+        description: 'The Steam ID of the game',
+        example: 1792250,
+    )]
     private int $steamId;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
@@ -45,6 +50,10 @@ class Game extends AbstractEntity
         KeyGroups::INDEX,
         KeyGroups::SHOW,
     ])]
+    #[Property(
+        description: 'The name of the game',
+        example: 'Team Fortress 2',
+    )]
     private string $name;
 
     public function getSteamId(): int

@@ -2,7 +2,8 @@
 
 namespace App\Controller\Game;
 
-use App\Component\Attribute as Param;
+use App\Component\Attribute\Param as Param;
+use App\Component\Attribute\Response as Resp;
 use App\Controller\AbstractController;
 use App\Entity\Game\Game;
 use App\Entity\Game\Key;
@@ -27,6 +28,11 @@ class KeyController extends AbstractController
     #[Param\Limit]
     #[Param\Page]
     #[ParamConverter(data: ['name' => 'game'], class: Game::class)]
+    #[Resp\PageResponse(
+        description: 'Returns the list of keys for the game',
+        class: Key::class,
+        group: KeyGroups::INDEX,
+    )]
     public function index(
         ParamFetcherInterface $paramFetcher,
         KeyRepository $repository,
@@ -53,10 +59,16 @@ class KeyController extends AbstractController
         ]
     )]
     #[ParamConverter(data: ['name' => 'key'], class: Key::class)]
+    #[Resp\ObjectResponse(
+        description: 'Shows the specific key for the game',
+        class: Key::class,
+        group: KeyGroups::SHOW,
+    )]
     public function show(
         Key $key
     ): Response {
         $this->denyAccessUnlessGranted(Qualifier::HAS_ACCESS, $key);
+
         return $this->object($key, groups: KeyGroups::SHOW);
     }
 
@@ -67,6 +79,12 @@ class KeyController extends AbstractController
     )]
     #[Param\Instance(Key::class, KeyGroups::CREATE)]
     #[ParamConverter(data: ['name' => 'game'], class: Game::class)]
+    #[Resp\ObjectResponse(
+        description: 'Creates a new key for the game',
+        class: Key::class,
+        group: KeyGroups::SHOW,
+        status: 201,
+    )]
     public function store(
         Instantiator $instantiator,
         ParamFetcherInterface $paramFetcher,
@@ -104,6 +122,11 @@ class KeyController extends AbstractController
     #[Param\Instance(Key::class, KeyGroups::UPDATE)]
     #[ParamConverter(data: ['name' => 'game'], class: Game::class, options: ['id' => 'game_id'])]
     #[ParamConverter(data: ['name' => 'key'], class: Key::class)]
+    #[Resp\ObjectResponse(
+        description: 'Updates the specific key for the game',
+        class: Key::class,
+        group: KeyGroups::SHOW,
+    )]
     public function update(
         Instantiator $instantiator,
         ParamFetcherInterface $paramFetcher,
@@ -135,6 +158,9 @@ class KeyController extends AbstractController
     )]
     #[ParamConverter(data: ['name' => 'game'], class: Game::class, options: ['id' => 'game_id'])]
     #[ParamConverter(data: ['name' => 'key'], class: Key::class)]
+    #[Resp\EmptyResponse(
+        description: 'Removes the specific key for the game',
+    )]
     public function remove(
         EntityManagerInterface $manager,
         Game $game,
