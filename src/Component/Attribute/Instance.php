@@ -3,21 +3,22 @@
 namespace App\Component\Attribute;
 
 use Attribute;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations\ParamInterface;
 
 #[Attribute(Attribute::TARGET_METHOD)]
-class Instance extends Param implements ParamInterface
+class Instance extends BodyParam implements ParamInterface
 {
-    public function __construct()
+    public function __construct(string $class, string $group)
     {
         parent::__construct(
-            'instance',
-            'body',
+            $class,
             'Describes object present in body',
-            false,
-            true,
-            '{}'
+            new Model(
+                type: $class,
+                groups: [$group]
+            )
         );
     }
 
@@ -28,6 +29,6 @@ class Instance extends Param implements ParamInterface
 
     public function getValue(Request $request, $default): string
     {
-        return $request->getContent() !== '' ? $request->getContent() : $this->default;
+        return $request->getContent() !== '' ? $request->getContent() : '';
     }
 }

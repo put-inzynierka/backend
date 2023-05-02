@@ -16,9 +16,7 @@ class Page extends Param implements ParamInterface
             'page',
             'query',
             'Defines list\'s page index',
-            false,
-            false,
-            1
+            default: 1
         );
     }
 

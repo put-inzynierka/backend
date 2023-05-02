@@ -16,7 +16,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class UserController extends AbstractController
 {
     #[Rest\Post(path: '/user', name: 'store_user')]
-    #[Param\Instance]
+    #[Param\Instance(User::class, UserGroups::CREATE)]
     public function store(
         Instantiator $instantiator,
         ParamFetcherInterface $paramFetcher,

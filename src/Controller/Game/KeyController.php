@@ -32,7 +32,7 @@ class KeyController extends AbstractController
         KeyRepository $repository,
         Game $game
     ): Response {
-        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $game);
+//        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $game);
         $list = $repository->indexByGame($game);
 
         $page = Paginator::paginate(
@@ -65,7 +65,7 @@ class KeyController extends AbstractController
         name: 'store_game_key',
         requirements: ['id' => '\d+']
     )]
-    #[Param\Instance]
+    #[Param\Instance(Key::class, KeyGroups::CREATE)]
     #[ParamConverter(data: ['name' => 'game'], class: Game::class)]
     public function store(
         Instantiator $instantiator,
@@ -101,7 +101,7 @@ class KeyController extends AbstractController
             'id' => '\d+'
         ]
     )]
-    #[Param\Instance]
+    #[Param\Instance(Key::class, KeyGroups::UPDATE)]
     #[ParamConverter(data: ['name' => 'game'], class: Game::class, options: ['id' => 'game_id'])]
     #[ParamConverter(data: ['name' => 'key'], class: Key::class)]
     public function update(

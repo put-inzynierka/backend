@@ -13,12 +13,10 @@ class Limit extends Param implements ParamInterface
     public function __construct()
     {
         parent::__construct(
-            'limit',
-            'query',
-            'Defines list\'s on-page limit',
-            false,
-            false,
-            10
+            name: 'limit',
+            in: 'query',
+            description: 'Defines list\'s on-page limit',
+            default: 10
         );
     }
 

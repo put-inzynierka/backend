@@ -49,7 +49,7 @@ class GameController extends AbstractController
     }
 
     #[Rest\Post(path: '/games', name: 'store_game')]
-    #[Param\Instance]
+    #[Param\Instance(Game::class, GameGroups::CREATE)]
     public function store(
         Instantiator $instantiator,
         ParamFetcherInterface $paramFetcher,
@@ -80,7 +80,7 @@ class GameController extends AbstractController
         name: 'update_game',
         requirements: ['id' => '\d+']
     )]
-    #[Param\Instance]
+    #[Param\Instance(Game::class, GameGroups::UPDATE)]
     #[ParamConverter(data: ['name' => 'game'], class: Game::class)]
     public function update(
         Instantiator $instantiator,
