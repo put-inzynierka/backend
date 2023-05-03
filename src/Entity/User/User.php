@@ -3,10 +3,7 @@
 namespace App\Entity\User;
 
 use App\Entity\AbstractEntity;
-use App\Entity\Game\Game;
 use App\Enum\SerializationGroup\User\UserGroups;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use League\OAuth2\Server\Entities\UserEntityInterface;
@@ -53,14 +50,6 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     )]
     private string $password;
 
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Game::class)]
-    private Collection $ownedGames;
-
-    public function __construct()
-    {
-        $this->ownedGames = new ArrayCollection();
-    }
-
     public function getEmail(): string
     {
         return $this->email;
@@ -88,18 +77,6 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     public function getIdentifier(): string
     {
         return $this->email;
-    }
-
-    public function getOwnedGames(): Collection
-    {
-        return $this->ownedGames;
-    }
-
-    public function setOwnedGames(Collection $games): self
-    {
-        $this->ownedGames = $games;
-
-        return $this;
     }
 
     public function getRoles(): array

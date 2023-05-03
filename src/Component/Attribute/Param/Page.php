@@ -15,7 +15,7 @@ class Page extends Param implements ParamInterface
         parent::__construct(
             'page',
             'query',
-            'Defines list\'s page index',
+            'Defines list\'s page index. If 0, returns all items.',
             default: 1
         );
     }

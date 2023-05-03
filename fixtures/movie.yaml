@@ -1,0 +1,92 @@
+
+App\Entity\Movie\Genre:
+  action:
+    name: "Action"
+  adventure:
+    name: "Adventure"
+  comedy:
+    name: "Comedy"
+  drama:
+    name: "Drama"
+  horror:
+    name: "Horror"
+  thriller:
+    name: "Thriller"
+
+App\Entity\Person\Person:
+  james-cameron:
+    firstName: "James"
+    lastName: "Cameron"
+  sam-worthington:
+    firstName: "Sam"
+    lastName: "Worthington"
+  zoe-saldana:
+    firstName: "Zoe"
+    lastName: "Saldana"
+  sigourney-weaver:
+    firstName: "Sigourney"
+    lastName: "Weaver"
+  stephen-lang:
+    firstName: "Stephen"
+    lastName: "Lang"
+  joseph-kosinski:
+    firstName: "Joseph"
+    lastName: "Kosinski"
+  tom-cruise:
+    firstName: "Tom"
+    lastName: "Cruise"
+  val-kilmer:
+    firstName: "Val"
+    lastName: "Kilmer"
+  miles-teller:
+    firstName: "Miles"
+    lastName: "Teller"
+  jennifer-connelly:
+    firstName: "Jennifer"
+    lastName: "Connelly"
+
+App\Entity\Movie\Movie:
+  avatar-2:
+    title: "Avatar: The Way of Water"
+    year: "2022"
+    genre: "@adventure"
+    director: "@james-cameron"
+  top-gun-2:
+    title: "Top Gun: Maverick"
+    year: "2021"
+    genre: "@action"
+    director: "@joseph-kosinski"
+
+App\Entity\Movie\Role:
+  jake-sully:
+    movie: "@avatar-2"
+    person: "@sam-worthington"
+    role: "Jake Sully"
+  neytiri:
+    movie: "@avatar-2"
+    person: "@zoe-saldana"
+    role: "Neytiri"
+  grace-augustine:
+    movie: "@avatar-2"
+    person: "@sigourney-weaver"
+    role: "Grace Augustine"
+  colonel-miles-quaritch:
+    movie: "@avatar-2"
+    person: "@stephen-lang"
+    role: "Colonel Miles Quaritch"
+  maverick:
+    movie: "@top-gun-2"
+    person: "@tom-cruise"
+    role: "Maverick"
+  iceman:
+    movie: "@top-gun-2"
+    person: "@val-kilmer"
+    role: "Iceman"
+  rooster:
+    movie: "@top-gun-2"
+    person: "@miles-teller"
+    role: "Rooster"
+  penny-benjamin:
+    movie: "@top-gun-2"
+    person: "@jennifer-connelly"
+    role: "Penny Benjamin"
