@@ -15,7 +15,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
 {
-    #[Rest\Post(path: '/user', name: 'store_user')]
+    #[Rest\Post(path: '/api/user', name: 'store_user')]
     #[Param\Instance(User::class, UserGroups::CREATE)]
     #[Resp\ObjectResponse(
         description: 'Creates a new user',

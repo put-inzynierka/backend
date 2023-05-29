@@ -20,13 +20,13 @@ use Symfony\Component\HttpFoundation\Response;
 class RoleController extends AbstractController
 {
     #[Rest\Get(
-        path: '/movies/{id}/cast',
+        path: '/api/movies/{id}/cast',
         name: 'index_movie_cast',
         requirements: ['id' => '\d+']
     )]
     #[Param\Path(
         name: 'id',
-        description: 'The ID of the game',
+        description: 'The ID of the movie',
     )]
     #[Param\Limit]
     #[Param\Page]
@@ -53,7 +53,7 @@ class RoleController extends AbstractController
     }
 
     #[Rest\Get(
-        path: '/movies/{movie_id}/cast/{id}',
+        path: '/api/movies/{movie_id}/cast/{id}',
         name: 'show_movie_cast_member',
         requirements: [
             'movie_id' => '\d+',
@@ -83,7 +83,7 @@ class RoleController extends AbstractController
     }
 
     #[Rest\Post(
-        path: '/movies/{id}/cast',
+        path: '/api/movies/{id}/cast',
         name: 'store_movie_cast_member',
         requirements: ['id' => '\d+']
     )]
@@ -126,7 +126,7 @@ class RoleController extends AbstractController
     }
 
     #[Rest\Patch(
-        path: '/movies/{movie_id}/cast/{id}',
+        path: '/api/movies/{movie_id}/cast/{id}',
         name: 'update_movie_cast_member',
         requirements: [
             'movie_id' => '\d+',
@@ -171,7 +171,7 @@ class RoleController extends AbstractController
     }
 
     #[Rest\Delete(
-        path: '/movies/{movie_id}/cast/{id}',
+        path: '/api/movies/{movie_id}/cast/{id}',
         name: 'remove_movie_cast_member',
         requirements: [
             'movie_id' => '\d+',

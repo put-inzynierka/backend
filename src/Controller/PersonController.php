@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PersonController extends AbstractController
 {
-    #[Rest\Get(path: '/people', name: 'index_people')]
+    #[Rest\Get(path: '/api/people', name: 'index_people')]
     #[Param\Limit]
     #[Param\Page]
     #[Resp\PageResponse(
@@ -42,7 +42,7 @@ class PersonController extends AbstractController
     }
 
     #[Rest\Get(
-        path: '/people/{id}',
+        path: '/api/people/{id}',
         name: 'show_person',
         requirements: ['id' => '\d+']
     )]
@@ -59,7 +59,7 @@ class PersonController extends AbstractController
         return $this->object($person, groups: PersonGroups::SHOW);
     }
 
-    #[Rest\Post(path: '/people', name: 'store_person')]
+    #[Rest\Post(path: '/api/people', name: 'store_person')]
     #[Param\Instance(Person::class, PersonGroups::CREATE)]
     #[Resp\ObjectResponse(
         description: 'Creates a new person',
@@ -92,7 +92,7 @@ class PersonController extends AbstractController
     }
 
     #[Rest\Patch(
-        path: '/people/{id}',
+        path: '/api/people/{id}',
         name: 'update_person',
         requirements: ['id' => '\d+']
     )]
@@ -126,7 +126,7 @@ class PersonController extends AbstractController
     }
 
     #[Rest\Delete(
-        path: '/people/{id}',
+        path: '/api/people/{id}',
         name: 'remove_person',
         requirements: ['id' => '\d+']
     )]

@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MovieController extends AbstractController
 {
-    #[Rest\Get(path: '/movies', name: 'index_movies')]
+    #[Rest\Get(path: '/api/movies', name: 'index_movies')]
     #[Param\Limit]
     #[Param\Page]
     #[Resp\PageResponse(
@@ -42,7 +42,7 @@ class MovieController extends AbstractController
     }
 
     #[Rest\Get(
-        path: '/movies/{id}',
+        path: '/api/movies/{id}',
         name: 'show_movie',
         requirements: ['id' => '\d+']
     )]
@@ -59,7 +59,7 @@ class MovieController extends AbstractController
         return $this->object($movie, groups: MovieGroups::SHOW);
     }
 
-    #[Rest\Post(path: '/movies', name: 'store_movie')]
+    #[Rest\Post(path: '/api/movies', name: 'store_movie')]
     #[Param\Instance(Movie::class, MovieGroups::CREATE)]
     #[Resp\ObjectResponse(
         description: 'Creates a new movie',
@@ -92,7 +92,7 @@ class MovieController extends AbstractController
     }
 
     #[Rest\Patch(
-        path: '/movies/{id}',
+        path: '/api/movies/{id}',
         name: 'update_movie',
         requirements: ['id' => '\d+']
     )]
@@ -126,7 +126,7 @@ class MovieController extends AbstractController
     }
 
     #[Rest\Delete(
-        path: '/movies/{id}',
+        path: '/api/movies/{id}',
         name: 'remove_movie',
         requirements: ['id' => '\d+']
     )]

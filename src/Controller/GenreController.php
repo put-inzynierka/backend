@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class GenreController extends AbstractController
 {
-    #[Rest\Get(path: '/genres', name: 'index_genres')]
+    #[Rest\Get(path: '/api/genres', name: 'index_genres')]
     #[Param\Limit]
     #[Param\Page]
     #[Resp\PageResponse(
@@ -42,7 +42,7 @@ class GenreController extends AbstractController
     }
 
     #[Rest\Get(
-        path: '/genres/{id}',
+        path: '/api/genres/{id}',
         name: 'show_genre',
         requirements: ['id' => '\d+']
     )]
@@ -59,7 +59,7 @@ class GenreController extends AbstractController
         return $this->object($genre, groups: GenreGroups::SHOW);
     }
 
-    #[Rest\Post(path: '/genres', name: 'store_genre')]
+    #[Rest\Post(path: '/api/genres', name: 'store_genre')]
     #[Param\Instance(Genre::class, GenreGroups::CREATE)]
     #[Resp\ObjectResponse(
         description: 'Creates a new genre',
@@ -92,7 +92,7 @@ class GenreController extends AbstractController
     }
 
     #[Rest\Patch(
-        path: '/genres/{id}',
+        path: '/api/genres/{id}',
         name: 'update_genre',
         requirements: ['id' => '\d+']
     )]
@@ -126,7 +126,7 @@ class GenreController extends AbstractController
     }
 
     #[Rest\Delete(
-        path: '/genres/{id}',
+        path: '/api/genres/{id}',
         name: 'remove_genre',
         requirements: ['id' => '\d+']
     )]
