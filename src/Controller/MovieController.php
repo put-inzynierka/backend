@@ -14,10 +14,12 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
+use OpenApi\Attributes\Tag;
 
 class MovieController extends AbstractController
 {
-    #[Rest\Get(path: '/api/movies', name: 'index_movies')]
+    #[Rest\Get(path: '/movies', name: 'index_movies')]
+    #[Tag('Movie')]
     #[Param\Limit]
     #[Param\Page]
     #[Resp\PageResponse(
@@ -42,10 +44,11 @@ class MovieController extends AbstractController
     }
 
     #[Rest\Get(
-        path: '/api/movies/{id}',
+        path: '/movies/{id}',
         name: 'show_movie',
         requirements: ['id' => '\d+']
     )]
+    #[Tag('Movie')]
     #[Param\Path('id', description: 'The ID of the movie')]
     #[ParamConverter(data: ['name' => 'movie'], class: Movie::class)]
     #[Resp\ObjectResponse(
@@ -59,7 +62,8 @@ class MovieController extends AbstractController
         return $this->object($movie, groups: MovieGroups::SHOW);
     }
 
-    #[Rest\Post(path: '/api/movies', name: 'store_movie')]
+    #[Rest\Post(path: '/movies', name: 'store_movie')]
+    #[Tag('Movie')]
     #[Param\Instance(Movie::class, MovieGroups::CREATE)]
     #[Resp\ObjectResponse(
         description: 'Creates a new movie',
@@ -92,10 +96,11 @@ class MovieController extends AbstractController
     }
 
     #[Rest\Patch(
-        path: '/api/movies/{id}',
+        path: '/movies/{id}',
         name: 'update_movie',
         requirements: ['id' => '\d+']
     )]
+    #[Tag('Movie')]
     #[Param\Path('id', description: 'The ID of the movie')]
     #[Param\Instance(Movie::class, MovieGroups::UPDATE)]
     #[ParamConverter(data: ['name' => 'movie'], class: Movie::class)]
@@ -126,10 +131,11 @@ class MovieController extends AbstractController
     }
 
     #[Rest\Delete(
-        path: '/api/movies/{id}',
+        path: '/movies/{id}',
         name: 'remove_movie',
         requirements: ['id' => '\d+']
     )]
+    #[Tag('Movie')]
     #[Param\Path('id', description: 'The ID of the movie')]
     #[ParamConverter(data: ['name' => 'movie'], class: Movie::class)]
     #[Resp\EmptyResponse(

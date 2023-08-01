@@ -14,10 +14,12 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
+use OpenApi\Attributes\Tag;
 
 class GenreController extends AbstractController
 {
-    #[Rest\Get(path: '/api/genres', name: 'index_genres')]
+    #[Rest\Get(path: '/genres', name: 'index_genres')]
+    #[Tag('Genre')]
     #[Param\Limit]
     #[Param\Page]
     #[Resp\PageResponse(
@@ -42,10 +44,11 @@ class GenreController extends AbstractController
     }
 
     #[Rest\Get(
-        path: '/api/genres/{id}',
+        path: '/genres/{id}',
         name: 'show_genre',
         requirements: ['id' => '\d+']
     )]
+    #[Tag('Genre')]
     #[Param\Path('id', description: 'The ID of the genre')]
     #[ParamConverter(data: ['name' => 'genre'], class: Genre::class)]
     #[Resp\ObjectResponse(
@@ -59,7 +62,8 @@ class GenreController extends AbstractController
         return $this->object($genre, groups: GenreGroups::SHOW);
     }
 
-    #[Rest\Post(path: '/api/genres', name: 'store_genre')]
+    #[Rest\Post(path: '/genres', name: 'store_genre')]
+    #[Tag('Genre')]
     #[Param\Instance(Genre::class, GenreGroups::CREATE)]
     #[Resp\ObjectResponse(
         description: 'Creates a new genre',
@@ -92,10 +96,11 @@ class GenreController extends AbstractController
     }
 
     #[Rest\Patch(
-        path: '/api/genres/{id}',
+        path: '/genres/{id}',
         name: 'update_genre',
         requirements: ['id' => '\d+']
     )]
+    #[Tag('Genre')]
     #[Param\Path('id', description: 'The ID of the genre')]
     #[Param\Instance(Genre::class, GenreGroups::UPDATE)]
     #[ParamConverter(data: ['name' => 'genre'], class: Genre::class)]
@@ -126,10 +131,11 @@ class GenreController extends AbstractController
     }
 
     #[Rest\Delete(
-        path: '/api/genres/{id}',
+        path: '/genres/{id}',
         name: 'remove_genre',
         requirements: ['id' => '\d+']
     )]
+    #[Tag('Genre')]
     #[Param\Path('id', description: 'The ID of the genre')]
     #[ParamConverter(data: ['name' => 'genre'], class: Genre::class)]
     #[Resp\EmptyResponse(

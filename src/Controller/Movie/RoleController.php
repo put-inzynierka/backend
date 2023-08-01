@@ -16,14 +16,16 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
+use OpenApi\Attributes\Tag;
 
 class RoleController extends AbstractController
 {
     #[Rest\Get(
-        path: '/api/movies/{id}/cast',
+        path: '/movies/{id}/cast',
         name: 'index_movie_cast',
-        requirements: ['id' => '\d+']
+        requirements: ['id' => '\d+'],
     )]
+    #[Tag('Movie')]
     #[Param\Path(
         name: 'id',
         description: 'The ID of the movie',
@@ -53,13 +55,14 @@ class RoleController extends AbstractController
     }
 
     #[Rest\Get(
-        path: '/api/movies/{movie_id}/cast/{id}',
+        path: '/movies/{movie_id}/cast/{id}',
         name: 'show_movie_cast_member',
         requirements: [
             'movie_id' => '\d+',
             'id' => '\d+'
         ]
     )]
+    #[Tag('Movie')]
     #[Param\Path(
         name: 'movie_id',
         description: 'The ID of the movie',
@@ -83,10 +86,11 @@ class RoleController extends AbstractController
     }
 
     #[Rest\Post(
-        path: '/api/movies/{id}/cast',
+        path: '/movies/{id}/cast',
         name: 'store_movie_cast_member',
         requirements: ['id' => '\d+']
     )]
+    #[Tag('Movie')]
     #[Param\Path(
         name: 'id',
         description: 'The ID of the movie',
@@ -126,13 +130,14 @@ class RoleController extends AbstractController
     }
 
     #[Rest\Patch(
-        path: '/api/movies/{movie_id}/cast/{id}',
+        path: '/movies/{movie_id}/cast/{id}',
         name: 'update_movie_cast_member',
         requirements: [
             'movie_id' => '\d+',
             'id' => '\d+'
         ]
     )]
+    #[Tag('Movie')]
     #[Param\Path(
         name: 'movie_id',
         description: 'The ID of the movie',
@@ -171,13 +176,14 @@ class RoleController extends AbstractController
     }
 
     #[Rest\Delete(
-        path: '/api/movies/{movie_id}/cast/{id}',
+        path: '/movies/{movie_id}/cast/{id}',
         name: 'remove_movie_cast_member',
         requirements: [
             'movie_id' => '\d+',
             'id' => '\d+'
         ]
     )]
+    #[Tag('Movie')]
     #[Param\Path(
         name: 'movie_id',
         description: 'The ID of the movie',

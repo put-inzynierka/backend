@@ -14,10 +14,12 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
+use OpenApi\Attributes\Tag;
 
 class PersonController extends AbstractController
 {
-    #[Rest\Get(path: '/api/people', name: 'index_people')]
+    #[Rest\Get(path: '/people', name: 'index_people')]
+    #[Tag('Person')]
     #[Param\Limit]
     #[Param\Page]
     #[Resp\PageResponse(
@@ -42,10 +44,11 @@ class PersonController extends AbstractController
     }
 
     #[Rest\Get(
-        path: '/api/people/{id}',
+        path: '/people/{id}',
         name: 'show_person',
         requirements: ['id' => '\d+']
     )]
+    #[Tag('Person')]
     #[Param\Path('id', description: 'The ID of the person')]
     #[ParamConverter(data: ['name' => 'person'], class: Person::class)]
     #[Resp\ObjectResponse(
@@ -59,7 +62,8 @@ class PersonController extends AbstractController
         return $this->object($person, groups: PersonGroups::SHOW);
     }
 
-    #[Rest\Post(path: '/api/people', name: 'store_person')]
+    #[Rest\Post(path: '/people', name: 'store_person')]
+    #[Tag('Person')]
     #[Param\Instance(Person::class, PersonGroups::CREATE)]
     #[Resp\ObjectResponse(
         description: 'Creates a new person',
@@ -92,10 +96,11 @@ class PersonController extends AbstractController
     }
 
     #[Rest\Patch(
-        path: '/api/people/{id}',
+        path: '/people/{id}',
         name: 'update_person',
         requirements: ['id' => '\d+']
     )]
+    #[Tag('Person')]
     #[Param\Path('id', description: 'The ID of the person')]
     #[Param\Instance(Person::class, PersonGroups::UPDATE)]
     #[ParamConverter(data: ['name' => 'person'], class: Person::class)]
@@ -126,10 +131,11 @@ class PersonController extends AbstractController
     }
 
     #[Rest\Delete(
-        path: '/api/people/{id}',
+        path: '/people/{id}',
         name: 'remove_person',
         requirements: ['id' => '\d+']
     )]
+    #[Tag('Person')]
     #[Param\Path('id', description: 'The ID of the person')]
     #[ParamConverter(data: ['name' => 'person'], class: Person::class)]
     #[Resp\EmptyResponse(
