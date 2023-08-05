@@ -34,6 +34,8 @@ class Stand extends AbstractEntity
     private string $name;
 
     #[ORM\Column(type: Types::STRING, enumType: StandType::class)]
+    #[Constraints\NotBlank(allowNull: false, groups: [StandGroups::CREATE])]
+    #[Constraints\Choice(callback: [StandType::class, 'cases'])]
     #[Groups([
         StandGroups::CREATE,
         StandGroups::SHOW,
