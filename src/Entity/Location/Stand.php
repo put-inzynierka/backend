@@ -42,6 +42,11 @@ class Stand extends AbstractEntity
         StandGroups::INDEX,
         StandGroups::UPDATE,
     ])]
+    #[Property(
+        description: 'The type of the stand',
+        enum: ['stand', 'stage'],
+        example: 'stand',
+    )]
     private StandType $type;
 
     #[ORM\ManyToOne(targetEntity: Location::class, inversedBy: 'stands')]
