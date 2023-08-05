@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use OpenApi\Attributes\Tag;
 
@@ -75,13 +76,14 @@ class LocationController extends AbstractController
     public function store(
         Instantiator $instantiator,
         ParamFetcherInterface $paramFetcher,
-        EntityManagerInterface $manager
+        EntityManagerInterface $manager,
+        Request $request
     ): Response {
 //        $this->denyAccessUnlessGranted(Qualifier::IS_AUTHENTICATED);
 
         /** @var Location $location */
         $location = $instantiator->deserialize(
-            $paramFetcher->get('instance'),
+            $request->getContent(),
             Location::class,
             LocationGroups::CREATE
         );
