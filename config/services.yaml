@@ -32,6 +32,10 @@ services:
         tags:
             - { name: doctrine.event_listener, event: loadClassMetadata, priority: 64 }
 
+    App\EventListener\TokenRequestListener:
+        tags:
+            - { name: kernel.event_listener, event: league.oauth2_server.event.token_request_resolve, priority: 64, method: onTokenRequestResolve }
+
     App\EventListener\KernelRequestListener:
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 4 }
