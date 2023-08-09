@@ -1,8 +1,12 @@
 App\Entity\User\User:
   user:
     email: 'user@gmail.com'
+    firstName: 'Adam'
+    lastName: 'Małysz'
     password: '\$2y\$13\$hURxRm.99HmUBhSVjIVHL.ZAVuhprFaW9bHhgIKgbOdYLVG6k66lu' # "haslo"
 
   developer:
     email: 'developer@gmail.com'
+    firstName: 'Mariusz'
+    lastName: 'Pudzianowski'
     password: '\$2y\$13\$ECTrpbhjAvikvDhKc44lc.ZKspApwvNXGw45sb4v/XEQopLDdqBZa'
