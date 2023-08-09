@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use OpenApi\Attributes\Tag;
 
@@ -105,7 +106,7 @@ class RoleController extends AbstractController
     )]
     public function store(
         Instantiator $instantiator,
-        ParamFetcherInterface $paramFetcher,
+        Request $request,
         EntityManagerInterface $manager,
         Movie $movie
     ): Response {
@@ -113,7 +114,7 @@ class RoleController extends AbstractController
 
         /** @var Role $role */
         $role = $instantiator->deserialize(
-            $paramFetcher->get('instance'),
+            $request->getContent(),
             Role::class,
             RoleGroups::CREATE
         );
@@ -156,14 +157,14 @@ class RoleController extends AbstractController
     )]
     public function update(
         Instantiator $instantiator,
-        ParamFetcherInterface $paramFetcher,
+        Request $request,
         EntityManagerInterface $manager,
         Movie $movie,
         Role $role
     ): Response {
 //        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $movie);
         $role = $instantiator->deserialize(
-            $paramFetcher->get('instance'),
+            $request->getContent(),
             Role::class,
              RoleGroups::UPDATE,
             $role

@@ -11,6 +11,7 @@ use App\Service\User\RegistrationService;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use OpenApi\Attributes\Tag;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends AbstractController
@@ -26,12 +27,12 @@ class UserController extends AbstractController
     )]
     public function store(
         Instantiator $instantiator,
-        ParamFetcherInterface $paramFetcher,
+        Request $request,
         RegistrationService $registrationService,
     ): Response {
         /** @var User $user */
         $user = $instantiator->deserialize(
-            $paramFetcher->get('instance'),
+            $request->getContent(),
             User::class,
             UserGroups::CREATE
         );

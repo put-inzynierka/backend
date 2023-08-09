@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use OpenApi\Attributes\Tag;
 
@@ -73,14 +74,14 @@ class GenreController extends AbstractController
     )]
     public function store(
         Instantiator $instantiator,
-        ParamFetcherInterface $paramFetcher,
+        Request $request,
         EntityManagerInterface $manager
     ): Response {
 //        $this->denyAccessUnlessGranted(Qualifier::IS_AUTHENTICATED);
 
         /** @var Genre $genre */
         $genre = $instantiator->deserialize(
-            $paramFetcher->get('instance'),
+            $request->getContent(),
             Genre::class,
             GenreGroups::CREATE
         );
@@ -111,14 +112,14 @@ class GenreController extends AbstractController
     )]
     public function update(
         Instantiator $instantiator,
-        ParamFetcherInterface $paramFetcher,
+        Request $request,
         EntityManagerInterface $manager,
         Genre $genre
     ): Response {
 //        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $genre);
 
         $genre = $instantiator->deserialize(
-            $paramFetcher->get('instance'),
+            $request->getContent(),
             Genre::class,
             GenreGroups::UPDATE,
             $genre

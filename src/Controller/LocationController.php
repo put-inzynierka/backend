@@ -114,14 +114,14 @@ class LocationController extends AbstractController
     )]
     public function update(
         Instantiator $instantiator,
-        ParamFetcherInterface $paramFetcher,
+        Request $request,
         EntityManagerInterface $manager,
         Location $location
     ): Response {
 //        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $location);
 
         $location = $instantiator->deserialize(
-            $paramFetcher->get('instance'),
+            $request->getContent(),
             Location::class,
             LocationGroups::UPDATE,
             $location
