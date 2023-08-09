@@ -5,9 +5,8 @@ namespace App\Controller;
 use App\Component\Attribute\Param as Param;
 use App\Component\Attribute\Response as Resp;
 use App\Component\Model\PasswordResetRequest;
-use App\Entity\User\ActivationToken;
+use App\Entity\User\PasswordResetToken;
 use App\Entity\User\User;
-use App\Enum\SerializationGroup\BaseGroups;
 use App\Enum\SerializationGroup\User\TokenGroups;
 use App\Enum\SerializationGroup\User\UserGroups;
 use App\Service\Instantiator;
@@ -51,7 +50,7 @@ class PasswordResetTokenController extends AbstractController
     )]
     #[Tag('User')]
     #[Param\Path('value', description: 'The token to invoke')]
-    #[ParamConverter(data: ['name' => 'token'], class: ActivationToken::class)]
+    #[ParamConverter(data: ['name' => 'token'], class: PasswordResetToken::class)]
     #[Resp\EmptyResponse(
         description: 'Changes password of the user associated with the token and returns them',
     )]
@@ -60,7 +59,7 @@ class PasswordResetTokenController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         PasswordHasher $passwordHasher,
-        ActivationToken $token
+        PasswordResetToken $token
     ): Response {
         $instantiator->validate($token, TokenGroups::INVOKE);
 
