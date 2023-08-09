@@ -9,7 +9,6 @@ use App\Enum\SerializationGroup\User\UserGroups;
 use App\Service\Instantiator;
 use App\Service\User\RegistrationService;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Request\ParamFetcherInterface;
 use OpenApi\Attributes\Tag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

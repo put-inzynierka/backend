@@ -24,7 +24,7 @@ class PasswordResetTokenController extends AbstractController
 {
     #[Rest\Post(path: '/password-reset-token', name: 'store_password_reset_token')]
     #[Tag('User')]
-    #[Param\Instance(PasswordResetRequest::class, BaseGroups::DEFAULT)]
+    #[Param\Instance(PasswordResetRequest::class, TokenGroups::CREATE)]
     #[Resp\EmptyResponse(
         description: 'Creates a new password reset token and sends it to the user',
     )]
@@ -36,7 +36,7 @@ class PasswordResetTokenController extends AbstractController
         $passwordResetRequest = $instantiator->deserialize(
             $request->getContent(),
             PasswordResetRequest::class,
-            BaseGroups::DEFAULT
+            TokenGroups::CREATE
         );
 
         $passwordResetService->sendPasswordResetLink($passwordResetRequest->getEmail());
