@@ -33,6 +33,10 @@ class SecurityUserRepository extends AbstractRepository implements UserRepositor
             return null;
         }
 
+        if (!$user->isActive()) {
+            return null;
+        }
+
         $isPasswordValid = $this->passwordHasher->isPasswordValid($user, $password);
         if (!$isPasswordValid) {
             return null;
