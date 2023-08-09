@@ -32,7 +32,7 @@ class ActivationTokenController extends AbstractController
         ActivationToken $token,
         EntityManagerInterface $entityManager
     ): Response {
-        $instantiator->validate($token, TokenGroups::ACTIVATE);
+        $instantiator->validate($token, TokenGroups::INVOKE);
 
         $user = $token->getUser();
 

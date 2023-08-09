@@ -60,6 +60,10 @@ services:
         arguments:
             $frontendUrl: '%app.frontend_url%'
 
+    App\Service\Mail\PasswordResetMailer:
+        arguments:
+            $frontendUrl: '%app.frontend_url%'s
+
     App\Repository\SecurityUserRepository: ~
     League\OAuth2\Server\Repositories\UserRepositoryInterface: '@App\Repository\SecurityUserRepository'
 

@@ -7,12 +7,11 @@ use App\Entity\User\ActivationToken;
 use App\Entity\User\User;
 use App\Service\Mail\RegistrationMailer;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class RegistrationService
 {
     public function __construct(
-        protected UserPasswordHasherInterface $passwordHasher,
+        protected PasswordHasher $passwordHasher,
         protected TokenFactory $tokenFactory,
         protected EntityManagerInterface $entityManager,
         protected RegistrationMailer $registrationMailer,
@@ -20,7 +19,7 @@ class RegistrationService
 
     public function register(User $user): void
     {
-        $this->hashPassword($user);
+        $this->passwordHasher->hashPassword($user);
 
         $token = $this->generateActivationToken($user);
 
@@ -30,13 +29,6 @@ class RegistrationService
         $this->entityManager->flush();
 
         $this->registrationMailer->send($user, $token);
-    }
-
-    protected function hashPassword(User $user): void
-    {
-        $password = $user->getPassword();
-        $password = $this->passwordHasher->hashPassword($user, $password);
-        $user->setPassword($password);
     }
 
     protected function generateActivationToken(User $user): Token

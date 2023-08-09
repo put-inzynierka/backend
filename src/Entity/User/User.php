@@ -80,10 +80,11 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Constraints\Type(type: Types::STRING)]
     #[Constraints\Length(min:1, max: 255)]
-    #[Constraints\NotBlank(allowNull: false, groups: [UserGroups::CREATE])]
+    #[Constraints\NotBlank(allowNull: false, groups: [UserGroups::CREATE, UserGroups::RESET_PASSWORD])]
     #[Groups([
         UserGroups::CREATE,
         UserGroups::UPDATE,
+        UserGroups::RESET_PASSWORD,
     ])]
     #[Property(
         description: 'The password of the user',

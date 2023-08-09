@@ -23,7 +23,7 @@ abstract class AbstractToken extends AbstractEntity implements Token
     private User $user;
 
     #[ORM\Column(type: Types::BOOLEAN)]
-    #[Constraints\IsFalse(groups: [TokenGroups::ACTIVATE])]
+    #[Constraints\IsFalse(groups: [TokenGroups::INVOKE])]
     private bool $used;
 
     public function __construct(string $value, User $user)
