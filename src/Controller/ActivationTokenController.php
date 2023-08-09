@@ -17,7 +17,7 @@ class ActivationTokenController extends AbstractController
     #[Rest\Patch(
         path: '/activation-token/{value}/activate',
         name: 'activate_activation_token',
-        requirements: ['value' => '{0-9a-f}+']
+        requirements: ['value' => '[0-9a-f]+']
     )]
     #[Tag('User')]
     #[Param\Path('value', description: 'The token to activate')]

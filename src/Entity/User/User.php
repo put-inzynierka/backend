@@ -69,6 +69,12 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     private string $lastName;
 
     #[ORM\Column(type: Types::BOOLEAN)]
+    #[Groups([
+        UserGroups::SHOW,
+    ])]
+    #[Property(
+        description: 'Whether or not the user is active',
+    )]
     private bool $active;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
