@@ -36,7 +36,7 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     )]
     private string $email;
 
-    #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     #[Constraints\Type(type: Types::STRING)]
     #[Constraints\Length(min:1, max: 255)]
     #[Constraints\NotBlank(allowNull: false, groups: [UserGroups::CREATE])]
@@ -52,7 +52,7 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     )]
     private string $firstName;
 
-    #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     #[Constraints\Type(type: Types::STRING)]
     #[Constraints\Length(min:1, max: 255)]
     #[Constraints\NotBlank(allowNull: false, groups: [UserGroups::CREATE])]
@@ -67,6 +67,9 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
         example: 'Pudzianowski',
     )]
     private string $lastName;
+
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $active;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Constraints\Type(type: Types::STRING)]
@@ -114,6 +117,18 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
 
         return $this;
     }

@@ -7,12 +7,11 @@ use App\Component\Attribute\Response as Resp;
 use App\Entity\User\User;
 use App\Enum\SerializationGroup\User\UserGroups;
 use App\Service\Instantiator;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\User\RegistrationService;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use OpenApi\Attributes\Tag;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends AbstractController
 {
@@ -28,8 +27,7 @@ class UserController extends AbstractController
     public function store(
         Instantiator $instantiator,
         ParamFetcherInterface $paramFetcher,
-        EntityManagerInterface $manager,
-        UserPasswordHasherInterface $passwordHasher
+        RegistrationService $registrationService,
     ): Response {
         /** @var User $user */
         $user = $instantiator->deserialize(
@@ -38,12 +36,7 @@ class UserController extends AbstractController
             UserGroups::CREATE
         );
 
-        $password = $user->getPassword();
-        $password = $passwordHasher->hashPassword($user, $password);
-        $user->setPassword($password);
-
-        $manager->persist($user);
-        $manager->flush();
+        $registrationService->register($user);
 
         return $this->object(
             $user,
