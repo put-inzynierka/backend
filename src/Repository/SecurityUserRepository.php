@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\User\User;
-use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
+use League\Bundle\OAuth2ServerBundle\Model\AccessToken;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
