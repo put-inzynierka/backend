@@ -4,9 +4,11 @@ namespace App\Entity\User;
 
 use App\Entity\AbstractEntity;
 use App\Entity\Component\Contract\Token;
+use App\Enum\SerializationGroup\User\ActivationTokenGroups;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints;
 
 #[ORM\Entity]
 #[ORM\Table]
@@ -21,6 +23,7 @@ class ActivationToken extends AbstractEntity implements Token
     private User $user;
 
     #[ORM\Column(type: Types::BOOLEAN)]
+    #[Constraints\IsFalse(groups: [ActivationTokenGroups::ACTIVATE])]
     private bool $used;
 
     public function __construct(string $value, User $user)
