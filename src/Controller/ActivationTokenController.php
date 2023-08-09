@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Component\Attribute\Param as Param;
 use App\Component\Attribute\Response as Resp;
 use App\Entity\User\ActivationToken;
-use App\Enum\SerializationGroup\User\ActivationTokenGroups;
+use App\Enum\SerializationGroup\User\TokenGroups;
 use App\Enum\SerializationGroup\User\UserGroups;
 use App\Service\Instantiator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,7 +32,7 @@ class ActivationTokenController extends AbstractController
         ActivationToken $token,
         EntityManagerInterface $entityManager
     ): Response {
-        $instantiator->validate($token, ActivationTokenGroups::ACTIVATE);
+        $instantiator->validate($token, TokenGroups::ACTIVATE);
 
         $user = $token->getUser();
 

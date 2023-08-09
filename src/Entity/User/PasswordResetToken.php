@@ -8,5 +8,5 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ORM\Entity]
 #[ORM\Table]
 #[UniqueEntity(fields: 'value')]
-class ActivationToken extends AbstractToken
+class PasswordResetToken extends AbstractToken
 {}
