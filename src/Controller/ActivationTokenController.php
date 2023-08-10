@@ -17,17 +17,17 @@ use Symfony\Component\HttpFoundation\Response;
 class ActivationTokenController extends AbstractController
 {
     #[Rest\Patch(
-        path: '/activation-token/{value}/activate',
-        name: 'activate_activation_token',
+        path: '/activation-token/{value}/invoke',
+        name: 'invoke_activation_token',
         requirements: ['value' => '[0-9a-f]+']
     )]
     #[Tag('User')]
-    #[Param\Path('value', description: 'The token to activate')]
+    #[Param\Path('value', description: 'The token to invoke')]
     #[ParamConverter(data: ['name' => 'token'], class: ActivationToken::class)]
     #[Resp\EmptyResponse(
         description: 'Activates the user associated with the token and returns them',
     )]
-    public function activate(
+    public function invoke(
         Instantiator $instantiator,
         ActivationToken $token,
         EntityManagerInterface $entityManager

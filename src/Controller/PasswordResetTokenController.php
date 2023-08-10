@@ -45,7 +45,7 @@ class PasswordResetTokenController extends AbstractController
 
     #[Rest\Patch(
         path: '/password-reset-token/{value}/invoke',
-        name: 'invoke_activation_token',
+        name: 'invoke_password_reset_token',
         requirements: ['value' => '[0-9a-f]+']
     )]
     #[Tag('User')]
