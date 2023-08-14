@@ -35,7 +35,7 @@ class Team extends AbstractEntity
     #[ORM\OneToMany(
         mappedBy: 'team',
         targetEntity: TeamMember::class,
-        cascade: ['persist', 'delete']
+        cascade: ['persist', 'remove']
     )]
     #[Groups([
         TeamGroups::SHOW,
