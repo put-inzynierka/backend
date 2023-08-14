@@ -13,6 +13,8 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            string $frontendUrl: '%app.frontend_url%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -55,14 +57,6 @@ services:
         arguments:
             $sender: '%app.mail_sender%'
             $senderName: '%app.mail_sender_name%'
-
-    App\Service\Mail\RegistrationMailer:
-        arguments:
-            $frontendUrl: '%app.frontend_url%'
-
-    App\Service\Mail\PasswordResetMailer:
-        arguments:
-            $frontendUrl: '%app.frontend_url%'
 
     App\Repository\SecurityUserRepository: ~
     League\OAuth2\Server\Repositories\UserRepositoryInterface: '@App\Repository\SecurityUserRepository'
