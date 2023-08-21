@@ -33,6 +33,12 @@ class PageResponse extends Response
                         type: 'integer',
                         example: 1,
                     ),
+                    'per_page' => new Property(
+                        property: 'per_page',
+                        description: 'Count of items per page',
+                        type: 'integer',
+                        example: 10,
+                    ),
                     'page_count' => new Property(
                         property: 'page_count',
                         description: 'Total count of pages',
