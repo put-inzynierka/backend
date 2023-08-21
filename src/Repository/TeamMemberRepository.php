@@ -25,7 +25,7 @@ class TeamMemberRepository extends AbstractRepository
         return $query;
     }
 
-    public function invitesByEmail(string $email): QueryBuilder
+    public function invitationsByEmail(string $email): QueryBuilder
     {
         $query = $this->index();
         $query

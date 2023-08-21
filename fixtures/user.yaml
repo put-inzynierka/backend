@@ -12,3 +12,17 @@ App\Entity\User\User:
     lastName: 'Pudzianowski'
     password: '\$2y\$13\$ECTrpbhjAvikvDhKc44lc.ZKspApwvNXGw45sb4v/XEQopLDdqBZa'
     active: true
+
+  content-manager:
+    email: 'manager@gmail.com'
+    firstName: 'Tomasz'
+    lastName: 'Kot'
+    password: '\$2y\$13\$hURxRm.99HmUBhSVjIVHL.ZAVuhprFaW9bHhgIKgbOdYLVG6k66lu' # "haslo"
+    active: true
+
+  random-guy:
+    email: 'random-guy@gmail.com'
+    firstName: 'Jan'
+    lastName: 'Matejko'
+    password: '\$2y\$13\$hURxRm.99HmUBhSVjIVHL.ZAVuhprFaW9bHhgIKgbOdYLVG6k66lu' # "haslo"
+    active: true

@@ -5,7 +5,7 @@ namespace App\Enum\SerializationGroup\Team;
 final class TeamMemberGroups
 {
     public const INDEX = 'index-team-members';
-    public const CREATE = 'create-team-member';
+    public const INVITE = 'invite-team-member';
     public const UPDATE = 'update-team-member';
     public const SHOW = 'show-team-member';
 }

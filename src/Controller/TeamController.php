@@ -18,12 +18,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use OpenApi\Attributes\Tag;
 
-final class TeamController extends AbstractController
+class TeamController extends AbstractController
 {
     public function __construct(
         private readonly TeamCreator $creator
-    )
-    {
+    ) {
     }
 
     #[Rest\Get(path: '/teams', name: 'index_teams')]
@@ -38,8 +37,7 @@ final class TeamController extends AbstractController
     public function index(
         ParamFetcherInterface $paramFetcher,
         RepositoryFactory     $repositoryFactory
-    ): Response
-    {
+    ): Response {
         $repository = $repositoryFactory->create(Team::class);
         $list = $repository->index();
 
