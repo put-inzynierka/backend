@@ -48,10 +48,11 @@ abstract class AbstractController extends AbstractFOSRestController
     protected function binary(
         string $file,
         string $mimeType,
-        string $filename
+        string $filename,
+        bool $download = false
     ): Response {
         $response = new BinaryFileResponse($file);
-        $contentDisposition = HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, $filename);
+        $contentDisposition = HeaderUtils::makeDisposition($download ? HeaderUtils::DISPOSITION_ATTACHMENT : HeaderUtils::DISPOSITION_INLINE, $filename);
 
         $response->headers->set('Content-Type', $mimeType);
         $response->headers->set('Content-Disposition', $contentDisposition);
