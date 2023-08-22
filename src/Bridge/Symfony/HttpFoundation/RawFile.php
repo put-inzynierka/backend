@@ -40,7 +40,7 @@ class RawFile extends File
 
         $mimeType = explode(';', $mimeTypeHeader)[0];
 
-        $filename = explode('filename="', $mimeTypeHeader)[1];
+        $filename = explode('filename="', $contentDispositionHeader)[1];
         $filename = substr($filename, 0, -1);
         $filename = basename($filename);
 
