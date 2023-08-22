@@ -2,12 +2,12 @@
 
 namespace App\Service\File\Validator;
 
+use App\Bridge\Symfony\HttpFoundation\RawFile;
 use App\Entity\User\User;
 use App\Enum\File\ByteSize;
 use App\Enum\File\FileType;
 use App\Service\File\Contract\FileValidator;
 use App\Service\File\Validator\Trait\ValidatesType;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
@@ -20,7 +20,7 @@ class ProjectImageValidator extends AbstractFileValidator implements FileValidat
         return [FileType::PROJECT_IMAGE];
     }
 
-    public function validate(UploadedFile $file, ?User $actor): ConstraintViolationListInterface
+    public function validate(RawFile $file, ?User $actor): ConstraintViolationListInterface
     {
         $violations = new ConstraintViolationList();
 

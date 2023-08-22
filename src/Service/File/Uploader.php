@@ -2,6 +2,7 @@
 
 namespace App\Service\File;
 
+use App\Bridge\Symfony\HttpFoundation\RawFile;
 use App\Entity\File\File;
 use App\Entity\User\User;
 use App\Enum\File\FileExtension;
@@ -11,7 +12,6 @@ use App\Exception\UnprocessableEntityHttpException;
 use App\Service\File\Factory\FileProcessorFactory;
 use App\Service\File\Factory\FileValidatorFactory;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Component\Model\File as FileModel;
 
 class Uploader
@@ -24,20 +24,20 @@ class Uploader
         protected string $backendUrl
     ) {}
 
-    public function upload(UploadedFile $uploadedFile, FileType $type, ?User $actor): FileModel
+    public function upload(RawFile $rawFile, FileType $type, ?User $actor): FileModel
     {
-        $this->validate($uploadedFile, $type, $actor);
-        $this->process($uploadedFile, $type, $actor);
+        $this->validate($rawFile, $type, $actor);
+        $this->process($rawFile, $type, $actor);
 
         $file = new File(
-            pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME),
-            FileExtension::from($uploadedFile->getClientOriginalExtension()),
-            MimeType::from($uploadedFile->getClientMimeType()),
+            $rawFile->getClientFilename(),
+            FileExtension::from($rawFile->getClientExtension()),
+            MimeType::from($rawFile->getClientMimeType()),
             $type,
             $actor
         );
 
-        $uploadedFile->move($this->uploadsDirectory, $file->getUuid()->jsonSerialize());
+        $rawFile->move($this->uploadsDirectory, $file->getUuid()->jsonSerialize());
 
         $this->entityManager->persist($file);
         $this->entityManager->flush();
@@ -55,7 +55,7 @@ class Uploader
         );
     }
 
-    protected function validate(UploadedFile $file, FileType $type, ?User $actor): void
+    protected function validate(RawFile $file, FileType $type, ?User $actor): void
     {
         $validator = $this->validatorFactory->getFileValidator($type);
 
@@ -65,7 +65,7 @@ class Uploader
         }
     }
 
-    protected function process(UploadedFile $file, FileType $type, ?User $actor): void
+    protected function process(RawFile $file, FileType $type, ?User $actor): void
     {
         $processor = $this->fileProcessorFactory->getFileProcessor($type);
 

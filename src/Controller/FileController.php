@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Bridge\Symfony\HttpFoundation\RawFile;
 use App\Component\Attribute\Response as Resp;
 use App\Component\Model\File;
 use App\Enum\File\FileType;
@@ -14,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FileController extends AbstractController
 {
-    #[Rest\Post(path: '/files', name: 'store_file')]
+    #[Rest\Post(path: '/files/{type}', name: 'store_file')]
     #[Tag('File')]
     #[OA\RequestBody(
         new OA\MediaType(
@@ -36,11 +37,12 @@ class FileController extends AbstractController
     )]
     public function store(
         Uploader $uploader,
-        Request $request
+        Request $request,
+        string $type
     ): Response {
         $file = $uploader->upload(
-            $request->files->get('file'),
-            FileType::from($request->get('type')),
+            RawFile::fromBinaryRequest($request),
+            FileType::from($type),
             $this->getUser()
         );
 

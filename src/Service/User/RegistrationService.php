@@ -5,6 +5,7 @@ namespace App\Service\User;
 use App\Entity\Component\Contract\Token;
 use App\Entity\User\ActivationToken;
 use App\Entity\User\User;
+use App\Enum\UserRole;
 use App\Service\Mail\RegistrationMailer;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -19,6 +20,11 @@ class RegistrationService
 
     public function register(User $user): void
     {
+        $user
+            ->setRole(UserRole::USER)
+            ->setActive(false)
+        ;
+
         $this->passwordHasher->hashPassword($user);
 
         $token = $this->generateActivationToken($user);
@@ -33,8 +39,6 @@ class RegistrationService
 
     protected function generateActivationToken(User $user): Token
     {
-        $user->setActive(false);
-
         return $this->tokenFactory->create(
             ActivationToken::class,
             $user
