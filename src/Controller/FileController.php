@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FileController extends AbstractController
 {
-    #[Rest\Post(path: '/file', name: 'store_file')]
+    #[Rest\Post(path: '/files', name: 'store_file')]
     #[Tag('File')]
     #[OA\RequestBody(
         new OA\MediaType(
