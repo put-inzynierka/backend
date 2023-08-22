@@ -4,8 +4,10 @@ namespace App\Entity\User;
 
 use App\Entity\AbstractEntity;
 use App\Enum\SerializationGroup\User\UserGroups;
+use App\Enum\UserRole;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Deprecated;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use OpenApi\Attributes\Property;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -76,6 +78,16 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
         description: 'Whether or not the user is active',
     )]
     private bool $active;
+
+    #[ORM\Column(type: Types::STRING, enumType: UserRole::class, options: ['default' => UserRole::USER])]
+    #[Groups([
+        UserGroups::SHOW,
+    ])]
+    #[Property(
+        description: 'Role of the user',
+        enum: ['admin', 'user']
+    )]
+    private UserRole $role;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Constraints\Type(type: Types::STRING)]
@@ -157,9 +169,22 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
         return $this->email;
     }
 
+    #[Deprecated('Only there to comply with UserInterface, use getRole instead.', '%class%->getRole()')]
     public function getRoles(): array
     {
-        return [];
+        return [$this->role->value];
+    }
+
+    public function getRole(): UserRole
+    {
+        return $this->role;
+    }
+
+    public function setRole(UserRole $role): self
+    {
+        $this->role = $role;
+
+        return $this;
     }
 
     public function eraseCredentials()
