@@ -44,6 +44,7 @@ class TeamMember extends AbstractEntity
         TeamMemberGroups::SHOW,
         TeamMemberGroups::INDEX,
         TeamMemberGroups::UPDATE,
+        TeamMemberGroups::ROLE,
     ])]
     #[Property(
         description: 'The role of a team member',

@@ -8,4 +8,5 @@ final class TeamMemberGroups
     public const INVITE = 'invite-team-member';
     public const UPDATE = 'update-team-member';
     public const SHOW = 'show-team-member';
+    public const ROLE = 'my-role-team-member';
 }
