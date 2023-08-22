@@ -18,7 +18,15 @@ trait UUIdentifiable
         description: 'The UUID of the entity',
         example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
     )]
-    private Uuid $uuid;
+    private Uuid|string $uuid;
+
+    #[ORM\PostLoad]
+    public function loaded(): void
+    {
+        if (is_string($this->uuid)) {
+            $this->uuid = Uuid::fromString($this->uuid);
+        }
+    }
 
     public function getUuid(): Uuid
     {
