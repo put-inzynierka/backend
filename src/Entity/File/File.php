@@ -16,6 +16,7 @@ use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity]
 #[ORM\Table]
+#[ORM\HasLifecycleCallbacks]
 class File implements UUIdentifiable, Timestampable
 {
     use UUIdentifiableTrait;

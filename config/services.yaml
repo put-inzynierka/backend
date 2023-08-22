@@ -8,7 +8,7 @@ parameters:
     app.frontend_url: '%env(FRONTEND_URL)%'
     app.mail_sender: '%env(MAIL_SENDER)%'
     app.mail_sender_name: '%env(MAIL_SENDER_NAME)%'
-    app.uploads_directory: '%env(UPLOADS_DIRECTORY)%'
+    app.uploads_directory: '%kernel.project_dir%/%env(UPLOADS_DIRECTORY)%'
 
 services:
     # default configuration for services in *this* file
