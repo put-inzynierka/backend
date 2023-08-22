@@ -10,7 +10,6 @@ use App\Entity\File\File;
 use App\Enum\File\FileType;
 use App\Enum\SerializationGroup\Movie\GenreGroups;
 use App\Service\File\Uploader;
-use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use OpenApi\Attributes as OA;
 use OpenApi\Attributes\Tag;
@@ -60,12 +59,11 @@ class FileController extends AbstractController
     )]
     #[Tag('File')]
     #[Param\Path('uuid', description: 'The UUID of the file')]
+    #[ParamConverter(data: ['name' => 'file'], class: File::class)]
     public function show(
-        EntityManagerInterface $entityManager,
-        string $uuid,
+        File $file,
         string $uploadsDirectory
     ): Response {
-        $file = $entityManager->getRepository(File::class)->findBy(['uuid' => $uuid]);
         $path = sprintf('%s/%s', $uploadsDirectory, $file->getUuid()->jsonSerialize());
 
         return $this->binary(
