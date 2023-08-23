@@ -81,7 +81,7 @@ class Event extends AbstractEntity
     )]
     private Collection $locations;
 
-    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Day::class)]
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Day::class, cascade: ['persist', 'remove'])]
     #[ORM\OrderBy(['date' => 'asc'])]
     #[Groups([
         EventGroups::CREATE,
