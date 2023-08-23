@@ -39,6 +39,10 @@ services:
 
     Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter: '@serializer.name_converter.camel_case_to_snake_case'
 
+    App\Normalizer\EntityNormalizer:
+        tags:
+            - { name: serializer.normalizer, priority: 50 }
+
     App\Normalizer\TimeNormalizer:
         tags:
             - { name: serializer.normalizer, priority: 100 }
