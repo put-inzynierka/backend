@@ -13,6 +13,7 @@ use App\Enum\File\MimeType;
 use App\Enum\SerializationGroup\BaseGroups;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Deprecated;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
@@ -111,6 +112,12 @@ class File implements UUIdentifiable, Timestampable
         $this->uploadedBy = $uploadedBy;
 
         return $this;
+    }
+
+    #[Deprecated('The following should only be used by normalizer\'s property accessors. Do not use the `url` property as it should not be set during File\'s lifecycle.')]
+    public function getUrl(): ?string
+    {
+        return $this->url;
     }
 
     public function setUrl(string $url): File
