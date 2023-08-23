@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints;
 use DateTimeImmutable;
+use DateTimeInterface;
 
 #[ORM\Entity]
 #[ORM\Table]
@@ -93,7 +94,7 @@ class Event extends AbstractEntity
     private Collection $days;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    #[Constraints\DateTime]
+    #[Constraints\Type(DateTimeInterface::class)]
     #[Constraints\NotBlank(allowNull: false, groups: [EventGroups::CREATE])]
     #[Groups([
         EventGroups::CREATE,
@@ -108,7 +109,7 @@ class Event extends AbstractEntity
     private DateTimeImmutable $teamRegistrationEndsAt;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    #[Constraints\DateTime]
+    #[Constraints\Type(DateTimeInterface::class)]
     #[Constraints\NotBlank(allowNull: false, groups: [EventGroups::CREATE])]
     #[Groups([
         EventGroups::CREATE,
