@@ -24,31 +24,27 @@ class TeamMember extends AbstractEntity
     #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'teamMembers')]
     #[ORM\JoinColumn]
     #[Groups([
-        TeamMemberGroups::CREATE,
         TeamMemberGroups::SHOW,
         TeamMemberGroups::INDEX,
-        TeamMemberGroups::UPDATE,
     ])]
     private Team $team;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn]
     #[Groups([
-        TeamMemberGroups::CREATE,
         TeamMemberGroups::SHOW,
         TeamMemberGroups::INDEX,
-        TeamMemberGroups::UPDATE,
     ])]
     private User $user;
 
     #[ORM\Column(type: Types::STRING, enumType: TeamMemberRole::class)]
-    #[Constraints\NotBlank(allowNull: false, groups: [TeamMemberGroups::CREATE])]
     #[Constraints\Choice(callback: [TeamMemberRole::class, 'cases'])]
     #[Groups([
-        TeamMemberGroups::CREATE,
+        TeamMemberGroups::INVITE,
         TeamMemberGroups::SHOW,
         TeamMemberGroups::INDEX,
         TeamMemberGroups::UPDATE,
+        TeamMemberGroups::ROLE,
     ])]
     #[Property(
         description: 'The role of a team member',
@@ -60,13 +56,12 @@ class TeamMember extends AbstractEntity
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Constraints\Type(type: Types::STRING)]
     #[Constraints\Length(min:1, max: 255)]
-    #[Constraints\NotBlank(allowNull: false, groups: [UserGroups::CREATE])]
+    #[Constraints\NotBlank(allowNull: false, groups: [TeamMemberGroups::INVITE])]
     #[Constraints\Email]
     #[Groups([
-        TeamMemberGroups::CREATE,
+        TeamMemberGroups::INVITE,
         TeamMemberGroups::SHOW,
         TeamMemberGroups::INDEX,
-        TeamMemberGroups::UPDATE,
     ])]
     #[Property(
         description: 'Email of the invited team member',
@@ -124,9 +119,11 @@ class TeamMember extends AbstractEntity
         return $this->email;
     }
 
-    public function setEmail(string $email): void
+    public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
     }
 
     public function isAccepted(): bool
@@ -134,8 +131,10 @@ class TeamMember extends AbstractEntity
         return $this->accepted;
     }
 
-    public function setAccepted(bool $accepted): void
+    public function setAccepted(bool $accepted): self
     {
         $this->accepted = $accepted;
+
+        return $this;
     }
 }

@@ -9,16 +9,18 @@ class Paginator
 {
     public static function paginate(QueryBuilder $builder, ?int $page, ?int $limit): PaginatedList
     {
+        $totalCount = Paginator::count($builder);
+
         if (!$page) {
             return new PaginatedList(
-                Paginator::count($builder),
+                $totalCount,
                 1,
+                $totalCount,
                 1,
                 $builder->getQuery()->getResult()
             );
         }
 
-        $totalCount = Paginator::count($builder);
         $builder
             ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit)
@@ -27,6 +29,7 @@ class Paginator
         return new PaginatedList(
             $totalCount,
             $page,
+            $limit,
             ceil($totalCount / $limit),
             $builder->getQuery()->getResult()
         );

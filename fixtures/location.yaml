@@ -1,0 +1,40 @@
+App\Entity\Location\Location:
+  pawilon-a:
+    name: 'Pawilon A'
+
+  pawilon-b:
+    name: 'Pawilon B'
+
+  pawilon-c:
+    name: 'Pawilon C'
+
+App\Entity\Location\Stand:
+  stand-1:
+    location: '@pawilon-a'
+    name: 'Stage 1'
+    type: 'stage'
+
+  stand-2:
+    location: '@pawilon-a'
+    name: 'Stand 2'
+    type: 'stand'
+
+  stand-3:
+    location: '@pawilon-a'
+    name: 'Stand 3'
+    type: 'stand'
+
+  stand-4:
+    location: '@pawilon-a'
+    name: 'Stand 4'
+    type: 'stand'
+
+  stand-5:
+    location: '@pawilon-b'
+    name: 'Stage 1'
+    type: 'stage'
+
+  stand-6:
+    location: '@pawilon-b'
+    name: 'Stage 2'
+    type: 'stage'

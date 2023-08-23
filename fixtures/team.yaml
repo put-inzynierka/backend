@@ -1,0 +1,25 @@
+App\Entity\Team\Team:
+  robocops:
+    name: 'Robocops'
+
+App\Entity\Team\TeamMember:
+  owner:
+    user: '@user'
+    team: '@robocops'
+    role: 'owner'
+    accepted: true
+    email: 'user@gmail.com'
+
+  manager:
+    user: '@content-manager'
+    team: '@robocops'
+    role: 'manager'
+    accepted: true
+    email: 'manager@gmail.com'
+
+  member:
+    user: '@random-guy'
+    team: '@robocops'
+    role: 'member'
+    accepted: false
+    email: 'random-guy@gmail.com'

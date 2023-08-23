@@ -14,15 +14,18 @@ class PaginatedList
     protected int $page;
 
     #[Groups([BaseGroups::DEFAULT])]
+    protected int $perPage;
+    #[Groups([BaseGroups::DEFAULT])]
     protected int $pageCount;
 
     #[Groups([BaseGroups::DEFAULT])]
     protected array $items;
 
-    public function __construct(int $totalCount, int $page, int $pageCount, array $items)
+    public function __construct(int $totalCount, int $page, int $perPage, int $pageCount, array $items)
     {
         $this->totalCount = $totalCount;
         $this->page = $page;
+        $this->perPage = $perPage;
         $this->pageCount = $pageCount;
         $this->items = $items;
     }
@@ -35,6 +38,11 @@ class PaginatedList
     public function getPage(): int
     {
         return $this->page;
+    }
+
+    public function getPerPage(): int
+    {
+        return $this->perPage;
     }
 
     public function getPageCount(): int

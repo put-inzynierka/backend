@@ -17,12 +17,12 @@ class TeamCreator
 
     public function create(Team $team, User $user): void
     {
-        $teamMember = new TeamMember();
-        $teamMember->setTeam($team);
-        $teamMember->setUser($user);
-        $teamMember->setEmail($user->getEmail());
-        $teamMember->setAccepted(true);
-        $teamMember->setRole(TeamMemberRole::OWNER);
+        $teamMember = (new TeamMember())
+            ->setTeam($team)
+            ->setUser($user)
+            ->setEmail($user->getEmail())
+            ->setAccepted(true)
+            ->setRole(TeamMemberRole::OWNER);
 
         $team->addTeamMember($teamMember);
 

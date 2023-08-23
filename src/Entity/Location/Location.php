@@ -36,7 +36,7 @@ class Location extends AbstractEntity
     )]
     private string $name;
 
-    #[ORM\OneToMany(mappedBy: 'location', targetEntity: Stand::class)]
+    #[ORM\OneToMany(mappedBy: 'location', targetEntity: Stand::class, cascade: ['remove'])]
     #[Groups([
         LocationGroups::SHOW,
     ])]
