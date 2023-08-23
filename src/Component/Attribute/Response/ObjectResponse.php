@@ -11,7 +11,7 @@ use OpenApi\Attributes\Response;
 #[Attribute(Attribute::TARGET_METHOD)]
 class ObjectResponse extends Response
 {
-    public function __construct(string $description, string $class, string $group, int $status = 200)
+    public function __construct(string $description, string $class, ?string $group = null, int $status = 200)
     {
         parent::__construct(
             response: $status,

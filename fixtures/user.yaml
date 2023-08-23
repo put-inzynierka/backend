@@ -1,10 +1,19 @@
 App\Entity\User\User:
+  admin:
+    email: 'admin@gmail.com'
+    firstName: 'Admin'
+    lastName: 'Małysz'
+    password: '\$2y\$13\$hURxRm.99HmUBhSVjIVHL.ZAVuhprFaW9bHhgIKgbOdYLVG6k66lu' # "haslo"
+    active: true
+    role: 'admin'
+
   user:
     email: 'user@gmail.com'
     firstName: 'Adam'
     lastName: 'Małysz'
     password: '\$2y\$13\$hURxRm.99HmUBhSVjIVHL.ZAVuhprFaW9bHhgIKgbOdYLVG6k66lu' # "haslo"
     active: true
+    role: 'user'
 
   developer:
     email: 'developer@gmail.com'
@@ -12,6 +21,7 @@ App\Entity\User\User:
     lastName: 'Pudzianowski'
     password: '\$2y\$13\$ECTrpbhjAvikvDhKc44lc.ZKspApwvNXGw45sb4v/XEQopLDdqBZa'
     active: true
+    role: 'user'
 
   content-manager:
     email: 'manager@gmail.com'
@@ -19,6 +29,7 @@ App\Entity\User\User:
     lastName: 'Kot'
     password: '\$2y\$13\$hURxRm.99HmUBhSVjIVHL.ZAVuhprFaW9bHhgIKgbOdYLVG6k66lu' # "haslo"
     active: true
+    role: 'user'
 
   random-guy:
     email: 'random-guy@gmail.com'
@@ -26,3 +37,4 @@ App\Entity\User\User:
     lastName: 'Matejko'
     password: '\$2y\$13\$hURxRm.99HmUBhSVjIVHL.ZAVuhprFaW9bHhgIKgbOdYLVG6k66lu' # "haslo"
     active: true
+    role: 'user'
