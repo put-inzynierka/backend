@@ -132,34 +132,6 @@ final class TeamMemberController extends AbstractController
         return $this->object($teamMember, groups: TeamMemberGroups::SHOW);
     }
 
-    #[Rest\Get(
-        path: '/teams/{id}/my-role',
-        name: 'my_role_team_member',
-        requirements: [
-            'id' => '\d+'
-        ]
-    )]
-    #[Tag('Team')]
-    #[Param\Path(
-        name: 'id',
-        description: 'The ID of the team',
-    )]
-    #[ParamConverter(data: ['name' => 'team'], class: Team::class)]
-    #[Resp\ObjectResponse(
-        description: 'Returns users role in a team',
-        class: Team::class,
-        group: TeamMemberGroups::ROLE,
-    )]
-    public function role(
-        Team $team
-    ): Response {
-        $teamMember = $team->getTeamMembers()->filter(function ($teamMember) {
-            return $teamMember->getUser() === $this->getUser();
-        })->first();
-
-        return $this->object($teamMember, groups: TeamMemberGroups::ROLE);
-    }
-
     #[Rest\Delete(
         path: '/teams/{team_id}/members/{id}',
         name: 'remove_team_member',

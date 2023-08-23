@@ -4,6 +4,7 @@ namespace App\Entity\Team;
 
 use App\Entity\AbstractEntity;
 use App\Enum\SerializationGroup\Team\TeamGroups;
+use App\Enum\TeamMemberRole;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -42,6 +43,16 @@ class Team extends AbstractEntity
     ])]
     private Collection $teamMembers;
 
+    #[Groups([
+        TeamGroups::INDEX,
+    ])]
+    private bool $editable = false;
+
+    #[Groups([
+        TeamGroups::SHOW,
+    ])]
+    private ?TeamMemberRole $myRole = null;
+
     public function __construct()
     {
         $this->teamMembers = new ArrayCollection();
@@ -79,6 +90,30 @@ class Team extends AbstractEntity
     public function removeTeamMember(TeamMember $teamMember): self
     {
         $this->teamMembers->removeElement($teamMember);
+
+        return $this;
+    }
+
+    public function isEditable(): bool
+    {
+        return $this->editable;
+    }
+
+    public function setEditable(bool $editable): self
+    {
+        $this->editable = $editable;
+
+        return $this;
+    }
+
+    public function getMyRole(): ?TeamMemberRole
+    {
+        return $this->myRole;
+    }
+
+    public function setMyRole(?TeamMemberRole $myRole): self
+    {
+        $this->myRole = $myRole;
 
         return $this;
     }

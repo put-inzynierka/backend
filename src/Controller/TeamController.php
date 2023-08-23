@@ -7,9 +7,10 @@ use App\Component\Attribute\Response as Resp;
 use App\Entity\Team\Team;
 use App\Enum\SerializationGroup\Team\TeamGroups;
 use App\Helper\Paginator;
-use App\Repository\RepositoryFactory;
+use App\Repository\TeamRepository;
 use App\Service\Instantiator;
 use App\Service\Team\TeamCreator;
+use App\Service\Team\TeamRoleService;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
@@ -21,7 +22,8 @@ use OpenApi\Attributes\Tag;
 class TeamController extends AbstractController
 {
     public function __construct(
-        private readonly TeamCreator $creator
+        private readonly TeamCreator $creator,
+        private readonly TeamRoleService $teamRoleService
     ) {
     }
 
@@ -36,16 +38,20 @@ class TeamController extends AbstractController
     )]
     public function index(
         ParamFetcherInterface $paramFetcher,
-        RepositoryFactory     $repositoryFactory
+        TeamRepository        $repository
     ): Response {
-        $repository = $repositoryFactory->create(Team::class);
-        $list = $repository->index();
+        $list = $repository->indexByUser($this->getUser());
 
         $page = Paginator::paginate(
             $list,
             $paramFetcher->get('page'),
             $paramFetcher->get('limit')
         );
+
+        /** @var Team $team */
+        foreach ($page->getItems() as $team) {
+            $this->teamRoleService->setEditable($team, $this->getUser());
+        }
 
         return $this->object($page, groups: TeamGroups::INDEX);
     }
@@ -67,6 +73,8 @@ class TeamController extends AbstractController
         Team $team
     ): Response
     {
+        $this->teamRoleService->setMyRole($team, $this->getUser());
+
         return $this->object($team, groups: TeamGroups::SHOW);
     }
 
