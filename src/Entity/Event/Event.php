@@ -53,7 +53,7 @@ class Event extends AbstractEntity
     )]
     private string $description;
 
-    #[ORM\OneToOne(targetEntity: File::class)]
+    #[ORM\ManyToOne(targetEntity: File::class)]
     #[ORM\JoinColumn(referencedColumnName: 'uuid', nullable: false)]
     #[Constraints\NotBlank(allowNull: false, groups: [EventGroups::CREATE])]
     #[Groups([
