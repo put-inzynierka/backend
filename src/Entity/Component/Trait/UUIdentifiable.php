@@ -30,6 +30,10 @@ trait UUIdentifiable
 
     public function getUuid(): Uuid
     {
+        if (is_string($this->uuid)) {
+            $this->uuid = Uuid::fromString($this->uuid);
+        }
+
         return $this->uuid;
     }
 }
