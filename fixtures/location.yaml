@@ -11,22 +11,22 @@ App\Entity\Location\Location:
 App\Entity\Location\Stand:
   lecture-hall-main-stage:
     name: 'Main stage'
-    location: '@lecutre-hall'
+    location: '@lecture-hall'
     type: 'stage'
 
   lecture-hall-second-stage:
     name: 'Second stage'
-    location: '@lecutre-hall'
+    location: '@lecture-hall'
     type: 'stage'
 
   lecture-hall-lecture-room-{1..3}:
     name: 'Lecture room <current()>'
-    location: '@lecutre-hall'
+    location: '@lecture-hall'
     type: 'stage'
 
   lecture-hall-stand-{1..20}:
     name: 'Stand <current()>'
-    location: '@lecutre-hall'
+    location: '@lecture-hall'
     type: 'stand'
 
   building-a1-stand-{1..20}:
