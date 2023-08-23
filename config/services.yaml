@@ -47,6 +47,12 @@ services:
         tags:
             - { name: serializer.normalizer, priority: 100 }
 
+    App\Normalizer\FileNormalizer:
+        tags:
+            - { name: serializer.normalizer, priority: 100 }
+        arguments:
+            $fileUrlFormat: '%env(FILE_URL_FORMAT)%'
+
     App\EventListener\ExceptionListener:
         tags:
             - { name: kernel.event_listener, event: kernel.exception, priority: 64 }
