@@ -130,7 +130,7 @@ class UserController extends AbstractController
             $user
         );
 
-        if (array_key_exists('password', json_decode($request->getContent()))) {
+        if (array_key_exists('password', json_decode($request->getContent(), true))) {
             $passwordHasher->hashPassword($user);
         }
 
