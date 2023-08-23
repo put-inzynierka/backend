@@ -4,6 +4,7 @@ namespace App\Entity\Location;
 
 use App\Entity\AbstractEntity;
 use App\Entity\Movie\Role;
+use App\Enum\SerializationGroup\Event\EventGroups;
 use App\Enum\SerializationGroup\Movie\MovieGroups;
 use App\Enum\SerializationGroup\Location\LocationGroups;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -29,6 +30,7 @@ class Location extends AbstractEntity
         LocationGroups::SHOW,
         LocationGroups::INDEX,
         LocationGroups::UPDATE,
+        EventGroups::SHOW,
     ])]
     #[Property(
         description: 'The name of the location',
@@ -39,6 +41,7 @@ class Location extends AbstractEntity
     #[ORM\OneToMany(mappedBy: 'location', targetEntity: Stand::class, cascade: ['remove'])]
     #[Groups([
         LocationGroups::SHOW,
+        EventGroups::SHOW,
     ])]
     private Collection $stands;
 

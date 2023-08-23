@@ -4,11 +4,12 @@ namespace App\Controller;
 
 use App\Component\Attribute\Param as Param;
 use App\Component\Attribute\Response as Resp;
-use App\Entity\Movie\Movie;
-use App\Enum\SerializationGroup\Movie\MovieGroups;
+use App\Entity\Event\Event;
+use App\Enum\SerializationGroup\Event\EventGroups;
 use App\Helper\Paginator;
 use App\Repository\RepositoryFactory;
 use App\Service\Instantiator;
+use App\Voter\Qualifier;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
@@ -25,14 +26,14 @@ class EventController extends AbstractController
     #[Param\Page]
     #[Resp\PageResponse(
         description: 'Returns the list of events',
-        class: Movie::class,
-        group: MovieGroups::INDEX,
+        class: Event::class,
+        group: EventGroups::INDEX,
     )]
     public function index(
         ParamFetcherInterface $paramFetcher,
         RepositoryFactory $repositoryFactory
     ): Response {
-        $repository = $repositoryFactory->create(Movie::class);
+        $repository = $repositoryFactory->create(Event::class);
         $list = $repository->index();
 
         $page = Paginator::paginate(
@@ -41,35 +42,35 @@ class EventController extends AbstractController
             $paramFetcher->get('limit')
         );
 
-        return $this->object($page, groups: MovieGroups::INDEX);
+        return $this->object($page, groups: EventGroups::INDEX);
     }
 
     #[Rest\Get(
-        path: '/movies/{id}',
-        name: 'show_movie',
+        path: '/events/{id}',
+        name: 'show_event',
         requirements: ['id' => '\d+']
     )]
-    #[Tag('Movie')]
-    #[Param\Path('id', description: 'The ID of the movie')]
-    #[ParamConverter(data: ['name' => 'movie'], class: Movie::class)]
+    #[Tag('Event')]
+    #[Param\Path('id', description: 'The ID of the event')]
+    #[ParamConverter(data: ['name' => 'event'], class: Event::class)]
     #[Resp\ObjectResponse(
-        description: 'Returns details about the specific movie',
-        class: Movie::class,
-        group: MovieGroups::SHOW,
+        description: 'Returns details about the specific event',
+        class: Event::class,
+        group: EventGroups::SHOW,
     )]
     public function show(
-        Movie $movie
+        Event $event
     ): Response {
-        return $this->object($movie, groups: MovieGroups::SHOW);
+        return $this->object($event, groups: EventGroups::SHOW);
     }
 
-    #[Rest\Post(path: '/movies', name: 'store_movie')]
-    #[Tag('Movie')]
-    #[Param\Instance(Movie::class, MovieGroups::CREATE)]
+    #[Rest\Post(path: '/events', name: 'store_event')]
+    #[Tag('Event')]
+    #[Param\Instance(Event::class, EventGroups::CREATE)]
     #[Resp\ObjectResponse(
-        description: 'Creates a new movie',
-        class: Movie::class,
-        group: MovieGroups::SHOW,
+        description: 'Creates a new event',
+        class: Event::class,
+        group: EventGroups::SHOW,
         status: 201,
     )]
     public function store(
@@ -77,79 +78,79 @@ class EventController extends AbstractController
         Request $request,
         EntityManagerInterface $manager
     ): Response {
-//        $this->denyAccessUnlessGranted(Qualifier::IS_AUTHENTICATED);
+        $this->denyAccessUnlessGranted(Qualifier::IS_ADMIN);
 
-        /** @var Movie $movie */
-        $movie = $instantiator->deserialize(
+        /** @var Event $event */
+        $event = $instantiator->deserialize(
             $request->getContent(),
-            Movie::class,
-            MovieGroups::CREATE
+            Event::class,
+            EventGroups::CREATE
         );
 
-        $manager->persist($movie);
+        $manager->persist($event);
         $manager->flush();
 
         return $this->object(
-            $movie,
+            $event,
             201,
-            MovieGroups::SHOW
+            EventGroups::SHOW
         );
     }
 
     #[Rest\Patch(
-        path: '/movies/{id}',
-        name: 'update_movie',
+        path: '/events/{id}',
+        name: 'update_event',
         requirements: ['id' => '\d+']
     )]
-    #[Tag('Movie')]
-    #[Param\Path('id', description: 'The ID of the movie')]
-    #[Param\Instance(Movie::class, MovieGroups::UPDATE)]
-    #[ParamConverter(data: ['name' => 'movie'], class: Movie::class)]
+    #[Tag('Event')]
+    #[Param\Path('id', description: 'The ID of the event')]
+    #[Param\Instance(Event::class, EventGroups::UPDATE)]
+    #[ParamConverter(data: ['name' => 'event'], class: Event::class)]
     #[Resp\ObjectResponse(
-        description: 'Updates the specific movie',
-        class: Movie::class,
-        group: MovieGroups::SHOW,
+        description: 'Updates the specific event',
+        class: Event::class,
+        group: EventGroups::SHOW,
     )]
     public function update(
         Instantiator $instantiator,
         Request $request,
         EntityManagerInterface $manager,
-        Movie $movie
+        Event $event
     ): Response {
-//        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $movie);
+        $this->denyAccessUnlessGranted(Qualifier::IS_ADMIN);
 
-        $movie = $instantiator->deserialize(
+        $event = $instantiator->deserialize(
             $request->getContent(),
-            Movie::class,
-            MovieGroups::UPDATE,
-            $movie
+            Event::class,
+            EventGroups::UPDATE,
+            $event
         );
 
-        $manager->persist($movie);
+        $manager->persist($event);
         $manager->flush();
 
-        return $this->object($movie, groups: MovieGroups::SHOW);
+        return $this->object($event, groups: EventGroups::SHOW);
     }
 
     #[Rest\Delete(
-        path: '/movies/{id}',
-        name: 'remove_movie',
+        path: '/events/{id}',
+        name: 'remove_event',
         requirements: ['id' => '\d+']
     )]
-    #[Tag('Movie')]
-    #[Param\Path('id', description: 'The ID of the movie')]
-    #[ParamConverter(data: ['name' => 'movie'], class: Movie::class)]
+    #[Tag('Event')]
+    #[Param\Path('id', description: 'The ID of the event')]
+    #[ParamConverter(data: ['name' => 'event'], class: Event::class)]
     #[Resp\EmptyResponse(
-        description: 'Removes the specific movie',
+        description: 'Removes the specific event',
         status: 204,
     )]
     public function remove(
         EntityManagerInterface $manager,
-        Movie $movie
+        Event $event
     ): Response {
-//        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $movie);
+        $this->denyAccessUnlessGranted(Qualifier::IS_ADMIN);
 
-        $manager->remove($movie);
+        $manager->remove($event);
         $manager->flush();
 
         return $this->empty();

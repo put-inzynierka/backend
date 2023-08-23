@@ -12,7 +12,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Attributes\Property;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints;
+use DateTimeImmutable;
 
 #[ORM\Entity]
 #[ORM\Table]
@@ -73,20 +75,77 @@ class Event extends AbstractEntity
         EventGroups::SHOW,
         EventGroups::UPDATE,
     ])]
+    #[Property(
+        description: 'The locations the event is taking place at',
+    )]
     private Collection $locations;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Day::class)]
+    #[ORM\OrderBy(['date' => 'asc'])]
     #[Groups([
         EventGroups::CREATE,
         EventGroups::SHOW,
         EventGroups::UPDATE,
     ])]
+    #[Property(
+        description: 'The days the event is taking place at',
+    )]
     private Collection $days;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Constraints\DateTime]
+    #[Constraints\NotBlank(allowNull: false, groups: [EventGroups::CREATE])]
+    #[Groups([
+        EventGroups::CREATE,
+        EventGroups::SHOW,
+        EventGroups::INDEX,
+        EventGroups::UPDATE,
+    ])]
+    #[Property(
+        description: 'Time the teams need to register by',
+        example: '2023-08-18 23:59',
+    )]
+    private DateTimeImmutable $teamRegistrationEndsAt;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Constraints\DateTime]
+    #[Constraints\NotBlank(allowNull: false, groups: [EventGroups::CREATE])]
+    #[Groups([
+        EventGroups::CREATE,
+        EventGroups::SHOW,
+        EventGroups::INDEX,
+        EventGroups::UPDATE,
+    ])]
+    #[Property(
+        description: 'Time the volunteers need to register by',
+        example: '2023-08-18 23:59',
+    )]
+    private DateTimeImmutable $volunteerRegistrationEndsAt;
 
     public function __construct()
     {
         $this->locations = new ArrayCollection();
         $this->days = new ArrayCollection();
+    }
+
+    #[SerializedName('first_day')]
+    #[Groups([
+        EventGroups::INDEX,
+        EventGroups::SHOW,
+    ])]
+    public function getFirstDay(): ?Day
+    {
+        return $this->days->first() ?: null;
+    }
+
+    #[SerializedName('last_day')]
+    #[Groups([
+        EventGroups::INDEX,
+        EventGroups::SHOW,
+    ])]
+    public function getLastDay(): ?Day
+    {
+        return $this->days->last() ?: null;
     }
 
     public function getName(): string
@@ -178,6 +237,30 @@ class Event extends AbstractEntity
     public function removeDay(Day $day): self
     {
         $this->days->removeElement($day);
+
+        return $this;
+    }
+
+    public function getTeamRegistrationEndsAt(): DateTimeImmutable
+    {
+        return $this->teamRegistrationEndsAt;
+    }
+
+    public function setTeamRegistrationEndsAt(DateTimeImmutable $datetime): Event
+    {
+        $this->teamRegistrationEndsAt = $datetime;
+
+        return $this;
+    }
+
+    public function getVolunteerRegistrationEndsAt(): DateTimeImmutable
+    {
+        return $this->volunteerRegistrationEndsAt;
+    }
+
+    public function setVolunteerRegistrationEndsAt(DateTimeImmutable $datetime): Event
+    {
+        $this->volunteerRegistrationEndsAt = $datetime;
 
         return $this;
     }
