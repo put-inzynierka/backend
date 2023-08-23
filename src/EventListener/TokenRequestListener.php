@@ -2,6 +2,7 @@
 
 namespace App\EventListener;
 
+use App\Enum\SerializationGroup\BaseGroups;
 use App\Enum\SerializationGroup\User\UserGroups;
 use App\Repository\SecurityUserRepository;
 use League\Bundle\OAuth2ServerBundle\Event\TokenRequestResolveEvent;
@@ -23,7 +24,7 @@ class TokenRequestListener
 
         $user = $this->userRepository->getUserByIdentifier($username);
         $response['user'] = json_decode(
-            $this->serializer->serialize($user, 'json', ['groups' => [UserGroups::SHOW]]),
+            $this->serializer->serialize($user, 'json', ['groups' => [BaseGroups::DEFAULT, UserGroups::SHOW]]),
             true
         );
 

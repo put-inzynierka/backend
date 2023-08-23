@@ -73,6 +73,7 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     #[ORM\Column(type: Types::BOOLEAN)]
     #[Groups([
         UserGroups::SHOW,
+        UserGroups::INDEX,
     ])]
     #[Property(
         description: 'Whether or not the user is active',
