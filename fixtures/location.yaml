@@ -1,40 +1,41 @@
 App\Entity\Location\Location:
-  pawilon-a:
-    name: 'Pawilon A'
+  lecture-hall:
+    name: 'Lecture Hall'
 
-  pawilon-b:
-    name: 'Pawilon B'
+  building-a1:
+    name: 'Building A1'
 
-  pawilon-c:
-    name: 'Pawilon C'
+  building-a3:
+    name: 'Building A3'
 
 App\Entity\Location\Stand:
-  stand-1:
-    location: '@pawilon-a'
-    name: 'Stage 1'
+  lecture-hall-main-stage:
+    name: 'Main stage'
+    location: '@lecutre-hall'
     type: 'stage'
 
-  stand-2:
-    location: '@pawilon-a'
-    name: 'Stand 2'
-    type: 'stand'
-
-  stand-3:
-    location: '@pawilon-a'
-    name: 'Stand 3'
-    type: 'stand'
-
-  stand-4:
-    location: '@pawilon-a'
-    name: 'Stand 4'
-    type: 'stand'
-
-  stand-5:
-    location: '@pawilon-b'
-    name: 'Stage 1'
+  lecture-hall-second-stage:
+    name: 'Second stage'
+    location: '@lecutre-hall'
     type: 'stage'
 
-  stand-6:
-    location: '@pawilon-b'
-    name: 'Stage 2'
+  lecture-hall-lecture-room-{1..3}:
+    name: 'Lecture room <current()>'
+    location: '@lecutre-hall'
     type: 'stage'
+
+  lecture-hall-stand-{1..20}:
+    name: 'Stand <current()>'
+    location: '@lecutre-hall'
+    type: 'stand'
+
+  building-a1-stand-{1..20}:
+    name: 'Stand <current()>'
+    location: '@building-a1'
+    type: 'stand'
+
+  building-a3-stand-{1..20}:
+    name: 'Stand <current()>'
+    location: '@building-a3'
+    type: 'stand'
+
