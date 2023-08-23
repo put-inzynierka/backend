@@ -25,6 +25,6 @@ class FileNormalizer implements NormalizerInterface
             sprintf($this->fileUrlFormat, $object->getUuid()->jsonSerialize())
         );
 
-        $this->objectNormalizer->normalize($object, $format, $context);
+        return $this->objectNormalizer->normalize($object, $format, $context);
     }
 }
