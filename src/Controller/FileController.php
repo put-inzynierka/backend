@@ -8,10 +8,8 @@ use App\Component\Attribute\Response as Resp;
 use App\Component\Model\File as FileModel;
 use App\Entity\File\File;
 use App\Enum\File\FileType;
-use App\Enum\SerializationGroup\Movie\GenreGroups;
 use App\Service\File\Uploader;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use OpenApi\Attributes as OA;
 use OpenApi\Attributes\Tag;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,19 +19,11 @@ class FileController extends AbstractController
 {
     #[Rest\Post(path: '/files/{type}', name: 'store_file')]
     #[Tag('File')]
-    #[OA\RequestBody(
-        new OA\MediaType(
-            mediaType: 'multipart/form-data',
-            schema: new OA\Schema(
-                new OA\Property(
-                    property: 'file',
-                    description: 'File to upload',
-                    type: 'string',
-                    format: 'binary',
-                )
-            )
-        )
-    )]
+    #[Param\Path(
+        'type',
+        'Type of uploaded file. One of: event-image, project-image',
+        '/^(event-image|project-image)$/')
+    ]
     #[Resp\ObjectResponse(
         description: 'Creates a new file',
         class: FileModel::class,
