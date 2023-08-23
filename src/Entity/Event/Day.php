@@ -35,7 +35,7 @@ class Day extends AbstractEntity
     )]
     private DateTimeImmutable $date;
 
-    #[ORM\ManyToOne(targetEntity: Timeframe::class)]
+    #[ORM\OneToOne(targetEntity: Timeframe::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     #[Constraints\NotBlank(allowNull: false, groups: [EventGroups::CREATE])]
     #[Groups([
