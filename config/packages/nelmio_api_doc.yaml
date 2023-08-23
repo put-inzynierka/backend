@@ -2,7 +2,7 @@ nelmio_api_doc:
     models: { use_jms: false }
     documentation:
         info:
-            title: Movie DB API
+            title: Events app API
             description: An app
             version: 1.0.0
     areas: # to filter documented areas

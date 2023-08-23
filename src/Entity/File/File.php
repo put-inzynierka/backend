@@ -10,8 +10,11 @@ use App\Entity\User\User;
 use App\Enum\File\FileExtension;
 use App\Enum\File\FileType;
 use App\Enum\File\MimeType;
+use App\Enum\SerializationGroup\BaseGroups;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Deprecated;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity]
@@ -37,6 +40,9 @@ class File implements UUIdentifiable, Timestampable
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: true)]
     private ?User $uploadedBy;
+
+    #[Groups([BaseGroups::DEFAULT])]
+    private ?string $url;
 
     public function __construct(string $filename, FileExtension $extension, MimeType $mimeType, FileType $type, ?User $uploadedBy)
     {
@@ -104,6 +110,19 @@ class File implements UUIdentifiable, Timestampable
     public function setUploadedBy(?User $uploadedBy): File
     {
         $this->uploadedBy = $uploadedBy;
+
+        return $this;
+    }
+
+    #[Deprecated('The following should only be used by normalizer\'s property accessors. Do not use the `url` property as it should not be set during File\'s lifecycle.')]
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(string $url): File
+    {
+        $this->url = $url;
 
         return $this;
     }

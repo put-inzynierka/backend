@@ -3,6 +3,7 @@
 namespace App\Entity\Location;
 
 use App\Entity\AbstractEntity;
+use App\Enum\SerializationGroup\Event\EventGroups;
 use App\Enum\SerializationGroup\Location\StandGroups;
 use App\Enum\StandType;
 use Doctrine\DBAL\Types\Types;
@@ -26,6 +27,7 @@ class Stand extends AbstractEntity
         StandGroups::SHOW,
         StandGroups::INDEX,
         StandGroups::UPDATE,
+        EventGroups::SHOW,
     ])]
     #[Property(
         description: 'The name of the stand',

@@ -12,7 +12,6 @@ use App\Exception\UnprocessableEntityHttpException;
 use App\Service\File\Factory\FileProcessorFactory;
 use App\Service\File\Factory\FileValidatorFactory;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Component\Model\File as FileModel;
 
 class Uploader
 {
@@ -24,7 +23,7 @@ class Uploader
         protected string $backendUrl
     ) {}
 
-    public function upload(RawFile $rawFile, FileType $type, ?User $actor): FileModel
+    public function upload(RawFile $rawFile, FileType $type, ?User $actor): File
     {
         $this->validate($rawFile, $type, $actor);
         $this->process($rawFile, $type, $actor);
@@ -42,17 +41,7 @@ class Uploader
         $this->entityManager->persist($file);
         $this->entityManager->flush();
 
-        return $this->prepareModel($file);
-    }
-
-    public function prepareModel(File $file): FileModel
-    {
-        $uuid = $file->getUuid()->jsonSerialize();
-
-        return new FileModel(
-            $uuid,
-            sprintf('%s/files/%s', $this->backendUrl, $uuid)
-        );
+        return $file;
     }
 
     protected function validate(RawFile $file, FileType $type, ?User $actor): void

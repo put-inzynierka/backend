@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Bridge\Symfony\HttpFoundation\RawFile;
 use App\Component\Attribute\Param as Param;
 use App\Component\Attribute\Response as Resp;
-use App\Component\Model\File as FileModel;
 use App\Entity\File\File;
 use App\Enum\File\FileType;
 use App\Service\File\Uploader;
@@ -26,7 +25,7 @@ class FileController extends AbstractController
     ]
     #[Resp\ObjectResponse(
         description: 'Creates a new file',
-        class: FileModel::class,
+        class: File::class,
         status: 201,
     )]
     public function store(
