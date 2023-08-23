@@ -21,11 +21,12 @@ class EntityNormalizer implements DenormalizerInterface
 
     public function supportsDenormalization($data, string $type, string $format = null): bool
     {
-        $isAnEntity = str_starts_with($type, 'App\\Entity\\') && is_array($data);
+        $isAnEntity = str_starts_with($type, 'App\\Entity\\');
 
         $hasId =
-            (array_key_exists('id', $data) && !is_null($data['id'])) ||
-            (array_key_exists('uuid', $data) && !is_null($data['uuid']))
+            is_array($data) &&
+            ((array_key_exists('id', $data) && !is_null($data['id'])) ||
+            (array_key_exists('uuid', $data) && !is_null($data['uuid'])))
         ;
 
         return $isAnEntity && $hasId;
