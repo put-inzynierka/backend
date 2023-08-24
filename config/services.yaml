@@ -19,6 +19,7 @@ services:
             string $frontendUrl: '%app.frontend_url%'
             string $backendUrl: '%app.backend_url%'
             string $uploadsDirectory: '%app.uploads_directory%'
+            string $locale: "@=service('request_stack').getCurrentRequest().getLocale()"
 
     _instanceof:
         App\Service\File\Contract\FileProcessor:
@@ -69,6 +70,10 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 4 }
 
+    App\EventListener\LocaleListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 4 }
+
     App\Command\LoadFixtures:
         arguments:
             $fixturesDirectory: '%kernel.project_dir%/fixtures'
@@ -81,6 +86,14 @@ services:
         arguments:
             $sender: '%app.mail_sender%'
             $senderName: '%app.mail_sender_name%'
+
+    App\Service\Mail\PasswordResetMailer:
+        arguments:
+            $urlFormat: '%env(PASSWORD_RESET_URL_FORMAT)%'
+
+    App\Service\Mail\RegistrationMailer:
+        arguments:
+            $urlFormat: '%env(EMAIL_ACTIVATION_URL_FORMAT)%'
 
     App\Service\File\Factory\FileProcessorFactory:
         arguments:

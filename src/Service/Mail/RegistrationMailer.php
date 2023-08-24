@@ -9,13 +9,16 @@ class RegistrationMailer
 {
     public function __construct(
         protected Mailer $mailer,
-        protected string $frontendUrl,
+        protected string $urlFormat,
+        protected string $locale
     ) {}
 
     public function send(
         User $recipient,
         Token $activationToken
     ): void {
+        $url = sprintf($this->urlFormat, $this->locale, $activationToken->getValue());
+
         $this->mailer->send(
             $recipient->getEmail(),
             'Registration',
@@ -23,7 +26,7 @@ class RegistrationMailer
                 <p>Hi {$recipient->getFirstName()}!</p>
                 <p>Thank you for registering.</p>
                 <p>Please click the link below to activate your account:</p>
-                <p><a href="{$this->frontendUrl}/activate/{$activationToken->getValue()}">Activate</a></p>
+                <p><a href="$url">Activate</a></p>
             MSG
         );
     }

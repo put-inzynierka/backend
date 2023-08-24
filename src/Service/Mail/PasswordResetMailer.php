@@ -9,20 +9,23 @@ class PasswordResetMailer
 {
     public function __construct(
         protected Mailer $mailer,
-        protected string $frontendUrl,
+        protected string $urlFormat,
+        protected string $locale
     ) {}
 
     public function send(
         User $recipient,
         Token $resetToken
     ): void {
+        $url = sprintf($this->urlFormat, $this->locale, $resetToken->getValue());
+
         $this->mailer->send(
             $recipient->getEmail(),
             'Password reset',
             <<<MSG
                 <p>Hi {$recipient->getFirstName()}!</p>
                 <p>You have requested a password reset. Please click the link below to reset your password.</p>
-                <p><a href="{$this->frontendUrl}/reset-password/{$resetToken->getValue()}">Reset password</a></p>
+                <p><a href="$url">Reset password</a></p>
                 <p>If you did not request a password reset, please ignore this email.</p>
             MSG
         );
