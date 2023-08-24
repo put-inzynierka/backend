@@ -3,6 +3,7 @@
 namespace App\Entity\Team;
 
 use App\Entity\AbstractEntity;
+use App\Entity\Project\Project;
 use App\Enum\SerializationGroup\Team\TeamGroups;
 use App\Enum\TeamMemberRole;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -43,6 +44,16 @@ class Team extends AbstractEntity
     ])]
     private Collection $teamMembers;
 
+    #[ORM\OneToMany(
+        mappedBy: 'team',
+        targetEntity: Project::class,
+        cascade: ['persist', 'remove']
+    )]
+    #[Groups([
+        TeamGroups::SHOW,
+    ])]
+    private Collection $projects;
+
     #[Groups([
         TeamGroups::INDEX,
     ])]
@@ -56,6 +67,7 @@ class Team extends AbstractEntity
     public function __construct()
     {
         $this->teamMembers = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
     public function getName(): string
@@ -90,6 +102,32 @@ class Team extends AbstractEntity
     public function removeTeamMember(TeamMember $teamMember): self
     {
         $this->teamMembers->removeElement($teamMember);
+
+        return $this;
+    }
+
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function setProjects(Collection $projects): self
+    {
+        $this->projects = $projects;
+
+        return $this;
+    }
+
+    public function addProject(Project $project): self
+    {
+        $this->projects->add($project);
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): self
+    {
+        $this->projects->removeElement($project);
 
         return $this;
     }
