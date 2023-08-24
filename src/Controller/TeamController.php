@@ -11,6 +11,7 @@ use App\Repository\TeamRepository;
 use App\Service\Instantiator;
 use App\Service\Team\TeamCreator;
 use App\Service\Team\TeamRoleService;
+use App\Voter\Qualifier;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
@@ -24,8 +25,7 @@ class TeamController extends AbstractController
     public function __construct(
         private readonly TeamCreator $creator,
         private readonly TeamRoleService $teamRoleService
-    ) {
-    }
+    ) {}
 
     #[Rest\Get(path: '/teams', name: 'index_teams')]
     #[Tag('Team')]
@@ -40,6 +40,8 @@ class TeamController extends AbstractController
         ParamFetcherInterface $paramFetcher,
         TeamRepository        $repository
     ): Response {
+        $this->denyAccessUnlessGranted(Qualifier::IS_AUTHENTICATED);
+
         $list = $repository->indexByUser($this->getUser());
 
         $page = Paginator::paginate(
@@ -71,8 +73,9 @@ class TeamController extends AbstractController
     )]
     public function show(
         Team $team
-    ): Response
-    {
+    ): Response {
+        $this->denyAccessUnlessGranted(Qualifier::HAS_ACCESS, $team);
+
         $this->teamRoleService->setMyRole($team, $this->getUser());
 
         return $this->object($team, groups: TeamGroups::SHOW);
@@ -90,9 +93,8 @@ class TeamController extends AbstractController
     public function store(
         Instantiator $instantiator,
         Request      $request
-    ): Response
-    {
-//        $this->denyAccessUnlessGranted(Qualifier::IS_AUTHENTICATED);
+    ): Response {
+        $this->denyAccessUnlessGranted(Qualifier::IS_AUTHENTICATED);
 
         /** @var Team $team */
         $team = $instantiator->deserialize(
@@ -129,9 +131,8 @@ class TeamController extends AbstractController
         Request                $request,
         EntityManagerInterface $manager,
         Team                   $team
-    ): Response
-    {
-//        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $team);
+    ): Response {
+        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $team);
 
         $team = $instantiator->deserialize(
             $request->getContent(),
@@ -161,9 +162,8 @@ class TeamController extends AbstractController
     public function remove(
         EntityManagerInterface $manager,
         Team                   $team
-    ): Response
-    {
-//        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $team);
+    ): Response {
+        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $team);
 
         $manager->remove($team);
         $manager->flush();

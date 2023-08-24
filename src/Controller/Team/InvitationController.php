@@ -13,6 +13,7 @@ use App\Helper\Paginator;
 use App\Repository\TeamMemberRepository;
 use App\Service\Instantiator;
 use App\Service\Team\TeamInvitationService;
+use App\Voter\Qualifier;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -24,8 +25,7 @@ class InvitationController extends AbstractController
 {
     public function __construct(
         private readonly TeamInvitationService $invitationService
-    ) {
-    }
+    ) {}
 
     #[Rest\Post(
         path: '/teams/{id}/invite',
@@ -50,7 +50,7 @@ class InvitationController extends AbstractController
         Team         $team,
         Request      $request
     ): Response {
-//        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $team);
+        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $team);
 
         /** @var TeamMember $teamMember */
         $teamMember = $instantiator->deserialize(
@@ -84,6 +84,8 @@ class InvitationController extends AbstractController
         ParamFetcherInterface $paramFetcher,
         TeamMemberRepository  $repository
     ): Response {
+        $this->denyAccessUnlessGranted(Qualifier::IS_AUTHENTICATED);
+
         $list = $repository->invitationsByEmail($this->getUser()->getEmail());
 
         $page = Paginator::paginate(
@@ -115,6 +117,8 @@ class InvitationController extends AbstractController
     public function accept(
         TeamMember $teamMember,
     ): Response {
+        $this->denyAccessUnlessGranted(Qualifier::IS_AUTHENTICATED);
+
         $this->invitationService->accept($teamMember, $this->getUser());
 
         return $this->object(

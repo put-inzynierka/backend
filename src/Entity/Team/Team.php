@@ -4,6 +4,7 @@ namespace App\Entity\Team;
 
 use App\Entity\AbstractEntity;
 use App\Entity\Project\Project;
+use App\Entity\User\User;
 use App\Enum\SerializationGroup\Team\TeamGroups;
 use App\Enum\TeamMemberRole;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -12,6 +13,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Attributes\Property;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints;
 
 #[ORM\Entity]
@@ -39,10 +41,11 @@ class Team extends AbstractEntity
         targetEntity: TeamMember::class,
         cascade: ['persist', 'remove']
     )]
+    #[SerializedName('team_members')]
     #[Groups([
         TeamGroups::SHOW,
     ])]
-    private Collection $teamMembers;
+    private Collection $members;
 
     #[ORM\OneToMany(
         mappedBy: 'team',
@@ -66,7 +69,7 @@ class Team extends AbstractEntity
 
     public function __construct()
     {
-        $this->teamMembers = new ArrayCollection();
+        $this->members = new ArrayCollection();
         $this->projects = new ArrayCollection();
     }
 
@@ -80,28 +83,35 @@ class Team extends AbstractEntity
         $this->name = $name;
     }
 
-    public function getTeamMembers(): Collection
+    public function getMembers(): Collection
     {
-        return $this->teamMembers;
+        return $this->members;
     }
 
-    public function setTeamMembers(Collection $teamMembers): self
+    public function getMember(User $user): ?TeamMember
     {
-        $this->teamMembers = $teamMembers;
+        return $this->members->findFirst(function (string|int $key, TeamMember $teamMember) use ($user) {
+            return $teamMember->isAccepted() && $teamMember->getUser()->getId() === $user->getId();
+        });
+    }
+
+    public function setMembers(Collection $members): self
+    {
+        $this->members = $members;
 
         return $this;
     }
 
-    public function addTeamMember(TeamMember $teamMember): self
+    public function addMember(TeamMember $member): self
     {
-        $this->teamMembers->add($teamMember);
+        $this->members->add($member);
 
         return $this;
     }
 
-    public function removeTeamMember(TeamMember $teamMember): self
+    public function removeMember(TeamMember $member): self
     {
-        $this->teamMembers->removeElement($teamMember);
+        $this->members->removeElement($member);
 
         return $this;
     }

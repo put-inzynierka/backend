@@ -28,12 +28,7 @@ final class TeamRoleService
             return TeamMemberRole::OWNER;
         }
 
-        /** @var TeamMember|null $teamMember */
-        $teamMember = $team->getTeamMembers()->findFirst(function (string|int $key, TeamMember $teamMember) use ($user) {
-            return $teamMember->isAccepted() && $teamMember->getUser() === $user;
-        });
-
-        return $teamMember?->getRole();
+        return $team->getMember($user)?->getRole();
     }
 
     private function isAdmin(User $user): bool
