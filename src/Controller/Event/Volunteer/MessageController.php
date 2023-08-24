@@ -37,8 +37,8 @@ class MessageController extends AbstractController
         description: 'The ID of the volunteer',
     )]
     #[Param\Instance(Message::class, MessageGroups::CREATE)]
-    #[ParamConverter(data: ['name' => 'event'], class: Event::class)]
-    #[ParamConverter(data: ['name' => 'volunteer'], class: Volunteer::class)]
+    #[ParamConverter(data: ['name' => 'event'], class: Event::class, options: ['id' => 'eventId'])]
+    #[ParamConverter(data: ['name' => 'volunteer'], class: Volunteer::class, options: ['id' => 'volunteerId'])]
     #[Resp\ObjectResponse(
         description: 'Messages a volunteer',
         class: MailLog::class,

@@ -29,7 +29,7 @@ class VolunteerAvailability extends AbstractEntity
     ])]
     private Day $day;
 
-    #[ORM\OneToMany(targetEntity: Timeframe::class, cascade: ['persist', 'remove'])]
+    #[ORM\ManyToMany(targetEntity: Timeframe::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinTable(name: 'event.volunteer_availabilities_timeframes')]
     #[ORM\JoinColumn(name: 'volunteer_availability_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'timeframe_id', referencedColumnName: 'id')]
