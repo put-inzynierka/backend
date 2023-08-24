@@ -12,7 +12,7 @@ final class TeamRoleService
 {
     public function setEditable(Team $team, User $user): void
     {
-        if ($this->isAdmin($user) || $this->getTeamRole($team, $user) === TeamMemberRole::OWNER) {
+        if ($this->getTeamRole($team, $user) === TeamMemberRole::OWNER) {
             $team->setEditable(true);
         }
     }
