@@ -23,7 +23,7 @@ class Mailer
         string $content,
         ?string $from = null,
         ?string $fromName = null
-    ): void {
+    ): MailLog {
         $from = $from ?? $this->sender;
         $fromName = $fromName ?? $this->senderName;
 
@@ -49,5 +49,7 @@ class Mailer
 
         $mailLog->setSent(true);
         $this->entityManager->flush();
+
+        return $mailLog;
     }
 }
