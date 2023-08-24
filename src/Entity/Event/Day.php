@@ -5,6 +5,7 @@ namespace App\Entity\Event;
 use App\Entity\AbstractEntity;
 use App\Entity\Timeframe;
 use App\Enum\SerializationGroup\Event\EventGroups;
+use App\Enum\SerializationGroup\Event\VolunteerGroups;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Attributes\Property;
@@ -28,6 +29,7 @@ class Day extends AbstractEntity
         EventGroups::SHOW,
         EventGroups::INDEX,
         EventGroups::UPDATE,
+        VolunteerGroups::INDEX,
     ])]
     #[Property(
         description: 'Date of the day',
