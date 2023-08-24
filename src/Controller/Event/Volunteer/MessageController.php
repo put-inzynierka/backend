@@ -53,7 +53,7 @@ class MessageController extends AbstractController
         Request $request
     ): Response {
         $this->denyAccessUnlessGranted(Qualifier::IS_ADMIN);
-
+        
         /** @var Message $message */
         $message = $instantiator->deserialize(
             $request->getContent(),
