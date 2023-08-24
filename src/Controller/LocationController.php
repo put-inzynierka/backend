@@ -10,6 +10,7 @@ use App\Enum\SerializationGroup\Location\LocationGroups;
 use App\Helper\Paginator;
 use App\Repository\RepositoryFactory;
 use App\Service\Instantiator;
+use App\Voter\Qualifier;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
@@ -79,7 +80,7 @@ class LocationController extends AbstractController
         EntityManagerInterface $manager,
         Request $request
     ): Response {
-//        $this->denyAccessUnlessGranted(Qualifier::IS_AUTHENTICATED);
+        $this->denyAccessUnlessGranted(Qualifier::IS_ADMIN);
 
         /** @var Location $location */
         $location = $instantiator->deserialize(
@@ -118,7 +119,7 @@ class LocationController extends AbstractController
         EntityManagerInterface $manager,
         Location $location
     ): Response {
-//        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $location);
+        $this->denyAccessUnlessGranted(Qualifier::IS_ADMIN);
 
         $location = $instantiator->deserialize(
             $request->getContent(),
@@ -149,7 +150,7 @@ class LocationController extends AbstractController
         EntityManagerInterface $manager,
         Location $location
     ): Response {
-//        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $location);
+        $this->denyAccessUnlessGranted(Qualifier::IS_ADMIN);
 
         $manager->remove($location);
         $manager->flush();

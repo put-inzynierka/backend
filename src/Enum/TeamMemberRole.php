@@ -9,4 +9,9 @@ enum TeamMemberRole: string
     case OWNER = 'owner';
     case MANAGER = 'manager';
     case MEMBER = 'member';
+
+    public function canManage(): bool
+    {
+        return in_array($this, [self::MANAGER, self::OWNER]);
+    }
 }

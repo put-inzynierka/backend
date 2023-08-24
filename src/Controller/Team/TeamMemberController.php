@@ -11,6 +11,7 @@ use App\Enum\SerializationGroup\Team\TeamMemberGroups;
 use App\Helper\Paginator;
 use App\Repository\TeamMemberRepository;
 use App\Service\Instantiator;
+use App\Voter\Qualifier;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
@@ -44,6 +45,8 @@ final class TeamMemberController extends AbstractController
         TeamMemberRepository  $repository,
         Team                  $team
     ): Response {
+        $this->denyAccessUnlessGranted(Qualifier::HAS_ACCESS, $team);
+
         $list = $repository->indexByTeam($team);
 
         $page = Paginator::paginate(
@@ -81,7 +84,7 @@ final class TeamMemberController extends AbstractController
     public function show(
         TeamMember $teamMember
     ): Response {
-//        $this->denyAccessUnlessGranted(Qualifier::HAS_ACCESS, $teamMember);
+        $this->denyAccessUnlessGranted(Qualifier::HAS_ACCESS, $teamMember->getTeam());
 
         return $this->object($teamMember, groups: TeamMemberGroups::SHOW);
     }
@@ -118,7 +121,8 @@ final class TeamMemberController extends AbstractController
         Team                   $team,
         TeamMember             $teamMember
     ): Response {
-//        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $team);
+        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $team);
+
         $teamMember = $instantiator->deserialize(
             $request->getContent(),
             TeamMember::class,
@@ -159,7 +163,8 @@ final class TeamMemberController extends AbstractController
         Team                   $team,
         TeamMember             $teamMember
     ): Response {
-//        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $team);
+        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $team);
+
         $manager->remove($teamMember);
         $manager->flush();
 

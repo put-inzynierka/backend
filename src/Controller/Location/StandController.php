@@ -11,6 +11,7 @@ use App\Enum\SerializationGroup\Location\StandGroups;
 use App\Helper\Paginator;
 use App\Repository\StandRepository;
 use App\Service\Instantiator;
+use App\Voter\Qualifier;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
@@ -81,8 +82,6 @@ class StandController extends AbstractController
     public function show(
         Stand $stand
     ): Response {
-//        $this->denyAccessUnlessGranted(Qualifier::HAS_ACCESS, $stand);
-
         return $this->object($stand, groups: StandGroups::SHOW);
     }
 
@@ -111,7 +110,7 @@ class StandController extends AbstractController
         Location $location,
         Request $request
     ): Response {
-//        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $location);
+        $this->denyAccessUnlessGranted(Qualifier::IS_ADMIN);
 
         /** @var Stand $stand */
         $stand = $instantiator->deserialize(
@@ -163,7 +162,8 @@ class StandController extends AbstractController
         Location $location,
         Stand $stand
     ): Response {
-//        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $location);
+        $this->denyAccessUnlessGranted(Qualifier::IS_ADMIN);
+
         $stand = $instantiator->deserialize(
             $request->getContent(),
             Stand::class,
@@ -204,7 +204,8 @@ class StandController extends AbstractController
         Location $location,
         Stand $stand
     ): Response {
-//        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $location);
+        $this->denyAccessUnlessGranted(Qualifier::IS_ADMIN);
+
         $manager->remove($stand);
         $manager->flush();
 
