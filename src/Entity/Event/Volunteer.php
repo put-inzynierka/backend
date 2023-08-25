@@ -20,6 +20,9 @@ class Volunteer extends AbstractEntity
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn]
+    #[Groups([
+        VolunteerGroups::INDEX,
+    ])]
     private User $user;
 
     #[ORM\OneToMany(mappedBy: 'volunteer', targetEntity: VolunteerAvailability::class, cascade: ['persist', 'remove'])]
