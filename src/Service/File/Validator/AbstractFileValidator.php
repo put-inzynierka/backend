@@ -2,12 +2,7 @@
 
 namespace App\Service\File\Validator;
 
-use Symfony\Component\Validator\ConstraintViolation;
+use App\Service\Validation\Validator;
 
-abstract class AbstractFileValidator
-{
-    protected function createViolation(string $message, string $property = '', ?string $invalidValue = null): ConstraintViolation
-    {
-        return new ConstraintViolation($message, '', [], null, $property, $invalidValue);
-    }
-}
+abstract class AbstractFileValidator extends Validator
+{}

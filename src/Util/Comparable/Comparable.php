@@ -30,4 +30,9 @@ trait Comparable
     {
         return $this->getValue() <=> $that->getValue();
     }
+
+    public function between(ComparableInterface $beginning, ComparableInterface $end): bool
+    {
+        return $this->getValue() >= $beginning && $this->getValue() <= $end;
+    }
 }
