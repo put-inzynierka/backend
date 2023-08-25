@@ -3,45 +3,80 @@
 namespace App\Entity\Project;
 
 use App\Entity\AbstractEntity;
+use App\Entity\Component\Contract\Timeframeable;
 use App\Entity\Event\Day;
 use App\Entity\Event\Event;
-use App\Entity\Location\Location;
 use App\Entity\Location\Stand;
 use App\Entity\Timeframe;
-use App\Enum\SerializationGroup\Event\EventGroups;
-use App\Enum\SerializationGroup\Location\StandGroups;
-use App\Enum\StandType;
+use App\Enum\SerializationGroup\Project\ReservationGroups;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use OpenApi\Attributes\Property;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints;
+use DateTimeImmutable;
 
 #[ORM\Entity]
 #[ORM\Table]
 #[UniqueEntity(fields: ['name'])]
-class Reservation extends AbstractEntity
+class Reservation extends AbstractEntity implements Timeframeable
 {
     #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        ReservationGroups::INDEX,
+    ])]
     private Project $project;
 
     #[ORM\ManyToOne(targetEntity: Event::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Constraints\NotBlank(allowNull: false, groups: [ReservationGroups::CREATE])]
+    #[Groups([
+        ReservationGroups::CREATE,
+        ReservationGroups::UPDATE,
+        ReservationGroups::INDEX,
+    ])]
     private Event $event;
 
     #[ORM\ManyToOne(targetEntity: Day::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Constraints\NotBlank(allowNull: false, groups: [ReservationGroups::CREATE])]
+    #[Groups([
+        ReservationGroups::CREATE,
+        ReservationGroups::UPDATE,
+        ReservationGroups::INDEX,
+    ])]
     private Day $day;
 
     #[ORM\ManyToOne(targetEntity: Stand::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Constraints\NotBlank(allowNull: false, groups: [ReservationGroups::CREATE])]
+    #[Groups([
+        ReservationGroups::CREATE,
+        ReservationGroups::UPDATE,
+        ReservationGroups::INDEX,
+    ])]
     private Stand $stand;
 
     #[ORM\OneToOne(targetEntity: Timeframe::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Constraints\NotBlank(allowNull: false, groups: [ReservationGroups::CREATE])]
+    #[Groups([
+        ReservationGroups::CREATE,
+        ReservationGroups::UPDATE,
+        ReservationGroups::INDEX,
+    ])]
     private Timeframe $timeframe;
+
+    #[ORM\Column(type: Types::BOOLEAN)]
+    #[Constraints\Type(Types::BOOLEAN)]
+    #[Groups([
+        ReservationGroups::ADMIN_UPDATE,
+        ReservationGroups::INDEX,
+    ])]
+    private bool $confirmed;
 
     public function getProject(): Project
     {
@@ -98,6 +133,28 @@ class Reservation extends AbstractEntity
     public function setTimeframe(Timeframe $timeframe): Reservation
     {
         $this->timeframe = $timeframe;
+
+        return $this;
+    }
+
+    public function getDate(): DateTimeImmutable
+    {
+        return $this->day->getDate();
+    }
+
+    public function getTimeframes(): Collection
+    {
+        return new ArrayCollection([$this->timeframe]);
+    }
+
+    public function isConfirmed(): bool
+    {
+        return $this->confirmed;
+    }
+
+    public function setConfirmed(bool $confirmed): Reservation
+    {
+        $this->confirmed = $confirmed;
 
         return $this;
     }

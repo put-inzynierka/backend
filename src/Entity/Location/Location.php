@@ -3,10 +3,9 @@
 namespace App\Entity\Location;
 
 use App\Entity\AbstractEntity;
-use App\Entity\Movie\Role;
 use App\Enum\SerializationGroup\Event\EventGroups;
-use App\Enum\SerializationGroup\Movie\MovieGroups;
 use App\Enum\SerializationGroup\Location\LocationGroups;
+use App\Enum\SerializationGroup\Project\ReservationGroups;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -31,6 +30,7 @@ class Location extends AbstractEntity
         LocationGroups::INDEX,
         LocationGroups::UPDATE,
         EventGroups::SHOW,
+        ReservationGroups::INDEX,
     ])]
     #[Property(
         description: 'The name of the location',
@@ -79,12 +79,7 @@ class Location extends AbstractEntity
 
     public function removeStand(Stand $stand): self
     {
-        if ($this->stands->removeElement($stand)) {
-            // set the owning side to null (unless already changed)
-            if ($stand->getLocation() === $this) {
-                $stand->setLocation(null);
-            }
-        }
+        $this->stands->removeElement($stand);
 
         return $this;
     }

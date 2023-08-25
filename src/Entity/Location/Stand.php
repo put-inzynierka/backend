@@ -5,6 +5,7 @@ namespace App\Entity\Location;
 use App\Entity\AbstractEntity;
 use App\Enum\SerializationGroup\Event\EventGroups;
 use App\Enum\SerializationGroup\Location\StandGroups;
+use App\Enum\SerializationGroup\Project\ReservationGroups;
 use App\Enum\StandType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,6 +29,7 @@ class Stand extends AbstractEntity
         StandGroups::INDEX,
         StandGroups::UPDATE,
         EventGroups::SHOW,
+        ReservationGroups::INDEX,
     ])]
     #[Property(
         description: 'The name of the stand',
@@ -55,6 +57,7 @@ class Stand extends AbstractEntity
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         StandGroups::SHOW,
+        ReservationGroups::INDEX,
     ])]
     private Location $location;
 

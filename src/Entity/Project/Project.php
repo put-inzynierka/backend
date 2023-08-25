@@ -7,6 +7,7 @@ use App\Entity\File\File;
 use App\Entity\Team\Team;
 use App\Enum\ProjectType;
 use App\Enum\SerializationGroup\Project\ProjectGroups;
+use App\Enum\SerializationGroup\Project\ReservationGroups;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -28,6 +29,7 @@ class Project extends AbstractEntity
         ProjectGroups::SHOW,
         ProjectGroups::INDEX,
         ProjectGroups::UPDATE,
+        ReservationGroups::INDEX,
     ])]
     #[Property(
         description: 'The name of the project',
@@ -43,6 +45,7 @@ class Project extends AbstractEntity
         ProjectGroups::CREATE,
         ProjectGroups::SHOW,
         ProjectGroups::UPDATE,
+        ReservationGroups::INDEX,
     ])]
     #[Property(
         description: 'The description of the project',
@@ -71,6 +74,7 @@ class Project extends AbstractEntity
         ProjectGroups::SHOW,
         ProjectGroups::CREATE,
         ProjectGroups::INDEX,
+        ReservationGroups::INDEX,
     ])]
     #[Property(
         description: 'Team responsible for the project',
@@ -85,6 +89,7 @@ class Project extends AbstractEntity
         ProjectGroups::SHOW,
         ProjectGroups::INDEX,
         ProjectGroups::UPDATE,
+        ReservationGroups::INDEX,
     ])]
     #[Property(
         description: 'The image of the project',

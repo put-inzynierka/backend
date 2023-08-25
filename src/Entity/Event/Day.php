@@ -7,6 +7,7 @@ use App\Entity\Component\Contract\Timeframeable;
 use App\Entity\Timeframe;
 use App\Enum\SerializationGroup\Event\EventGroups;
 use App\Enum\SerializationGroup\Event\VolunteerGroups;
+use App\Enum\SerializationGroup\Project\ReservationGroups;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,6 +33,7 @@ class Day extends AbstractEntity implements Timeframeable
         EventGroups::INDEX,
         EventGroups::UPDATE,
         VolunteerGroups::INDEX,
+        ReservationGroups::INDEX,
     ])]
     #[Property(
         description: 'Date of the day',

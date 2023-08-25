@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Enum\SerializationGroup\Event\EventGroups;
 use App\Enum\SerializationGroup\Event\VolunteerGroups;
+use App\Enum\SerializationGroup\Project\ReservationGroups;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Attributes\Property;
@@ -25,6 +26,9 @@ class Timeframe extends AbstractEntity
         EventGroups::UPDATE,
         VolunteerGroups::CREATE,
         VolunteerGroups::INDEX,
+        ReservationGroups::CREATE,
+        ReservationGroups::UPDATE,
+        ReservationGroups::INDEX,
     ])]
     #[Property(
         description: 'Time of the beginning',
@@ -42,6 +46,9 @@ class Timeframe extends AbstractEntity
         EventGroups::UPDATE,
         VolunteerGroups::CREATE,
         VolunteerGroups::INDEX,
+        ReservationGroups::CREATE,
+        ReservationGroups::UPDATE,
+        ReservationGroups::INDEX,
     ])]
     #[Property(
         description: 'Time of the end',

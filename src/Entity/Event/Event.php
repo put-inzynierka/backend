@@ -6,6 +6,7 @@ use App\Entity\AbstractEntity;
 use App\Entity\File\File;
 use App\Entity\Location\Location;
 use App\Enum\SerializationGroup\Event\EventGroups;
+use App\Enum\SerializationGroup\Project\ReservationGroups;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -30,6 +31,7 @@ class Event extends AbstractEntity
         EventGroups::SHOW,
         EventGroups::INDEX,
         EventGroups::UPDATE,
+        ReservationGroups::INDEX,
     ])]
     #[Property(
         description: 'The name of the event',
