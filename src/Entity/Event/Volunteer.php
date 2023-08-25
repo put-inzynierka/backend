@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints;
 
 #[ORM\Entity]
 #[ORM\Table]
@@ -16,6 +17,7 @@ class Volunteer extends AbstractEntity
 {
     #[ORM\ManyToOne(targetEntity: Event::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Constraints\Valid(groups: [VolunteerGroups::CREATE])]
     private Event $event;
 
     #[ORM\ManyToOne(targetEntity: User::class)]

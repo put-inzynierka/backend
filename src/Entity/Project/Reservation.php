@@ -33,6 +33,10 @@ class Reservation extends AbstractEntity implements Timeframeable
     #[ORM\ManyToOne(targetEntity: Event::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Constraints\NotBlank(allowNull: false, groups: [ReservationGroups::CREATE])]
+    #[Constraints\Valid(groups: [
+        ReservationGroups::CREATE,
+        ReservationGroups::UPDATE,
+    ])]
     #[Groups([
         ReservationGroups::CREATE,
         ReservationGroups::UPDATE,

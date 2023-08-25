@@ -10,6 +10,7 @@ use App\Entity\Project\Reservation;
 use App\Enum\SerializationGroup\Project\ReservationGroups;
 use App\Exception\UnprocessableEntityHttpException;
 use App\Service\Instantiator;
+use App\Service\Validation\StandValidator;
 use App\Service\Validation\TimeframeValidator;
 use App\Voter\Qualifier;
 use Doctrine\ORM\EntityManagerInterface;
@@ -44,6 +45,7 @@ class ReservationController extends AbstractController
         EntityManagerInterface $manager,
         Request $request,
         TimeframeValidator $timeframeValidator,
+        StandValidator $standValidator,
         Project $project
     ): Response {
         $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $project->getTeam());
@@ -59,8 +61,14 @@ class ReservationController extends AbstractController
             [$reservation],
             $reservation->getEvent()->getDays()
         );
-        if ($timeframeContainmentViolations->count()) {
-            throw new UnprocessableEntityHttpException($timeframeContainmentViolations);
+        $standContainmentViolations = $standValidator->validate(
+            [$reservation->getStand()],
+            $reservation->getEvent()->getLocations()
+        );
+        if ($timeframeContainmentViolations->count() + $standContainmentViolations->count()) {
+            throw new UnprocessableEntityHttpException(
+                $timeframeContainmentViolations->addAll($standContainmentViolations)
+            );
         }
 
         $reservation->setProject($project);
@@ -105,11 +113,13 @@ class ReservationController extends AbstractController
         Request $request,
         EntityManagerInterface $manager,
         TimeframeValidator $timeframeValidator,
+        StandValidator $standValidator,
         Project $project,
         Reservation $reservation
     ): Response {
         $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $project->getTeam());
 
+        /** @var Reservation $reservation */
         $reservation = $instantiator->deserialize(
             $request->getContent(),
             Reservation::class,
@@ -121,8 +131,14 @@ class ReservationController extends AbstractController
             [$reservation],
             $reservation->getEvent()->getDays()
         );
-        if ($timeframeContainmentViolations->count()) {
-            throw new UnprocessableEntityHttpException($timeframeContainmentViolations);
+        $standContainmentViolations = $standValidator->validate(
+            [$reservation->getStand()],
+            $reservation->getEvent()->getLocations()
+        );
+        if ($timeframeContainmentViolations->count() + $standContainmentViolations->count()) {
+            throw new UnprocessableEntityHttpException(
+                $timeframeContainmentViolations->addAll($standContainmentViolations)
+            );
         }
 
         $manager->persist($reservation);
