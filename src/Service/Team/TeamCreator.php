@@ -24,7 +24,7 @@ class TeamCreator
             ->setAccepted(true)
             ->setRole(TeamMemberRole::OWNER);
 
-        $team->addTeamMember($teamMember);
+        $team->addMember($teamMember);
 
         $this->manager->persist($team);
         $this->manager->flush();

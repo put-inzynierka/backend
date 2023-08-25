@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Project\Project;
-use App\Entity\Team\Team;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,13 +13,16 @@ final class ProjectRepository extends AbstractRepository
         parent::__construct($registry, Project::class);
     }
 
-    public function indexByTeam(Team $team): QueryBuilder
+    public function indexByTeamId(string $teamId): QueryBuilder
     {
         $query = $this->index();
-        $query
-            ->andWhere('e.team = :team')
-            ->setParameter('team', $team)
-        ;
+
+        if ($teamId !== '') {
+            $query
+                ->andWhere('e.team = :teamId')
+                ->setParameter('teamId', $teamId)
+            ;
+        }
 
         return $query;
     }
