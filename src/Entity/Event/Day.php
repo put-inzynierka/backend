@@ -3,9 +3,11 @@
 namespace App\Entity\Event;
 
 use App\Entity\AbstractEntity;
+use App\Entity\Component\Contract\Timeframeable;
 use App\Entity\Timeframe;
 use App\Enum\SerializationGroup\Event\EventGroups;
 use App\Enum\SerializationGroup\Event\VolunteerGroups;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Attributes\Property;
@@ -15,7 +17,7 @@ use DateTimeImmutable;
 
 #[ORM\Entity]
 #[ORM\Table]
-class Day extends AbstractEntity
+class Day extends AbstractEntity implements Timeframeable
 {
     #[ORM\ManyToOne(targetEntity: Event::class)]
     #[ORM\JoinColumn]
@@ -78,6 +80,11 @@ class Day extends AbstractEntity
     public function getTimeframe(): Timeframe
     {
         return $this->timeframe;
+    }
+
+    public function getTimeframes(): ArrayCollection
+    {
+        return new ArrayCollection([$this->timeframe]);
     }
 
     public function setTimeframe(Timeframe $timeframe): Day

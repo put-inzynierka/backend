@@ -3,9 +3,11 @@
 namespace App\Entity\Event;
 
 use App\Entity\AbstractEntity;
+use App\Entity\Component\Contract\Timeframeable;
 use App\Entity\Timeframe;
 use App\Enum\SerializationGroup\Event\EventGroups;
 use App\Enum\SerializationGroup\Event\VolunteerGroups;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,7 +17,7 @@ use Symfony\Component\Validator\Constraints;
 
 #[ORM\Entity]
 #[ORM\Table]
-class VolunteerAvailability extends AbstractEntity
+class VolunteerAvailability extends AbstractEntity implements Timeframeable
 {
     #[ORM\ManyToOne(targetEntity: Volunteer::class)]
     #[ORM\JoinColumn]
@@ -70,6 +72,11 @@ class VolunteerAvailability extends AbstractEntity
         $this->day = $day;
 
         return $this;
+    }
+
+    public function getDate(): DateTimeImmutable
+    {
+        return $this->day->getDate();
     }
 
     public function getTimeframes(): Collection

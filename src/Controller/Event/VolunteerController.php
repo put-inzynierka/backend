@@ -5,8 +5,10 @@ namespace App\Controller\Event;
 use App\Entity\Event\Event;
 use App\Entity\Event\Volunteer;
 use App\Enum\SerializationGroup\Event\VolunteerGroups;
+use App\Exception\UnprocessableEntityHttpException;
 use App\Helper\Paginator;
 use App\Repository\VolunteerRepository;
+use App\Service\Validation\TimeframeValidator;
 use App\Voter\Qualifier;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use App\Component\Attribute\Param as Param;
@@ -79,8 +81,9 @@ class VolunteerController extends AbstractController
     public function store(
         Instantiator $instantiator,
         EntityManagerInterface $manager,
+        Request $request,
+        TimeframeValidator $timeframeValidator,
         Event $event,
-        Request $request
     ): Response {
         $this->denyAccessUnlessGranted(Qualifier::IS_AUTHENTICATED);
 
@@ -90,6 +93,15 @@ class VolunteerController extends AbstractController
             Volunteer::class,
             VolunteerGroups::CREATE
         );
+
+        $timeframeContainmentViolations = $timeframeValidator->validate(
+            $volunteer->getAvailabilities(),
+            $event->getDays()
+        );
+        if ($timeframeContainmentViolations->count()) {
+            throw new UnprocessableEntityHttpException($timeframeContainmentViolations);
+        }
+
         $volunteer
             ->setEvent($event)
             ->setUser($this->getUser())
