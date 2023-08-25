@@ -52,7 +52,7 @@ class Stand extends AbstractEntity
     private StandType $type;
 
     #[ORM\ManyToOne(targetEntity: Location::class, inversedBy: 'stands')]
-    #[ORM\JoinColumn()]
+    #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         StandGroups::SHOW,
     ])]

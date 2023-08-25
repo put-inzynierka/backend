@@ -69,8 +69,8 @@ class Event extends AbstractEntity
 
     #[ORM\ManyToMany(targetEntity: Location::class)]
     #[ORM\JoinTable(name: 'event.events_locations')]
-    #[ORM\JoinColumn(name: 'event_id', referencedColumnName: 'id')]
-    #[ORM\InverseJoinColumn(name: 'location_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'event_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\InverseJoinColumn(name: 'location_id', referencedColumnName: 'id', nullable: false)]
     #[Groups([
         EventGroups::CREATE,
         EventGroups::SHOW,

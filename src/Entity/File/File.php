@@ -38,7 +38,7 @@ class File implements UUIdentifiable, Timestampable
     private FileType $type;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\JoinColumn]
     private ?User $uploadedBy;
 
     #[Groups([BaseGroups::DEFAULT])]

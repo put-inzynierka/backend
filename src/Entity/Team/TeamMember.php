@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints;
 class TeamMember extends AbstractEntity
 {
     #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'teamMembers')]
-    #[ORM\JoinColumn]
+    #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         TeamMemberGroups::SHOW,
         TeamMemberGroups::INDEX,
@@ -30,7 +30,7 @@ class TeamMember extends AbstractEntity
     private Team $team;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn]
+    #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         TeamMemberGroups::SHOW,
         TeamMemberGroups::INDEX,

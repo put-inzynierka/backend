@@ -15,11 +15,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Volunteer extends AbstractEntity
 {
     #[ORM\ManyToOne(targetEntity: Event::class)]
-    #[ORM\JoinColumn]
+    #[ORM\JoinColumn(nullable: false)]
     private Event $event;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn]
+    #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         VolunteerGroups::INDEX,
     ])]

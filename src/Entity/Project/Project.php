@@ -7,6 +7,8 @@ use App\Entity\File\File;
 use App\Entity\Team\Team;
 use App\Enum\ProjectType;
 use App\Enum\SerializationGroup\Project\ProjectGroups;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Attributes\Property;
@@ -63,7 +65,7 @@ class Project extends AbstractEntity
     private ProjectType $projectType;
 
     #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'projects')]
-    #[ORM\JoinColumn]
+    #[ORM\JoinColumn(nullable: false)]
     #[Constraints\NotBlank(allowNull: false, groups: [ProjectGroups::CREATE])]
     #[Groups([
         ProjectGroups::SHOW,
@@ -88,6 +90,14 @@ class Project extends AbstractEntity
         description: 'The image of the project',
     )]
     private File $image;
+
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Reservation::class, cascade: ['remove'])]
+    private Collection $reservations;
+
+    public function __construct()
+    {
+        $this->reservations = new ArrayCollection();
+    }
 
     public function getName(): string
     {
@@ -145,6 +155,28 @@ class Project extends AbstractEntity
     public function setImage(File $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        $this->reservations->removeElement($reservation);
 
         return $this;
     }

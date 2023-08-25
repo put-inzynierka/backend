@@ -20,7 +20,7 @@ use DateTimeImmutable;
 class Day extends AbstractEntity implements Timeframeable
 {
     #[ORM\ManyToOne(targetEntity: Event::class)]
-    #[ORM\JoinColumn]
+    #[ORM\JoinColumn(nullable: false)]
     private Event $event;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
