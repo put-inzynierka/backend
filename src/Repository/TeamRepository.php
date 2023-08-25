@@ -21,9 +21,9 @@ final class TeamRepository extends AbstractRepository
 
         if ($user->getRole() !== UserRole::ADMIN) {
             $query
-                ->leftJoin('e.teamMembers', 'tm')
-                ->andWhere('tm.user = :user')
-                ->andWhere('tm.accepted = true')
+                ->leftJoin('e.members', 'm')
+                ->andWhere('m.user = :user')
+                ->andWhere('m.accepted = true')
                 ->setParameter('user', $user)
             ;
         }
