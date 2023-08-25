@@ -3,6 +3,7 @@
 namespace App\Entity\User;
 
 use App\Entity\AbstractEntity;
+use App\Enum\SerializationGroup\Event\VolunteerGroups;
 use App\Enum\SerializationGroup\User\UserGroups;
 use App\Enum\UserRole;
 use Doctrine\DBAL\Types\Types;
@@ -31,6 +32,7 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
         UserGroups::SHOW,
         UserGroups::INDEX,
         UserGroups::UPDATE,
+        VolunteerGroups::INDEX,
     ])]
     #[Property(
         description: 'The email of the user',
@@ -47,6 +49,7 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
         UserGroups::SHOW,
         UserGroups::INDEX,
         UserGroups::UPDATE,
+        VolunteerGroups::INDEX,
     ])]
     #[Property(
         description: 'First name of the user',
@@ -63,6 +66,7 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
         UserGroups::SHOW,
         UserGroups::INDEX,
         UserGroups::UPDATE,
+        VolunteerGroups::INDEX,
     ])]
     #[Property(
         description: 'Last name of the user',
