@@ -2,8 +2,10 @@
 
 namespace App\Service;
 
-use App\Enum\SerializationGroup\SerializationGroup;
+use App\Component\Model\ContainmentValidationRule;
+use App\Entity\Component\Contract\ContainmentValidatable;
 use App\Exception\UnprocessableEntityHttpException;
+use App\Service\Validation\ContainmentValidator;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -50,6 +52,19 @@ class Instantiator
     public function validate($instance, string $group): void
     {
         $violations = $this->validator->validate($instance, null, [$group, 'Default']);
+
+        if ($instance instanceof ContainmentValidatable) {
+            /** @var ContainmentValidationRule $rule */
+            foreach ($instance->getContainmentValidationRules() as $rule) {
+                /** @var ContainmentValidator $validator */
+                $validator = $rule->getValidatorClass();
+
+                $violations->addAll(
+                    $validator::validate($rule->getNeedles(), $rule->getHaystack())
+                );
+            }
+        }
+
         if ($violations->count() > 0) {
             throw new UnprocessableEntityHttpException($violations);
         }

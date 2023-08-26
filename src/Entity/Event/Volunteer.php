@@ -2,9 +2,12 @@
 
 namespace App\Entity\Event;
 
+use App\Component\Model\ContainmentValidationRule;
 use App\Entity\AbstractEntity;
+use App\Entity\Component\Contract\ContainmentValidatable;
 use App\Entity\User\User;
 use App\Enum\SerializationGroup\Event\VolunteerGroups;
+use App\Service\Validation\TimeframeValidator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,7 +16,7 @@ use Symfony\Component\Validator\Constraints;
 
 #[ORM\Entity]
 #[ORM\Table]
-class Volunteer extends AbstractEntity
+class Volunteer extends AbstractEntity implements ContainmentValidatable
 {
     #[ORM\ManyToOne(targetEntity: Event::class)]
     #[ORM\JoinColumn(nullable: false)]
@@ -90,5 +93,16 @@ class Volunteer extends AbstractEntity
         $this->availabilities->removeElement($availability);
 
         return $this;
+    }
+
+    public function getContainmentValidationRules(): array
+    {
+        return [
+            new ContainmentValidationRule(
+                TimeframeValidator::class,
+                $this->getAvailabilities(),
+                $this->getEvent()->getDays()
+            ),
+        ];
     }
 }

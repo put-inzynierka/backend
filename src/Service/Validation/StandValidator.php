@@ -7,22 +7,22 @@ use App\Entity\Location\Stand;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
-class StandValidator extends Validator
+class StandValidator extends Validator implements ContainmentValidator
 {
     /**
      * @param Stand[] $needles
      * @param Location[] $haystack
      * @return ConstraintViolationListInterface
      */
-    public function validate(iterable $needles, iterable $haystack): ConstraintViolationListInterface
+    public static function validate(iterable $needles, iterable $haystack): ConstraintViolationListInterface
     {
         $violations = new ConstraintViolationList();
         foreach ($needles as $needle) {
-            if ($this->checkIfIsContained($needle, $haystack)) {
+            if (self::checkIfIsContained($needle, $haystack)) {
                 continue;
             }
 
-            $violations->add($this->createViolation(
+            $violations->add(self::createViolation(
                 'The stand need to be contained within possible locations.',
                 'stand',
                 $needle->getId()
@@ -32,7 +32,7 @@ class StandValidator extends Validator
         return $violations;
     }
 
-    protected function checkIfIsContained(Stand $stand, iterable $locations): bool
+    protected static function checkIfIsContained(Stand $stand, iterable $locations): bool
     {
         foreach ($locations as $location) {
             if ($stand->getLocation()->getId() === $location->getId()) {

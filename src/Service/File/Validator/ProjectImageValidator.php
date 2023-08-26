@@ -25,7 +25,7 @@ class ProjectImageValidator extends AbstractFileValidator implements FileValidat
         $violations = new ConstraintViolationList();
 
         if (!$actor) {
-            $violations->add($this->createViolation(
+            $violations->add($this::createViolation(
                 'Insufficient permissions to upload a project image.'
             ));
         }
@@ -33,7 +33,7 @@ class ProjectImageValidator extends AbstractFileValidator implements FileValidat
         $this->validateImage($file, $violations);
 
         if ($file->getSize() > ByteSize::HUNDRED_MB) {
-            $violations->add($this->createViolation(
+            $violations->add($this::createViolation(
                 'The file must not be larger than 100 MB.',
                 'file'
             ));

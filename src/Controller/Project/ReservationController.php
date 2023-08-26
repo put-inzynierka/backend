@@ -57,20 +57,6 @@ class ReservationController extends AbstractController
             ReservationGroups::CREATE
         );
 
-        $timeframeContainmentViolations = $timeframeValidator->validate(
-            [$reservation],
-            $reservation->getEvent()->getDays()
-        );
-        $standContainmentViolations = $standValidator->validate(
-            [$reservation->getStand()],
-            $reservation->getEvent()->getLocations()
-        );
-        if ($timeframeContainmentViolations->count() + $standContainmentViolations->count()) {
-            throw new UnprocessableEntityHttpException(
-                $timeframeContainmentViolations->addAll($standContainmentViolations)
-            );
-        }
-
         $reservation->setProject($project);
 
         $manager->persist($reservation);

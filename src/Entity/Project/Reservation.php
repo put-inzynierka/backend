@@ -2,13 +2,17 @@
 
 namespace App\Entity\Project;
 
+use App\Component\Model\ContainmentValidationRule;
 use App\Entity\AbstractEntity;
+use App\Entity\Component\Contract\ContainmentValidatable;
 use App\Entity\Component\Contract\Timeframeable;
 use App\Entity\Event\Day;
 use App\Entity\Event\Event;
 use App\Entity\Location\Stand;
 use App\Entity\Timeframe;
 use App\Enum\SerializationGroup\Project\ReservationGroups;
+use App\Service\Validation\StandValidator;
+use App\Service\Validation\TimeframeValidator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -21,7 +25,7 @@ use DateTimeImmutable;
 #[ORM\Entity]
 #[ORM\Table]
 #[UniqueEntity(fields: ['name'])]
-class Reservation extends AbstractEntity implements Timeframeable
+class Reservation extends AbstractEntity implements Timeframeable, ContainmentValidatable
 {
     #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
@@ -161,5 +165,21 @@ class Reservation extends AbstractEntity implements Timeframeable
         $this->confirmed = $confirmed;
 
         return $this;
+    }
+
+    public function getContainmentValidationRules(): array
+    {
+        return [
+            new ContainmentValidationRule(
+                TimeframeValidator::class,
+                [$this],
+                $this->getEvent()->getDays()
+            ),
+            new ContainmentValidationRule(
+                StandValidator::class,
+                [$this->getStand()],
+                $this->getEvent()->getLocations()
+            )
+        ];
     }
 }
