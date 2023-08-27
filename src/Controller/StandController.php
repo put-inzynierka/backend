@@ -36,7 +36,7 @@ class StandController extends AbstractController
         $repository = $repositoryFactory->create(Event::class);
         $list = $repository->index()->getQuery()->getResult();
 
-        $result = $availabilityService->buildReservationAutocomplete($list);
+        $result = $availabilityService->buildReservationAutocomplete($list, true);
         $page = Paginator::wrapArray($result);
 
         return $this->object($page, groups: BaseGroups::DEFAULT);

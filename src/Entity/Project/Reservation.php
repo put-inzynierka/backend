@@ -24,7 +24,6 @@ use DateTimeImmutable;
 
 #[ORM\Entity]
 #[ORM\Table]
-#[UniqueEntity(fields: ['name'])]
 class Reservation extends AbstractEntity implements Timeframeable, ContainmentValidatable
 {
     #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'reservations')]
