@@ -2,13 +2,11 @@
 
 namespace App\Util\Comparable;
 
-use App\Component\Model\ComparableTimeframe;
-
 interface ComparableInterface
 {
     public function getValue(): int;
 
-    public function equals(ComparableTimeframe $that): bool;
+    public function equals(ComparableInterface $that): bool;
 
     public function greaterThan(ComparableInterface $that): bool;
 
