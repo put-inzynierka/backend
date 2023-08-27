@@ -14,12 +14,13 @@ class ReservationRepository extends AbstractRepository
         parent::__construct($registry, Reservation::class);
     }
 
-    public function findByStandAndDay(Stand $stand, Day $day): array
+    public function findConfirmedByStandAndDay(Stand $stand, Day $day): array
     {
         $builder = $this->index();
         $builder
             ->andWhere('e.stand = :stand')
             ->andWhere('e.day = :day')
+            ->andWhere('e.confirmed = true')
             ->setParameters([
                 'stand' => $stand,
                 'day' => $day

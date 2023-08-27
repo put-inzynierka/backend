@@ -11,6 +11,7 @@ use App\Entity\Event\Event;
 use App\Entity\Location\Location;
 use App\Entity\Project\Reservation;
 use App\Entity\Timeframe;
+use App\Repository\RepositoryFactory;
 use App\Repository\ReservationRepository;
 use App\Util\Time;
 use Psr\Cache\CacheItemInterface;
@@ -20,16 +21,25 @@ class AvailabilityService
 {
     public function __construct(
         protected CacheInterface $appCache,
-        protected ReservationRepository $reservationRepository
+        protected ReservationRepository $reservationRepository,
+        protected RepositoryFactory $repositoryFactory
     ) {}
 
-    public function buildReservationAutocomplete(array $events, bool $force = false): array
+    public function rebuild(): void
+    {
+        $this->buildReservationAutocomplete(true);
+    }
+
+    public function buildReservationAutocomplete(bool $force = false): array
     {
         /** @var CacheItemInterface $cachedStands */
         $cachedStands = $this->appCache->getItem('available_stands');
         if (!$force && $cachedStands->isHit()) {
             return $cachedStands->get();
         }
+
+        $repository = $this->repositoryFactory->create(Event::class);
+        $events = $repository->findAll();
 
         $result = [];
 
@@ -63,7 +73,7 @@ class AvailabilityService
                             Time::createFromDateTime($reservation->getTimeframe()->getHourFrom()),
                             Time::createFromDateTime($reservation->getTimeframe()->getHourTo())
                         ),
-                        $this->reservationRepository->findByStandAndDay($stand, $day)
+                        $this->reservationRepository->findConfirmedByStandAndDay($stand, $day)
                     );
                     $this->subtractReservations($standTimeframes, $reservationsToSubtract);
 

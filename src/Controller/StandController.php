@@ -28,15 +28,11 @@ class StandController extends AbstractController
         group: BaseGroups::DEFAULT,
     )]
     public function indexAvailable(
-        RepositoryFactory $repositoryFactory,
         AvailabilityService $availabilityService
     ): Response {
         $this->denyAccessUnlessGranted(Qualifier::IS_AUTHENTICATED);
 
-        $repository = $repositoryFactory->create(Event::class);
-        $list = $repository->index()->getQuery()->getResult();
-
-        $result = $availabilityService->buildReservationAutocomplete($list, true);
+        $result = $availabilityService->buildReservationAutocomplete();
         $page = Paginator::wrapArray($result);
 
         return $this->object($page, groups: BaseGroups::DEFAULT);

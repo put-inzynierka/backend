@@ -4,11 +4,14 @@ namespace App\Controller;
 
 use App\Component\Attribute\Param as Param;
 use App\Component\Attribute\Response as Resp;
+use App\Entity\Event\Event;
 use App\Entity\Project\Reservation;
 use App\Enum\SerializationGroup\Project\ReservationGroups;
 use App\Helper\Paginator;
+use App\Repository\RepositoryFactory;
 use App\Repository\SecurityUserRepository;
 use App\Service\Instantiator;
+use App\Service\Stand\AvailabilityService;
 use App\Voter\Qualifier;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -64,6 +67,7 @@ class ReservationController extends AbstractController
         Instantiator $instantiator,
         Request $request,
         EntityManagerInterface $manager,
+        AvailabilityService $availabilityService,
         Reservation $reservation
     ): Response {
         $this->denyAccessUnlessGranted(Qualifier::IS_ADMIN);
@@ -74,6 +78,8 @@ class ReservationController extends AbstractController
             ReservationGroups::ADMIN_UPDATE,
             $reservation
         );
+
+        $availabilityService->rebuild();
 
         $manager->persist($reservation);
         $manager->flush();
