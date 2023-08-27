@@ -4,7 +4,8 @@ namespace App\Controller;
 
 use App\Component\Attribute\Param as Param;
 use App\Component\Attribute\Response as Resp;
-use App\Component\Model\AvailableStand\Event;
+use App\Component\Model\AvailableStand\Event as EventModel;
+use App\Entity\Event\Event;
 use App\Enum\SerializationGroup\BaseGroups;
 use App\Enum\SerializationGroup\User\UserGroups;
 use App\Helper\Paginator;
@@ -23,7 +24,7 @@ class StandController extends AbstractController
     #[Tag('Reservation')]
     #[Resp\PageResponse(
         description: 'Returns the list of available stands for reservations autocomplete',
-        class: Event::class,
+        class: EventModel::class,
         group: BaseGroups::DEFAULT,
     )]
     public function indexAvailable(
