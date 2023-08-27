@@ -3,7 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Project\Project;
-use App\Entity\Team\Team;
+use App\Entity\User\User;
+use App\Enum\UserRole;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,13 +15,19 @@ final class ProjectRepository extends AbstractRepository
         parent::__construct($registry, Project::class);
     }
 
-    public function indexByTeam(Team $team): QueryBuilder
+    public function indexByUser(?User $user): QueryBuilder
     {
         $query = $this->index();
-        $query
-            ->andWhere('e.team = :team')
-            ->setParameter('team', $team)
-        ;
+
+        if ($user !== null && $user->getRole() !== UserRole::ADMIN) {
+            $query
+                ->leftJoin('e.team', 't')
+                ->leftJoin('t.members', 'm')
+                ->andWhere('m.user = :user')
+                ->andWhere('m.accepted = true')
+                ->setParameter('user', $user)
+            ;
+        }
 
         return $query;
     }

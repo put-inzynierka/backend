@@ -9,6 +9,7 @@ use App\Enum\SerializationGroup\Project\ProjectGroups;
 use App\Helper\Paginator;
 use App\Repository\ProjectRepository;
 use App\Service\Instantiator;
+use App\Voter\Qualifier;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
@@ -22,7 +23,6 @@ final class ProjectController extends AbstractController
     #[Rest\Get(
         path: '/projects',
         name: 'index_projects',
-        requirements: ['id' => '\d+'],
     )]
     #[Tag('Project')]
     #[Param\Limit]
@@ -36,7 +36,8 @@ final class ProjectController extends AbstractController
         ParamFetcherInterface $paramFetcher,
         ProjectRepository     $repository
     ): Response {
-        $list = $repository->index();
+        $list = $repository->indexByUser($this->getUser());
+
         $page = Paginator::paginate(
             $list,
             $paramFetcher->get('page'),
@@ -67,8 +68,6 @@ final class ProjectController extends AbstractController
     public function show(
         Project $project
     ): Response {
-//        $this->denyAccessUnlessGranted(Qualifier::HAS_ACCESS, $project);
-
         return $this->object($project, groups: ProjectGroups::SHOW);
     }
 
@@ -86,12 +85,13 @@ final class ProjectController extends AbstractController
         Request $request,
         EntityManagerInterface $manager
     ): Response {
-        /** @var Project $project */
         $project = $instantiator->deserialize(
             $request->getContent(),
             Project::class,
             ProjectGroups::CREATE
         );
+
+        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $project->getTeam());
 
         $manager->persist($project);
         $manager->flush();
@@ -135,6 +135,8 @@ final class ProjectController extends AbstractController
             $project
         );
 
+        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $project->getTeam());
+
         $manager->persist($project);
         $manager->flush();
 
@@ -161,6 +163,8 @@ final class ProjectController extends AbstractController
         EntityManagerInterface $manager,
         Project                $project
     ): Response {
+        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $project->getTeam());
+
         $manager->remove($project);
         $manager->flush();
 
