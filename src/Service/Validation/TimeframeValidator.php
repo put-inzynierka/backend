@@ -35,7 +35,7 @@ class TimeframeValidator extends Validator implements ContainmentValidator
         return $violations;
     }
 
-    protected static function preparePossibleDays(array $haystack): array
+    protected static function preparePossibleDays(iterable $haystack): array
     {
         $possibleDays = [];
 
