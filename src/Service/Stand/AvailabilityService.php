@@ -51,7 +51,7 @@ class AvailabilityService
                         Time::createFromDateTime($timeframe->getHourFrom()),
                         Time::createFromDateTime($timeframe->getHourTo())
                     ),
-                    $day->getTimeframes()
+                    (array) $day->getTimeframes()
                 );
                 $standsTimeframes = [];
 
