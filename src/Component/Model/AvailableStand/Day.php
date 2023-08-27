@@ -15,6 +15,7 @@ class Day
         #[Groups([BaseGroups::DEFAULT])]
         protected string $date,
 
+        /** @var Timeframe[] $timeframes */
         #[Groups([BaseGroups::DEFAULT])]
         protected array $timeframes
     ) {}
