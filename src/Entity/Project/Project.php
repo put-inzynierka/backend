@@ -5,7 +5,6 @@ namespace App\Entity\Project;
 use App\Entity\AbstractEntity;
 use App\Entity\File\File;
 use App\Entity\Team\Team;
-use App\Enum\ProjectType;
 use App\Enum\SerializationGroup\Project\ProjectGroups;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -47,20 +46,6 @@ class Project extends AbstractEntity
         example: 'Our line follower like to follow lines',
     )]
     private string $description;
-
-    #[ORM\Column(type: Types::STRING, enumType: ProjectType::class)]
-    #[Constraints\Choice(callback: [ProjectType::class, 'cases'])]
-    #[Groups([
-        ProjectGroups::SHOW,
-        ProjectGroups::UPDATE,
-        ProjectGroups::CREATE,
-    ])]
-    #[Property(
-        description: 'Type of the project',
-        enum: ['project_stand', 'lecture_panel'],
-        example: 'project_stand',
-    )]
-    private ProjectType $projectType;
 
     #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'projects')]
     #[ORM\JoinColumn]
@@ -109,18 +94,6 @@ class Project extends AbstractEntity
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getProjectType(): ProjectType
-    {
-        return $this->projectType;
-    }
-
-    public function setProjectType(ProjectType $projectType): self
-    {
-        $this->projectType = $projectType;
 
         return $this;
     }
