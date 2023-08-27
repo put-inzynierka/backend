@@ -25,10 +25,6 @@ final class ProjectController extends AbstractController
         name: 'index_projects',
     )]
     #[Tag('Project')]
-    #[Rest\QueryParam(
-        name: 'team',
-        description: 'Filtering by team id'
-    )]
     #[Param\Limit]
     #[Param\Page]
     #[Resp\PageResponse(
@@ -40,9 +36,7 @@ final class ProjectController extends AbstractController
         ParamFetcherInterface $paramFetcher,
         ProjectRepository     $repository
     ): Response {
-        $teamId = $paramFetcher->get('team');
-
-        $list = $repository->indexByTeamId($teamId);
+        $list = $repository->indexByUser($this->getUser());
 
         $page = Paginator::paginate(
             $list,
