@@ -5,7 +5,6 @@ namespace App\Component\Model\AvailableStand;
 use App\Entity\Event\Day as DayEntity;
 use App\Enum\SerializationGroup\BaseGroups;
 use Symfony\Component\Serializer\Annotation\Groups;
-use App\Component\Model\AvailableStand\Timeframe as TimeframeModel;
 
 class Day
 {
@@ -16,7 +15,7 @@ class Day
         #[Groups([BaseGroups::DEFAULT])]
         protected string $date,
 
-        /** @var TimeframeModel[] $timeframes */
+        /** @var \App\Entity\Timeframe[] $timeframes */
         #[Groups([BaseGroups::DEFAULT])]
         protected array $timeframes
     ) {}
