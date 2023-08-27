@@ -35,6 +35,19 @@ class Paginator
         );
     }
 
+    public static function wrap(QueryBuilder $builder): PaginatedList
+    {
+        $totalCount = Paginator::count($builder);
+
+        return new PaginatedList(
+            $totalCount,
+            1,
+            $totalCount,
+            1,
+            $builder->getQuery()->getResult()
+        );
+    }
+
     protected static function count(QueryBuilder $builder): int
     {
         $immutableBuilder = clone $builder;
