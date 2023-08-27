@@ -53,6 +53,10 @@ class Instantiator
     {
         $violations = $this->validator->validate($instance, null, [$group, 'Default']);
 
+        if ($violations->count() > 0) {
+            throw new UnprocessableEntityHttpException($violations);
+        }
+
         if ($instance instanceof ContainmentValidatable) {
             /** @var ContainmentValidationRule $rule */
             foreach ($instance->getContainmentValidationRules() as $rule) {

@@ -44,8 +44,6 @@ class ReservationController extends AbstractController
         Instantiator $instantiator,
         EntityManagerInterface $manager,
         Request $request,
-        TimeframeValidator $timeframeValidator,
-        StandValidator $standValidator,
         Project $project
     ): Response {
         $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $project->getTeam());
@@ -57,7 +55,10 @@ class ReservationController extends AbstractController
             ReservationGroups::CREATE
         );
 
-        $reservation->setProject($project);
+        $reservation
+            ->setProject($project)
+            ->setConfirmed(false)
+        ;
 
         $manager->persist($reservation);
         $manager->flush();
