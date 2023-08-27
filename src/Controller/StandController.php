@@ -34,12 +34,11 @@ class StandController extends AbstractController
         $this->denyAccessUnlessGranted(Qualifier::IS_AUTHENTICATED);
 
         $repository = $repositoryFactory->create(Event::class);
-        $list = $repository->index();
+        $list = $repository->index()->getQuery()->getResult();
 
-        $page = Paginator::wrap($list);
-        $events = $page->getItems();
-        $availabilityService->buildReservationAutocomplete($events);
+        $result = $availabilityService->buildReservationAutocomplete($list);
+        $page = Paginator::wrapArray($result);
 
-        return $this->object($page, groups: UserGroups::INDEX);
+        return $this->object($page, groups: BaseGroups::DEFAULT);
     }
 }

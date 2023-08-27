@@ -48,6 +48,19 @@ class Paginator
         );
     }
 
+    public static function wrapArray(array $array): PaginatedList
+    {
+        $totalCount = count($array);
+
+        return new PaginatedList(
+            $totalCount,
+            1,
+            $totalCount,
+            1,
+            $array
+        );
+    }
+
     protected static function count(QueryBuilder $builder): int
     {
         $immutableBuilder = clone $builder;

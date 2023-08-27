@@ -23,7 +23,7 @@ class AvailabilityService
         protected ReservationRepository $reservationRepository
     ) {}
 
-    public function buildReservationAutocomplete(array &$events, bool $force = false): array
+    public function buildReservationAutocomplete(array $events, bool $force = false): array
     {
         /** @var CacheItemInterface $cachedStands */
         $cachedStands = $this->appCache->getItem('available_stands');
@@ -51,7 +51,7 @@ class AvailabilityService
                         Time::createFromDateTime($timeframe->getHourFrom()),
                         Time::createFromDateTime($timeframe->getHourTo())
                     ),
-                    (array) $day->getTimeframes()
+                    $day->getTimeframes()->toArray()
                 );
                 $standsTimeframes = [];
 
@@ -79,11 +79,13 @@ class AvailabilityService
                 $timeframes = [];
                 /**
                  * @var StandModel $stand
-                 * @var TimeframeModel $timeframe
+                 * @var TimeframeModel[] $rawTimeframes
                  */
-                foreach ($standsTimeframes as [$stand, $timeframe]) {
-                    $timeframe->setStand($stand);
-                    $timeframes[] = $timeframe;
+                foreach ($standsTimeframes as [$stand, $rawTimeframes]) {
+                    foreach ($rawTimeframes as $timeframe) {
+                        $timeframe->setStand($stand);
+                        $timeframes[] = $timeframe;
+                    }
                 }
 
                 $dayModel->setTimeframes($timeframes);

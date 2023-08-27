@@ -31,6 +31,7 @@ class Timeframe
 
     public static function fromComparableTimeframe(ComparableTimeframe $timeframe): Timeframe
     {
+        dump($timeframe->getHourFrom());
         return new self(
             $timeframe->getHourFrom()->format('H:i'),
             $timeframe->getHourTo()->format('H:i'),
