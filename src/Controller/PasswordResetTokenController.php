@@ -15,7 +15,6 @@ use App\Service\User\PasswordResetService;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use OpenApi\Attributes\Tag;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -50,7 +49,6 @@ class PasswordResetTokenController extends AbstractController
     )]
     #[Tag('User')]
     #[Param\Path('value', description: 'The token to invoke')]
-    #[ParamConverter(data: ['name' => 'token'], class: PasswordResetToken::class)]
     #[Resp\EmptyResponse(
         description: 'Changes password of the user associated with the token and returns them',
     )]

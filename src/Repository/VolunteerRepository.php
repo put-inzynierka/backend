@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Event\Event;
 use App\Entity\Event\Volunteer;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 class VolunteerRepository extends AbstractRepository
@@ -13,7 +14,7 @@ class VolunteerRepository extends AbstractRepository
         parent::__construct($registry, Volunteer::class);
     }
 
-    public function indexByEvent(Event $event)
+    public function indexByEvent(Event $event): QueryBuilder
     {
         $query = $this->index();
         $query
@@ -22,5 +23,18 @@ class VolunteerRepository extends AbstractRepository
         ;
 
         return $query;
+    }
+
+    public function findWithParent(string $id, string $eventId): ?Volunteer
+    {
+        $query = $this->index();
+        $query
+            ->andWhere('e.id = :id')
+            ->andWhere('e.event = :eventId')
+            ->setParameter('id', $id)
+            ->setParameter('eventId', $eventId)
+        ;
+
+        return $query->getQuery()->getOneOrNullResult();
     }
 }

@@ -13,7 +13,6 @@ use App\Voter\Qualifier;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use OpenApi\Attributes\Tag;
@@ -52,7 +51,6 @@ class EventController extends AbstractController
     )]
     #[Tag('Event')]
     #[Param\Path('id', description: 'The ID of the event')]
-    #[ParamConverter(data: ['name' => 'event'], class: Event::class)]
     #[Resp\ObjectResponse(
         description: 'Returns details about the specific event',
         class: Event::class,
@@ -105,7 +103,6 @@ class EventController extends AbstractController
     #[Tag('Event')]
     #[Param\Path('id', description: 'The ID of the event')]
     #[Param\Instance(Event::class, EventGroups::UPDATE)]
-    #[ParamConverter(data: ['name' => 'event'], class: Event::class)]
     #[Resp\ObjectResponse(
         description: 'Updates the specific event',
         class: Event::class,
@@ -139,7 +136,6 @@ class EventController extends AbstractController
     )]
     #[Tag('Event')]
     #[Param\Path('id', description: 'The ID of the event')]
-    #[ParamConverter(data: ['name' => 'event'], class: Event::class)]
     #[Resp\EmptyResponse(
         description: 'Removes the specific event',
         status: 204,

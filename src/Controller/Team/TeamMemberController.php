@@ -15,7 +15,7 @@ use App\Voter\Qualifier;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use OpenApi\Attributes\Tag;
@@ -34,7 +34,6 @@ final class TeamMemberController extends AbstractController
     )]
     #[Param\Limit]
     #[Param\Page]
-    #[ParamConverter(data: ['name' => 'team'], class: Team::class)]
     #[Resp\PageResponse(
         description: 'Returns the list of members for given team',
         class: TeamMember::class,
@@ -75,13 +74,13 @@ final class TeamMemberController extends AbstractController
         name: 'id',
         description: 'The ID of the team member',
     )]
-    #[ParamConverter(data: ['name' => 'teamMember'], class: TeamMember::class)]
     #[Resp\ObjectResponse(
         description: 'Shows the specific team member',
         class: TeamMember::class,
         group: TeamMemberGroups::SHOW,
     )]
     public function show(
+        #[MapEntity(expr: 'repository.findWithParent(id, team_id)')]
         TeamMember $teamMember
     ): Response {
         $this->denyAccessUnlessGranted(Qualifier::HAS_ACCESS, $teamMember->getTeam());
@@ -107,8 +106,6 @@ final class TeamMemberController extends AbstractController
         description: 'The ID of the team member',
     )]
     #[Param\Instance(TeamMember::class, TeamMemberGroups::UPDATE)]
-    #[ParamConverter(data: ['name' => 'team'], class: Team::class, options: ['id' => 'team_id'])]
-    #[ParamConverter(data: ['name' => 'teamMember'], class: TeamMember::class)]
     #[Resp\ObjectResponse(
         description: 'Updates the specific member for the team',
         class: TeamMember::class,
@@ -118,10 +115,10 @@ final class TeamMemberController extends AbstractController
         Instantiator           $instantiator,
         Request                $request,
         EntityManagerInterface $manager,
-        Team                   $team,
+        #[MapEntity(expr: 'repository.findWithParent(id, team_id)')]
         TeamMember             $teamMember
     ): Response {
-        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $team);
+        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $teamMember->getTeam());
 
         $teamMember = $instantiator->deserialize(
             $request->getContent(),
@@ -153,17 +150,15 @@ final class TeamMemberController extends AbstractController
         name: 'id',
         description: 'The ID of the team member',
     )]
-    #[ParamConverter(data: ['name' => 'team'], class: Team::class, options: ['id' => 'team_id'])]
-    #[ParamConverter(data: ['name' => 'teamMember'], class: TeamMember::class)]
     #[Resp\EmptyResponse(
         description: 'Removes the specific member from the team',
     )]
     public function remove(
         EntityManagerInterface $manager,
-        Team                   $team,
+        #[MapEntity(expr: 'repository.findWithParent(id, team_id)')]
         TeamMember             $teamMember
     ): Response {
-        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $team);
+        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $teamMember->getTeam());
 
         $manager->remove($teamMember);
         $manager->flush();

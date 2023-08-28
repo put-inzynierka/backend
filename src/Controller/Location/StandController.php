@@ -15,7 +15,7 @@ use App\Voter\Qualifier;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use OpenApi\Attributes\Tag;
@@ -34,7 +34,6 @@ class StandController extends AbstractController
     )]
     #[Param\Limit]
     #[Param\Page]
-    #[ParamConverter(data: ['name' => 'location'], class: Location::class)]
     #[Resp\PageResponse(
         description: 'Returns the list stands for the location',
         class: Stand::class,
@@ -73,13 +72,13 @@ class StandController extends AbstractController
         name: 'id',
         description: 'The ID of the role',
     )]
-    #[ParamConverter(data: ['name' => 'stand'], class: Stand::class)]
     #[Resp\ObjectResponse(
         description: 'Shows the specific stand',
         class: Stand::class,
         group: StandGroups::SHOW,
     )]
     public function show(
+        #[MapEntity(expr: 'repository.findWithParent(id, location_id)')]
         Stand $stand
     ): Response {
         return $this->object($stand, groups: StandGroups::SHOW);
@@ -96,7 +95,6 @@ class StandController extends AbstractController
         description: 'The ID of the location',
     )]
     #[Param\Instance(Stand::class, StandGroups::CREATE)]
-    #[ParamConverter(data: ['name' => 'location'], class: Location::class)]
     #[Resp\ObjectResponse(
         description: 'Creates a new stand for the location',
         class: Stand::class,
@@ -105,7 +103,6 @@ class StandController extends AbstractController
     )]
     public function store(
         Instantiator $instantiator,
-        ParamFetcherInterface $paramFetcher,
         EntityManagerInterface $manager,
         Location $location,
         Request $request
@@ -148,10 +145,8 @@ class StandController extends AbstractController
         description: 'The ID of the cast member',
     )]
     #[Param\Instance(Stand::class, StandGroups::UPDATE)]
-    #[ParamConverter(data: ['name' => 'location'], class: Location::class, options: ['id' => 'location_id'])]
-    #[ParamConverter(data: ['name' => 'stand'], class: Stand::class)]
     #[Resp\ObjectResponse(
-        description: 'Updates the specific cast member for the movie',
+        description: 'Updates the specific stand for the location',
         class: Stand::class,
         group: StandGroups::SHOW,
     )]
@@ -159,7 +154,7 @@ class StandController extends AbstractController
         Instantiator $instantiator,
         Request $request,
         EntityManagerInterface $manager,
-        Location $location,
+        #[MapEntity(expr: 'repository.findWithParent(id, location_id)')]
         Stand $stand
     ): Response {
         $this->denyAccessUnlessGranted(Qualifier::IS_ADMIN);
@@ -194,14 +189,12 @@ class StandController extends AbstractController
         name: 'id',
         description: 'The ID of the cast member',
     )]
-    #[ParamConverter(data: ['name' => 'location'], class: Location::class, options: ['id' => 'location_id'])]
-    #[ParamConverter(data: ['name' => 'stand'], class: Stand::class)]
     #[Resp\EmptyResponse(
-        description: 'Removes the specific cast member from the movie',
+        description: 'Removes the specific stand from the location',
     )]
     public function remove(
         EntityManagerInterface $manager,
-        Location $location,
+        #[MapEntity(expr: 'repository.findWithParent(id, location_id)')]
         Stand $stand
     ): Response {
         $this->denyAccessUnlessGranted(Qualifier::IS_ADMIN);

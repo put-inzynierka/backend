@@ -7,7 +7,6 @@ use App\Component\Attribute\Response as Resp;
 use App\Entity\User\User;
 use App\Enum\SerializationGroup\User\UserGroups;
 use App\Helper\Paginator;
-use App\Repository\RepositoryFactory;
 use App\Repository\SecurityUserRepository;
 use App\Service\Instantiator;
 use App\Service\User\PasswordHasher;
@@ -17,7 +16,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use OpenApi\Attributes\Tag;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -56,7 +54,6 @@ class UserController extends AbstractController
     )]
     #[Tag('User')]
     #[Param\Path('id', description: 'The ID of the user')]
-    #[ParamConverter(data: ['name' => 'user'], class: User::class)]
     #[Resp\ObjectResponse(
         description: 'Returns details about the specific user',
         class: User::class,
@@ -108,7 +105,6 @@ class UserController extends AbstractController
     #[Tag('User')]
     #[Param\Path('id', description: 'The ID of the user')]
     #[Param\Instance(User::class, UserGroups::UPDATE)]
-    #[ParamConverter(data: ['name' => 'user'], class: User::class)]
     #[Resp\ObjectResponse(
         description: 'Updates the specific user',
         class: User::class,

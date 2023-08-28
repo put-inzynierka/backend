@@ -5,12 +5,13 @@ namespace App\Entity\Event;
 use App\Entity\AbstractEntity;
 use App\Entity\User\User;
 use App\Enum\SerializationGroup\Event\VolunteerGroups;
+use App\Repository\VolunteerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: VolunteerRepository::class)]
 #[ORM\Table]
 class Volunteer extends AbstractEntity
 {

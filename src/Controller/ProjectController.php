@@ -14,7 +14,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use OpenApi\Attributes\Tag;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -59,7 +58,6 @@ final class ProjectController extends AbstractController
         name: 'id',
         description: 'The ID of the project',
     )]
-    #[ParamConverter(data: ['name' => 'project'], class: Project::class)]
     #[Resp\ObjectResponse(
         description: 'Shows the specific project',
         class: Project::class,
@@ -116,7 +114,6 @@ final class ProjectController extends AbstractController
         description: 'The ID of the project',
     )]
     #[Param\Instance(Project::class, ProjectGroups::UPDATE)]
-    #[ParamConverter(data: ['name' => 'project'], class: Project::class)]
     #[Resp\ObjectResponse(
         description: 'Updates the specific project',
         class: Project::class,
@@ -155,7 +152,6 @@ final class ProjectController extends AbstractController
         name: 'id',
         description: 'The ID of the project',
     )]
-    #[ParamConverter(data: ['name' => 'project'], class: Project::class)]
     #[Resp\EmptyResponse(
         description: 'Removes the specific project',
     )]

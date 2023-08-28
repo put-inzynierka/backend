@@ -15,7 +15,6 @@ use App\Voter\Qualifier;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use OpenApi\Attributes\Tag;
@@ -65,7 +64,6 @@ class TeamController extends AbstractController
     )]
     #[Tag('Team')]
     #[Param\Path('id', description: 'The ID of the team')]
-    #[ParamConverter(data: ['name' => 'team'], class: Team::class)]
     #[Resp\ObjectResponse(
         description: 'Returns details about the specific team',
         class: Team::class,
@@ -120,7 +118,6 @@ class TeamController extends AbstractController
     #[Tag('Team')]
     #[Param\Path('id', description: 'The ID of the team')]
     #[Param\Instance(Team::class, TeamGroups::UPDATE)]
-    #[ParamConverter(data: ['name' => 'team'], class: Team::class)]
     #[Resp\ObjectResponse(
         description: 'Updates the specific team',
         class: Team::class,
@@ -154,7 +151,6 @@ class TeamController extends AbstractController
     )]
     #[Tag('Team')]
     #[Param\Path('id', description: 'The ID of the team')]
-    #[ParamConverter(data: ['name' => 'team'], class: Team::class)]
     #[Resp\EmptyResponse(
         description: 'Removes the specific team',
         status: 204,
