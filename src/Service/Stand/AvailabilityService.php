@@ -2,7 +2,6 @@
 
 namespace App\Service\Stand;
 
-use App\Component\Model\AvailableStand\Event as EventModel;
 use App\Component\Model\AvailableStand\Day as DayModel;
 use App\Component\Model\AvailableStand\Timeframe as TimeframeModel;
 use App\Component\Model\AvailableStand\Stand as StandModel;
@@ -11,7 +10,6 @@ use App\Entity\Event\Event;
 use App\Entity\Location\Location;
 use App\Entity\Project\Reservation;
 use App\Entity\Timeframe;
-use App\Repository\RepositoryFactory;
 use App\Repository\ReservationRepository;
 use App\Util\Time;
 use Psr\Cache\CacheItemInterface;
@@ -21,89 +19,76 @@ class AvailabilityService
 {
     public function __construct(
         protected CacheInterface $appCache,
-        protected ReservationRepository $reservationRepository,
-        protected RepositoryFactory $repositoryFactory
+        protected ReservationRepository $reservationRepository
     ) {}
 
-    public function rebuild(): void
+    public function rebuild(Event $event): void
     {
-        $this->buildReservationAutocomplete(true);
+        $this->buildReservationAutocomplete($event, true);
     }
 
-    public function buildReservationAutocomplete(bool $force = false): array
+    public function buildReservationAutocomplete(Event $event, bool $force = false): array
     {
         /** @var CacheItemInterface $cachedStands */
-        $cachedStands = $this->appCache->getItem('available_stands');
+        $cachedStands = $this->appCache->getItem(sprintf('available_stands_%d', $event->getId()));
         if (!$force && $cachedStands->isHit()) {
             return $cachedStands->get();
         }
 
-        $repository = $this->repositoryFactory->create(Event::class);
-        $events = $repository->findAll();
-
         $result = [];
+        $stands = [];
 
-        /** @var Event $event */
-        foreach ($events as $event) {
-            $eventModel = EventModel::fromEntity($event);
-            $days = [];
-            $stands = [];
+        /** @var Location $location */
+        foreach ($event->getLocations() as $location) {
+            $stands = [...$stands, ...$location->getStands()];
+        }
 
-            /** @var Location $location */
-            foreach ($event->getLocations() as $location) {
-                $stands = [...$stands, ...$location->getStands()];
-            }
+        foreach ($event->getDays() as $day) {
+            $dayModel = DayModel::fromEntity($day);
+            $timeframes = array_map(
+                fn (Timeframe $timeframe) => new ComparableTimeframe(
+                    Time::createFromDateTime($timeframe->getHourFrom()),
+                    Time::createFromDateTime($timeframe->getHourTo())
+                ),
+                $day->getTimeframes()->toArray()
+            );
+            $standsTimeframes = [];
 
-            foreach ($event->getDays() as $day) {
-                $dayModel = DayModel::fromEntity($day);
-                $timeframes = array_map(
-                    fn (Timeframe $timeframe) => new ComparableTimeframe(
-                        Time::createFromDateTime($timeframe->getHourFrom()),
-                        Time::createFromDateTime($timeframe->getHourTo())
+            foreach ($stands as $stand) {
+                $standTimeframes = $timeframes;
+
+                $reservationsToSubtract = array_map(
+                    fn (Reservation $reservation) => new ComparableTimeframe(
+                        Time::createFromDateTime($reservation->getTimeframe()->getHourFrom()),
+                        Time::createFromDateTime($reservation->getTimeframe()->getHourTo())
                     ),
-                    $day->getTimeframes()->toArray()
+                    $this->reservationRepository->findConfirmedByStandAndDay($stand, $day)
                 );
-                $standsTimeframes = [];
+                $this->subtractReservations($standTimeframes, $reservationsToSubtract);
 
-                foreach ($stands as $stand) {
-                    $standTimeframes = $timeframes;
-
-                    $reservationsToSubtract = array_map(
-                        fn (Reservation $reservation) => new ComparableTimeframe(
-                            Time::createFromDateTime($reservation->getTimeframe()->getHourFrom()),
-                            Time::createFromDateTime($reservation->getTimeframe()->getHourTo())
-                        ),
-                        $this->reservationRepository->findConfirmedByStandAndDay($stand, $day)
-                    );
-                    $this->subtractReservations($standTimeframes, $reservationsToSubtract);
-
-                    $standsTimeframes[] = [
-                        StandModel::fromEntity($stand),
-                        array_map(
-                            fn (ComparableTimeframe $timeframe) => TimeframeModel::fromComparableTimeframe($timeframe),
-                            $standTimeframes
-                        )
-                    ];
-                }
-
-                $timeframes = [];
-                /**
-                 * @var StandModel $stand
-                 * @var TimeframeModel[] $rawTimeframes
-                 */
-                foreach ($standsTimeframes as [$stand, $rawTimeframes]) {
-                    foreach ($rawTimeframes as $timeframe) {
-                        $timeframe->setStand($stand);
-                        $timeframes[] = $timeframe;
-                    }
-                }
-
-                $dayModel->setTimeframes($timeframes);
-                $days[] = $dayModel;
+                $standsTimeframes[] = [
+                    StandModel::fromEntity($stand),
+                    array_map(
+                        fn (ComparableTimeframe $timeframe) => TimeframeModel::fromComparableTimeframe($timeframe),
+                        $standTimeframes
+                    )
+                ];
             }
 
-            $eventModel->setDays($days);
-            $result[] = $eventModel;
+            $timeframes = [];
+            /**
+             * @var StandModel $stand
+             * @var TimeframeModel[] $rawTimeframes
+             */
+            foreach ($standsTimeframes as [$stand, $rawTimeframes]) {
+                foreach ($rawTimeframes as $timeframe) {
+                    $timeframe->setStand($stand);
+                    $timeframes[] = $timeframe;
+                }
+            }
+
+            $dayModel->setTimeframes($timeframes);
+            $result[] = $dayModel;
         }
 
         $cachedStands->set($result);

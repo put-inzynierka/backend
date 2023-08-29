@@ -72,6 +72,7 @@ class ReservationController extends AbstractController
     ): Response {
         $this->denyAccessUnlessGranted(Qualifier::IS_ADMIN);
 
+        /** @var Reservation $reservation */
         $reservation = $instantiator->deserialize(
             $request->getContent(),
             Reservation::class,
@@ -79,7 +80,7 @@ class ReservationController extends AbstractController
             $reservation
         );
 
-        $availabilityService->rebuild();
+        $availabilityService->rebuild($reservation->getEvent());
 
         $manager->persist($reservation);
         $manager->flush();
