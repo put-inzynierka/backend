@@ -26,7 +26,7 @@ class EventImageValidator extends AbstractFileValidator implements FileValidator
         $violations = new ConstraintViolationList();
 
         if ($actor->getRole() !== UserRole::ADMIN) {
-            $violations->add($this->createViolation(
+            $violations->add($this::createViolation(
                 'Insufficient permissions to upload an event image.',
                 'type',
                 FileType::EVENT_IMAGE->value
@@ -36,7 +36,7 @@ class EventImageValidator extends AbstractFileValidator implements FileValidator
         $this->validateImage($file, $violations);
 
         if ($file->getSize() > ByteSize::HUNDRED_MB) {
-            $violations->add($this->createViolation(
+            $violations->add($this::createViolation(
                 'The file must not be larger than 100 MB.',
                 'file'
             ));

@@ -6,6 +6,11 @@ trait Comparable
 {
     abstract public function getValue(): int;
 
+    public function equals(ComparableInterface $that): bool
+    {
+        return $this->getValue() === $that->getValue();
+    }
+
     public function greaterThan(ComparableInterface $that): bool
     {
         return $this->getValue() > $that->getValue();
@@ -33,6 +38,6 @@ trait Comparable
 
     public function between(ComparableInterface $beginning, ComparableInterface $end): bool
     {
-        return $this->getValue() >= $beginning && $this->getValue() <= $end;
+        return $this->getValue() >= $beginning->getValue() && $this->getValue() <= $end->getValue();
     }
 }

@@ -8,28 +8,24 @@ use App\Util\Time;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
-class TimeframeValidator extends Validator
+class TimeframeValidator extends Validator implements ContainmentValidator
 {
-    public function __construct(
-        protected array $possibleDays
-    ) {}
-
     /**
      * @param Timeframeable[] $needles
      * @param Timeframeable[] $haystack
      * @return ConstraintViolationListInterface
      */
-    public function validate(iterable $needles, iterable $haystack): ConstraintViolationListInterface
+    public static function validate(iterable $needles, iterable $haystack): ConstraintViolationListInterface
     {
-        $this->preparePossibleDays($haystack);
+        $possibleDays = self::preparePossibleDays($haystack);
 
         $violations = new ConstraintViolationList();
         foreach ($needles as $needle) {
-            if ($this->checkIfIsContained($needle)) {
+            if (self::checkIfIsContained($needle, $possibleDays)) {
                 continue;
             }
 
-            $violations->add($this->createViolation(
+            $violations->add(self::createViolation(
                 'The timeframes need to be contained within possible timeframes.',
                 'day',
                 $needle->getDate()->format('D-m-y')
@@ -39,7 +35,7 @@ class TimeframeValidator extends Validator
         return $violations;
     }
 
-    protected function preparePossibleDays(array $haystack): void
+    protected static function preparePossibleDays(iterable $haystack): array
     {
         $possibleDays = [];
 
@@ -57,7 +53,7 @@ class TimeframeValidator extends Validator
                 );
 
                 foreach ($possibleDays[$formattedDate] as &$possibleTimeframe) {
-                    $mergedTimeframe = $this->attemptToMerge($comparableTimeframe, $possibleTimeframe);
+                    $mergedTimeframe = self::attemptToMerge($comparableTimeframe, $possibleTimeframe);
 
                     if ($mergedTimeframe) {
                         $possibleTimeframe = $mergedTimeframe;
@@ -69,14 +65,14 @@ class TimeframeValidator extends Validator
             }
         }
 
-        $this->possibleDays = $possibleDays;
+        return $possibleDays;
     }
 
-    protected function checkIfIsContained(Timeframeable $day): bool
+    protected static function checkIfIsContained(Timeframeable $day, array $possibleDays): bool
     {
         $formattedDate = $day->getDate()->format('Y-m-d');
 
-        if (!array_key_exists($formattedDate, $this->possibleDays)) {
+        if (!array_key_exists($formattedDate, $possibleDays)) {
             // That day is straight up missing in our possible
             // days, so it fails the check.
             return false;
@@ -89,7 +85,7 @@ class TimeframeValidator extends Validator
             );
 
             /** @var ComparableTimeframe $possibleTimeframe */
-            foreach ($this->possibleDays[$formattedDate] as $possibleTimeframe) {
+            foreach ($possibleDays[$formattedDate] as $possibleTimeframe) {
                 if (
                     $comparableTimeframe->getHourFrom()->between(
                         $possibleTimeframe->getHourFrom(),
@@ -115,7 +111,7 @@ class TimeframeValidator extends Validator
         return true;
     }
 
-    protected function attemptToMerge(ComparableTimeframe $first, ComparableTimeframe $second): ?ComparableTimeframe
+    protected static function attemptToMerge(ComparableTimeframe $first, ComparableTimeframe $second): ?ComparableTimeframe
     {
         if ($first->getHourFrom()->between($second->getHourFrom(), $second->getHourTo())) {
             if ($first->getHourTo()->between($second->getHourFrom(), $second->getHourTo())) {

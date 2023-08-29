@@ -6,6 +6,9 @@ use App\Entity\AbstractEntity;
 use App\Entity\File\File;
 use App\Entity\Team\Team;
 use App\Enum\SerializationGroup\Project\ProjectGroups;
+use App\Enum\SerializationGroup\Project\ReservationGroups;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Attributes\Property;
@@ -25,6 +28,7 @@ class Project extends AbstractEntity
         ProjectGroups::SHOW,
         ProjectGroups::INDEX,
         ProjectGroups::UPDATE,
+        ReservationGroups::INDEX,
     ])]
     #[Property(
         description: 'The name of the project',
@@ -40,6 +44,7 @@ class Project extends AbstractEntity
         ProjectGroups::CREATE,
         ProjectGroups::SHOW,
         ProjectGroups::UPDATE,
+        ReservationGroups::INDEX,
     ])]
     #[Property(
         description: 'The description of the project',
@@ -48,12 +53,13 @@ class Project extends AbstractEntity
     private string $description;
 
     #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'projects')]
-    #[ORM\JoinColumn]
+    #[ORM\JoinColumn(nullable: false)]
     #[Constraints\NotBlank(allowNull: false, groups: [ProjectGroups::CREATE])]
     #[Groups([
         ProjectGroups::SHOW,
         ProjectGroups::CREATE,
         ProjectGroups::INDEX,
+        ReservationGroups::INDEX,
     ])]
     #[Property(
         description: 'Team responsible for the project',
@@ -68,11 +74,20 @@ class Project extends AbstractEntity
         ProjectGroups::SHOW,
         ProjectGroups::INDEX,
         ProjectGroups::UPDATE,
+        ReservationGroups::INDEX,
     ])]
     #[Property(
         description: 'The image of the project',
     )]
     private File $image;
+
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Reservation::class, cascade: ['remove'])]
+    private Collection $reservations;
+
+    public function __construct()
+    {
+        $this->reservations = new ArrayCollection();
+    }
 
     public function getName(): string
     {
@@ -118,6 +133,28 @@ class Project extends AbstractEntity
     public function setImage(File $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        $this->reservations->removeElement($reservation);
 
         return $this;
     }

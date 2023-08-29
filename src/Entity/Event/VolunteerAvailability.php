@@ -20,11 +20,11 @@ use Symfony\Component\Validator\Constraints;
 class VolunteerAvailability extends AbstractEntity implements Timeframeable
 {
     #[ORM\ManyToOne(targetEntity: Volunteer::class)]
-    #[ORM\JoinColumn]
+    #[ORM\JoinColumn(nullable: false)]
     private Volunteer $volunteer;
 
     #[ORM\ManyToOne(targetEntity: Day::class)]
-    #[ORM\JoinColumn]
+    #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         VolunteerGroups::CREATE,
         VolunteerGroups::INDEX,
@@ -33,8 +33,8 @@ class VolunteerAvailability extends AbstractEntity implements Timeframeable
 
     #[ORM\ManyToMany(targetEntity: Timeframe::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinTable(name: 'event.volunteer_availabilities_timeframes')]
-    #[ORM\JoinColumn(name: 'volunteer_availability_id', referencedColumnName: 'id')]
-    #[ORM\InverseJoinColumn(name: 'timeframe_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'volunteer_availability_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\InverseJoinColumn(name: 'timeframe_id', referencedColumnName: 'id', nullable: false)]
     #[Constraints\NotBlank(allowNull: false, groups: [EventGroups::CREATE])]
     #[Groups([
         VolunteerGroups::CREATE,

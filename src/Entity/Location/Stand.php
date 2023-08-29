@@ -5,6 +5,7 @@ namespace App\Entity\Location;
 use App\Entity\AbstractEntity;
 use App\Enum\SerializationGroup\Event\EventGroups;
 use App\Enum\SerializationGroup\Location\StandGroups;
+use App\Enum\SerializationGroup\Project\ReservationGroups;
 use App\Enum\StandType;
 use App\Repository\StandRepository;
 use Doctrine\DBAL\Types\Types;
@@ -29,6 +30,7 @@ class Stand extends AbstractEntity
         StandGroups::INDEX,
         StandGroups::UPDATE,
         EventGroups::SHOW,
+        ReservationGroups::INDEX,
     ])]
     #[Property(
         description: 'The name of the stand',
@@ -53,9 +55,10 @@ class Stand extends AbstractEntity
     private StandType $type;
 
     #[ORM\ManyToOne(targetEntity: Location::class, inversedBy: 'stands')]
-    #[ORM\JoinColumn()]
+    #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         StandGroups::SHOW,
+        ReservationGroups::INDEX,
     ])]
     private Location $location;
 

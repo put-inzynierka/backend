@@ -28,7 +28,7 @@ class Time implements ComparableInterface
 
         $dateTime = \DateTime::createFromFormat(
             'H:i:s',
-            "{$this->hour}:{$this->minute}:{$this->second}"
+            sprintf('%02d:%02d:%02d', $this->hour, $this->minute, $this->second)
         );
 
         return $dateTime->format($format);

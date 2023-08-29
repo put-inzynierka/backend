@@ -6,6 +6,8 @@ use App\Entity\AbstractEntity;
 use App\Entity\File\File;
 use App\Entity\Location\Location;
 use App\Enum\SerializationGroup\Event\EventGroups;
+use App\Enum\SerializationGroup\Event\VolunteerGroups;
+use App\Enum\SerializationGroup\Project\ReservationGroups;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -30,6 +32,7 @@ class Event extends AbstractEntity
         EventGroups::SHOW,
         EventGroups::INDEX,
         EventGroups::UPDATE,
+        ReservationGroups::INDEX,
     ])]
     #[Property(
         description: 'The name of the event',
@@ -69,8 +72,8 @@ class Event extends AbstractEntity
 
     #[ORM\ManyToMany(targetEntity: Location::class)]
     #[ORM\JoinTable(name: 'event.events_locations')]
-    #[ORM\JoinColumn(name: 'event_id', referencedColumnName: 'id')]
-    #[ORM\InverseJoinColumn(name: 'location_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'event_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\InverseJoinColumn(name: 'location_id', referencedColumnName: 'id', nullable: false)]
     #[Groups([
         EventGroups::CREATE,
         EventGroups::SHOW,
@@ -96,6 +99,10 @@ class Event extends AbstractEntity
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Constraints\Type(DateTimeInterface::class)]
     #[Constraints\NotBlank(allowNull: false, groups: [EventGroups::CREATE])]
+    #[Constraints\GreaterThan('now', groups: [
+        ReservationGroups::CREATE,
+        ReservationGroups::UPDATE,
+    ])]
     #[Groups([
         EventGroups::CREATE,
         EventGroups::SHOW,
@@ -111,6 +118,7 @@ class Event extends AbstractEntity
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Constraints\Type(DateTimeInterface::class)]
     #[Constraints\NotBlank(allowNull: false, groups: [EventGroups::CREATE])]
+    #[Constraints\GreaterThan('now', groups: [VolunteerGroups::CREATE])]
     #[Groups([
         EventGroups::CREATE,
         EventGroups::SHOW,
