@@ -8,10 +8,7 @@ use App\Controller\AbstractController;
 use App\Entity\Project\Project;
 use App\Entity\Project\Reservation;
 use App\Enum\SerializationGroup\Project\ReservationGroups;
-use App\Exception\UnprocessableEntityHttpException;
 use App\Service\Instantiator;
-use App\Service\Validation\StandValidator;
-use App\Service\Validation\TimeframeValidator;
 use App\Voter\Qualifier;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -60,10 +57,20 @@ class ReservationController extends AbstractController
             ->setConfirmed(false)
         ;
 
-        $instantiator->validateContainment($reservation);
+        try {
+            $manager->beginTransaction();
 
-        $manager->persist($reservation);
-        $manager->flush();
+            $manager->persist($reservation);
+            $manager->flush();
+
+            $instantiator->validateContainment($reservation);
+        } catch (\Throwable $th) {
+            $manager->rollback();
+
+            throw $th;
+        }
+
+        $manager->commit();
 
         return $this->object(
             $reservation,
@@ -101,8 +108,6 @@ class ReservationController extends AbstractController
         Instantiator $instantiator,
         Request $request,
         EntityManagerInterface $manager,
-        TimeframeValidator $timeframeValidator,
-        StandValidator $standValidator,
         Project $project,
         Reservation $reservation
     ): Response {
@@ -116,10 +121,20 @@ class ReservationController extends AbstractController
             $reservation
         );
 
-        $instantiator->validateContainment($reservation);
+        try {
+            $manager->beginTransaction();
 
-        $manager->persist($reservation);
-        $manager->flush();
+            $manager->persist($reservation);
+            $manager->flush();
+
+            $instantiator->validateContainment($reservation);
+        } catch (\Throwable $th) {
+            $manager->rollback();
+
+            throw $th;
+        }
+
+        $manager->commit();
 
         return $this->object($reservation, groups: ReservationGroups::UPDATE);
     }

@@ -95,10 +95,20 @@ class VolunteerController extends AbstractController
             ->setUser($this->getUser())
         ;
         
-        $instantiator->validateContainment($volunteer);
+        try {
+            $manager->beginTransaction();
+            
+            $manager->persist($volunteer);
+            $manager->flush();
 
-        $manager->persist($volunteer);
-        $manager->flush();
+            $instantiator->validateContainment($volunteer);
+        } catch (\Throwable $th) {
+            $manager->rollback();
+
+            throw $th;
+        }
+
+        $manager->commit();
 
         return $this->object(
             $volunteer,
