@@ -43,7 +43,6 @@ class ReservationController extends AbstractController
             $paramFetcher->get('page'),
             $paramFetcher->get('limit')
         );
-        dd($page->getItems());
 
         return $this->object($page, groups: ReservationGroups::INDEX);
     }
