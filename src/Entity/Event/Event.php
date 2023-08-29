@@ -99,10 +99,6 @@ class Event extends AbstractEntity
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Constraints\Type(DateTimeInterface::class)]
     #[Constraints\NotBlank(allowNull: false, groups: [EventGroups::CREATE])]
-    #[Constraints\GreaterThan('now', groups: [
-        ReservationGroups::CREATE,
-        ReservationGroups::UPDATE,
-    ])]
     #[Groups([
         EventGroups::CREATE,
         EventGroups::SHOW,
@@ -118,7 +114,6 @@ class Event extends AbstractEntity
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Constraints\Type(DateTimeInterface::class)]
     #[Constraints\NotBlank(allowNull: false, groups: [EventGroups::CREATE])]
-    #[Constraints\GreaterThan('now', groups: [VolunteerGroups::CREATE])]
     #[Groups([
         EventGroups::CREATE,
         EventGroups::SHOW,
