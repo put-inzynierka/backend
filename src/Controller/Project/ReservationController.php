@@ -54,7 +54,7 @@ class ReservationController extends AbstractController
 
         $reservation
             ->setProject($project)
-            ->setConfirmed(false)
+            ->setConfirmed(null)
         ;
 
         try {

@@ -77,13 +77,13 @@ class Reservation extends AbstractEntity implements Timeframeable, ContainmentVa
     ])]
     private Timeframe $timeframe;
 
-    #[ORM\Column(type: Types::BOOLEAN)]
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     #[Constraints\Type(Types::BOOLEAN)]
     #[Groups([
         ReservationGroups::ADMIN_UPDATE,
         ReservationGroups::INDEX,
     ])]
-    private bool $confirmed;
+    private ?bool $confirmed;
 
     public function getProject(): Project
     {
@@ -154,12 +154,12 @@ class Reservation extends AbstractEntity implements Timeframeable, ContainmentVa
         return new ArrayCollection([$this->timeframe]);
     }
 
-    public function isConfirmed(): bool
+    public function isConfirmed(): ?bool
     {
         return $this->confirmed;
     }
 
-    public function setConfirmed(bool $confirmed): Reservation
+    public function setConfirmed(?bool $confirmed): Reservation
     {
         $this->confirmed = $confirmed;
 

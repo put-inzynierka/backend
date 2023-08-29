@@ -25,6 +25,7 @@ class ReservationController extends AbstractController
     #[Tag('Reservation')]
     #[Param\Limit]
     #[Param\Page]
+    #[Param\QueryParam('confirmed')]
     #[Resp\PageResponse(
         description: 'Returns the list of reservations',
         class: Reservation::class,
