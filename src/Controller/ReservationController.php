@@ -4,12 +4,10 @@ namespace App\Controller;
 
 use App\Component\Attribute\Param as Param;
 use App\Component\Attribute\Response as Resp;
-use App\Entity\Event\Event;
 use App\Entity\Project\Reservation;
 use App\Enum\SerializationGroup\Project\ReservationGroups;
 use App\Helper\Paginator;
-use App\Repository\RepositoryFactory;
-use App\Repository\SecurityUserRepository;
+use App\Repository\ReservationRepository;
 use App\Service\Instantiator;
 use App\Service\Stand\AvailabilityService;
 use App\Voter\Qualifier;
@@ -34,7 +32,7 @@ class ReservationController extends AbstractController
     )]
     public function index(
         ParamFetcherInterface $paramFetcher,
-        SecurityUserRepository $repository
+        ReservationRepository $repository
     ): Response {
         $this->denyAccessUnlessGranted(Qualifier::IS_ADMIN);
 
@@ -45,6 +43,7 @@ class ReservationController extends AbstractController
             $paramFetcher->get('page'),
             $paramFetcher->get('limit')
         );
+        dd($page->getItems());
 
         return $this->object($page, groups: ReservationGroups::INDEX);
     }
