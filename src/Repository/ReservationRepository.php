@@ -24,18 +24,15 @@ class ReservationRepository extends AbstractRepository
         
         if ($this->paramFetcher->get('confirmed')) {
             $confirmed = $this->paramFetcher->get('confirmed');
-            if ($confirmed === 'true') {
-                $confirmed = true;
-            } elseif ($confirmed === 'false') {
-                $confirmed = false;
-            } else {
-                $confirmed = null;
-            }
             
-            $query
-                ->andWhere('e.confirmed = :confirmed')
-                ->setParameter('confirmed', $confirmed)
-            ;
+            if ($confirmed === 'null') {
+                $query->andWhere('e.confirmed is null');
+            } else {
+                $query
+                    ->andWhere('e.confirmed = :confirmed')
+                    ->setParameter('confirmed', $confirmed === 'true')
+                ;
+            }
         }
 
         return $query;
