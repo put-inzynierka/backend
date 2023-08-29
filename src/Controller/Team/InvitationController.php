@@ -16,7 +16,6 @@ use App\Service\Team\TeamInvitationService;
 use App\Voter\Qualifier;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use OpenApi\Attributes\Tag;
@@ -38,7 +37,6 @@ class InvitationController extends AbstractController
         description: 'The ID of the team',
     )]
     #[Param\Instance(TeamMember::class, TeamMemberGroups::INVITE)]
-    #[ParamConverter(data: ['name' => 'team'], class: Team::class)]
     #[Resp\ObjectResponse(
         description: 'Creates a new member for the team',
         class: TeamMember::class,
@@ -107,7 +105,6 @@ class InvitationController extends AbstractController
         name: 'id',
         description: 'The ID of the team member',
     )]
-    #[ParamConverter(data: ['name' => 'teamMember'], class: TeamMember::class)]
     #[Resp\ObjectResponse(
         description: 'Accepts a team invite',
         class: TeamMember::class,

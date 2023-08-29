@@ -7,13 +7,14 @@ use App\Entity\User\User;
 use App\Enum\SerializationGroup\Team\TeamMemberGroups;
 use App\Enum\SerializationGroup\User\UserGroups;
 use App\Enum\TeamMemberRole;
+use App\Repository\TeamMemberRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Attributes\Property;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: TeamMemberRepository::class)]
 #[ORM\Table]
 #[ORM\UniqueConstraint(
     name: 'unique_team_invite',

@@ -3,7 +3,6 @@
 namespace App\Controller\Event\Volunteer;
 
 use App\Component\Model\Message;
-use App\Entity\Event\Event;
 use App\Entity\Event\Volunteer;
 use App\Entity\Mail\MailLog;
 use App\Enum\SerializationGroup\BaseGroups;
@@ -16,29 +15,27 @@ use App\Component\Attribute\Response as Resp;
 use App\Controller\AbstractController;
 use App\Service\Instantiator;
 use OpenApi\Attributes\Tag;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class MessageController extends AbstractController
 {
     #[Rest\Post(
-        path: '/events/{eventId}/volunteers/{volunteerId}/messages',
+        path: '/events/{event_id}/volunteers/{volunteer_id}/messages',
         name: 'store_event_volunteer_message',
         requirements: ['id' => '\d+']
     )]
     #[Tag('Event')]
     #[Param\Path(
-        name: 'eventId',
+        name: 'event_id',
         description: 'The ID of the event',
     )]
     #[Param\Path(
-        name: 'volunteerId',
+        name: 'volunteer_id',
         description: 'The ID of the volunteer',
     )]
     #[Param\Instance(Message::class, MessageGroups::CREATE)]
-    #[ParamConverter(data: ['name' => 'event'], class: Event::class, options: ['id' => 'eventId'])]
-    #[ParamConverter(data: ['name' => 'volunteer'], class: Volunteer::class, options: ['id' => 'volunteerId'])]
     #[Resp\ObjectResponse(
         description: 'Messages a volunteer',
         class: MailLog::class,
@@ -48,7 +45,7 @@ class MessageController extends AbstractController
     public function store(
         Instantiator $instantiator,
         Mailer $mailer,
-        Event $event,
+        #[MapEntity(expr: 'repository.findWithParent(volunteer_id, event_id)')]
         Volunteer $volunteer,
         Request $request
     ): Response {

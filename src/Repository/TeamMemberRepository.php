@@ -36,4 +36,17 @@ class TeamMemberRepository extends AbstractRepository
 
         return $query;
     }
+
+    public function findWithParent(string $id, string $teamId): ?Team
+    {
+        $query = $this->index();
+        $query
+            ->andWhere('e.id = :id')
+            ->andWhere('e.team = :teamId')
+            ->setParameter('id', $id)
+            ->setParameter('teamId', $teamId)
+        ;
+
+        return $query->getQuery()->getOneOrNullResult();
+    }
 }

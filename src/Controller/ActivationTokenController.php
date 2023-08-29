@@ -11,7 +11,6 @@ use App\Service\Instantiator;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use OpenApi\Attributes\Tag;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 
 class ActivationTokenController extends AbstractController
@@ -23,7 +22,6 @@ class ActivationTokenController extends AbstractController
     )]
     #[Tag('User')]
     #[Param\Path('value', description: 'The token to invoke')]
-    #[ParamConverter(data: ['name' => 'token'], class: ActivationToken::class)]
     #[Resp\EmptyResponse(
         description: 'Activates the user associated with the token and returns them',
     )]

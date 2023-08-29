@@ -4,6 +4,7 @@ namespace App\Voter;
 
 use App\Entity\Team\Team;
 use App\Entity\User\User;
+use App\Enum\UserRole;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
@@ -19,6 +20,10 @@ class TeamVoter extends Voter
         $user = $token->getUser();
         if (!$user instanceof User) {
             return false;
+        }
+
+        if($user->getRole() === UserRole::ADMIN) {
+            return true;
         }
 
         return match ($attribute) {

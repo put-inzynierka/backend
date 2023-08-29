@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Component\Attribute\Param as Param;
 use App\Component\Attribute\Response as Resp;
 use App\Entity\Location\Location;
-use App\Entity\Movie\Genre;
 use App\Enum\SerializationGroup\Location\LocationGroups;
 use App\Helper\Paginator;
 use App\Repository\RepositoryFactory;
@@ -14,7 +13,6 @@ use App\Voter\Qualifier;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use OpenApi\Attributes\Tag;
@@ -53,7 +51,6 @@ class LocationController extends AbstractController
     )]
     #[Tag('Location')]
     #[Param\Path('id', description: 'The ID of the location')]
-    #[ParamConverter(data: ['name' => 'location'], class: Location::class)]
     #[Resp\ObjectResponse(
         description: 'Returns details about the specific location',
         class: Location::class,
@@ -107,7 +104,6 @@ class LocationController extends AbstractController
     #[Tag('Location')]
     #[Param\Path('id', description: 'The ID of the location')]
     #[Param\Instance(Location::class, LocationGroups::UPDATE)]
-    #[ParamConverter(data: ['name' => 'location'], class: Location::class)]
     #[Resp\ObjectResponse(
         description: 'Updates the specific location',
         class: Location::class,
@@ -141,7 +137,6 @@ class LocationController extends AbstractController
     )]
     #[Tag('Location')]
     #[Param\Path('id', description: 'The ID of the location')]
-    #[ParamConverter(data: ['name' => 'location'], class: Location::class)]
     #[Resp\EmptyResponse(
         description: 'Removes the specific location',
         status: 204,

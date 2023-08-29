@@ -17,7 +17,6 @@ use App\Service\Instantiator;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use OpenApi\Attributes\Tag;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -35,7 +34,6 @@ class VolunteerController extends AbstractController
     )]
     #[Param\Limit]
     #[Param\Page]
-    #[ParamConverter(data: ['name' => 'event'], class: Event::class)]
     #[Resp\PageResponse(
         description: 'Returns the list of volunteers for the event',
         class: Volunteer::class,
@@ -70,7 +68,6 @@ class VolunteerController extends AbstractController
         description: 'The ID of the event',
     )]
     #[Param\Instance(Volunteer::class, VolunteerGroups::CREATE)]
-    #[ParamConverter(data: ['name' => 'event'], class: Event::class)]
     #[Resp\ObjectResponse(
         description: 'Creates a new volunteer for the event',
         class: Volunteer::class,

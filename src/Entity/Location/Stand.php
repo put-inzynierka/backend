@@ -7,6 +7,7 @@ use App\Enum\SerializationGroup\Event\EventGroups;
 use App\Enum\SerializationGroup\Location\StandGroups;
 use App\Enum\SerializationGroup\Project\ReservationGroups;
 use App\Enum\StandType;
+use App\Repository\StandRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Attributes\Property;
@@ -14,7 +15,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: StandRepository::class)]
 #[ORM\Table]
 #[UniqueEntity(fields: ['name'])]
 class Stand extends AbstractEntity

@@ -8,13 +8,14 @@ use App\Entity\Component\Contract\ContainmentValidatable;
 use App\Entity\User\User;
 use App\Enum\SerializationGroup\Event\VolunteerGroups;
 use App\Service\Validation\TimeframeValidator;
+use App\Repository\VolunteerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: VolunteerRepository::class)]
 #[ORM\Table]
 class Volunteer extends AbstractEntity implements ContainmentValidatable
 {

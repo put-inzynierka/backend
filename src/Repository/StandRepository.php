@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Location\Location;
 use App\Entity\Location\Stand;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 class StandRepository extends AbstractRepository
@@ -13,7 +14,7 @@ class StandRepository extends AbstractRepository
         parent::__construct($registry, Stand::class);
     }
 
-    public function indexByLocation(Location $location)
+    public function indexByLocation(Location $location): QueryBuilder
     {
         $query = $this->index();
         $query
@@ -22,5 +23,18 @@ class StandRepository extends AbstractRepository
         ;
 
         return $query;
+    }
+
+    public function findWithParent(string $id, string $locationId): ?Stand
+    {
+        $query = $this->index();
+        $query
+            ->andWhere('e.id = :id')
+            ->andWhere('e.location = :locationId')
+            ->setParameter('id', $id)
+            ->setParameter('locationId', $locationId)
+        ;
+
+        return $query->getQuery()->getOneOrNullResult();
     }
 }

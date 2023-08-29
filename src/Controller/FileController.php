@@ -10,7 +10,6 @@ use App\Enum\File\FileType;
 use App\Service\File\Uploader;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use OpenApi\Attributes\Tag;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -48,7 +47,6 @@ class FileController extends AbstractController
     )]
     #[Tag('File')]
     #[Param\Path('uuid', description: 'The UUID of the file')]
-    #[ParamConverter(data: ['name' => 'file'], class: File::class)]
     public function show(
         File $file,
         string $uploadsDirectory
