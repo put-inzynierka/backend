@@ -94,6 +94,8 @@ class VolunteerController extends AbstractController
             ->setEvent($event)
             ->setUser($this->getUser())
         ;
+        
+        $instantiator->validateContainment($volunteer);
 
         $manager->persist($volunteer);
         $manager->flush();

@@ -60,6 +60,8 @@ class ReservationController extends AbstractController
             ->setConfirmed(false)
         ;
 
+        $instantiator->validateContainment($reservation);
+
         $manager->persist($reservation);
         $manager->flush();
 
@@ -114,19 +116,7 @@ class ReservationController extends AbstractController
             $reservation
         );
 
-        $timeframeContainmentViolations = $timeframeValidator->validate(
-            [$reservation],
-            $reservation->getEvent()->getDays()
-        );
-        $standContainmentViolations = $standValidator->validate(
-            [$reservation->getStand()],
-            $reservation->getEvent()->getLocations()
-        );
-        if ($timeframeContainmentViolations->count() + $standContainmentViolations->count()) {
-            throw new UnprocessableEntityHttpException(
-                $timeframeContainmentViolations->addAll($standContainmentViolations)
-            );
-        }
+        $instantiator->validateContainment($reservation);
 
         $manager->persist($reservation);
         $manager->flush();

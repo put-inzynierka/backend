@@ -7,6 +7,7 @@ use App\Entity\Component\Contract\ContainmentValidatable;
 use App\Exception\UnprocessableEntityHttpException;
 use App\Service\Validation\ContainmentValidator;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -56,17 +57,20 @@ class Instantiator
         if ($violations->count() > 0) {
             throw new UnprocessableEntityHttpException($violations);
         }
+    }
+    
+    public function validateContainment(ContainmentValidatable $instance): void
+    {
+        $violations = new ConstraintViolationList();
+        
+        /** @var ContainmentValidationRule $rule */
+        foreach ($instance->getContainmentValidationRules() as $rule) {
+            /** @var ContainmentValidator $validator */
+            $validator = $rule->getValidatorClass();
 
-        if ($instance instanceof ContainmentValidatable) {
-            /** @var ContainmentValidationRule $rule */
-            foreach ($instance->getContainmentValidationRules() as $rule) {
-                /** @var ContainmentValidator $validator */
-                $validator = $rule->getValidatorClass();
-
-                $violations->addAll(
-                    $validator::validate($rule->getNeedles(), $rule->getHaystack())
-                );
-            }
+            $violations->addAll(
+                $validator::validate($rule->getNeedles(), $rule->getHaystack())
+            );
         }
 
         if ($violations->count() > 0) {
