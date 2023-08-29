@@ -40,7 +40,7 @@ class ReservationRepository extends AbstractRepository
 
     public function findConfirmedByStandAndDay(Stand $stand, Day $day): array
     {
-        $builder = $this->index();
+        $builder = parent::index();
         $builder
             ->andWhere('e.stand = :stand')
             ->andWhere('e.day = :day')

@@ -79,10 +79,10 @@ class ReservationController extends AbstractController
             $reservation
         );
 
-        $availabilityService->rebuild($reservation->getEvent());
-
         $manager->persist($reservation);
         $manager->flush();
+
+        $availabilityService->rebuild($reservation->getEvent());
 
         return $this->object($reservation, groups: ReservationGroups::ADMIN_UPDATE);
     }
