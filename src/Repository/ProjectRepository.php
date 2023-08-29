@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Project\Project;
+use App\Entity\Team\Team;
 use App\Entity\User\User;
 use App\Enum\UserRole;
 use Doctrine\ORM\QueryBuilder;
@@ -28,6 +29,17 @@ final class ProjectRepository extends AbstractRepository
                 ->setParameter('user', $user)
             ;
         }
+
+        return $query;
+    }
+
+    public function indexByTeam(Team $team): QueryBuilder
+    {
+        $query = $this->index();
+        $query
+            ->andWhere('e.team = :team')
+            ->setParameter('team', $team)
+        ;
 
         return $query;
     }
