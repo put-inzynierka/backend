@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Event\Day;
 use App\Entity\Location\Stand;
+use App\Entity\Project\Project;
 use App\Entity\Project\Reservation;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -52,5 +53,16 @@ class ReservationRepository extends AbstractRepository
         ;
 
         return $builder->getQuery()->getResult();
+    }
+
+    public function indexByProject(Project $project): QueryBuilder
+    {
+        $query = $this->index();
+        $query
+            ->andWhere('e.project = :project')
+            ->setParameter('project', $project)
+        ;
+
+        return $query;
     }
 }

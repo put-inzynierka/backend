@@ -8,10 +8,13 @@ use App\Controller\AbstractController;
 use App\Entity\Project\Project;
 use App\Entity\Project\Reservation;
 use App\Enum\SerializationGroup\Project\ReservationGroups;
+use App\Helper\Paginator;
+use App\Repository\ReservationRepository;
 use App\Service\Instantiator;
 use App\Voter\Qualifier;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Request\ParamFetcherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +22,41 @@ use OpenApi\Attributes\Tag;
 
 class ReservationController extends AbstractController
 {
+    #[Rest\Get(
+        path: '/projects/{id}/reservations',
+        name: 'index_project_reservations',
+        requirements: ['id' => '\d+'],
+    )]
+    #[Tag('Project')]
+    #[Param\Path(
+        name: 'id',
+        description: 'The ID of the project',
+    )]
+    #[Param\Limit]
+    #[Param\Page]
+    #[Resp\PageResponse(
+        description: 'Returns the list stands for the location',
+        class: Reservation::class,
+        group: ReservationGroups::INDEX,
+    )]
+    public function index(
+        ParamFetcherInterface $paramFetcher,
+        ReservationRepository $repository,
+        Project               $project
+    ): Response {
+        $this->denyAccessUnlessGranted(Qualifier::HAS_ACCESS, $project->getTeam());
+
+        $list = $repository->indexByProject($project);
+
+        $page = Paginator::paginate(
+            $list,
+            $paramFetcher->get('page'),
+            $paramFetcher->get('limit')
+        );
+
+        return $this->object($page, groups: ReservationGroups::INDEX);
+    }
+
     #[Rest\Post(
         path: '/projects/{id}/reservations',
         name: 'store_project_reservation',
