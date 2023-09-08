@@ -59,7 +59,9 @@ class ReservationRepository extends AbstractRepository
     {
         $query = parent::index();
         $query
+            ->leftJoin('e.day', 'd')
             ->andWhere('e.project = :project')
+            ->orderBy('d.date', 'desc')
             ->setParameter('project', $project)
         ;
 

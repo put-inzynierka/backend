@@ -177,9 +177,9 @@ class ReservationController extends AbstractController
         return $this->object($reservation, groups: ReservationGroups::UPDATE);
     }
 
-    #[Rest\Patch(
+    #[Rest\Delete(
         path: '/projects/{project_id}/reservations/{id}',
-        name: 'update_project_reservation',
+        name: 'remove_project_reservation',
         requirements: [
             'project_id' => '\d+',
             'id' => '\d+'
