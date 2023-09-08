@@ -57,7 +57,7 @@ class ReservationRepository extends AbstractRepository
 
     public function indexByProject(Project $project): QueryBuilder
     {
-        $query = $this->index();
+        $query = parent::index();
         $query
             ->andWhere('e.project = :project')
             ->setParameter('project', $project)
