@@ -7,6 +7,7 @@ use App\Component\Attribute\Response as Resp;
 use App\Controller\AbstractController;
 use App\Entity\Event\Announcement;
 use App\Entity\Event\Event;
+use App\Enum\SerializationGroup\BaseGroups;
 use App\Enum\SerializationGroup\Event\AnnouncementGroups;
 use App\Helper\Paginator;
 use App\Repository\AnnouncementRepository;
@@ -52,7 +53,7 @@ final class AnnouncementController extends AbstractController
             $paramFetcher->get('limit')
         );
 
-        return $this->object($page, groups: AnnouncementGroups::INDEX);
+        return $this->object($page, groups: [AnnouncementGroups::INDEX, BaseGroups::TIMESTAMPS]);
     }
 
     #[Rest\Get(
@@ -81,7 +82,7 @@ final class AnnouncementController extends AbstractController
         #[MapEntity(expr: 'repository.findWithParent(id, event_id)')]
         Announcement $announcement
     ): Response {
-        return $this->object($announcement, groups: AnnouncementGroups::SHOW);
+        return $this->object($announcement, groups: [AnnouncementGroups::SHOW, BaseGroups::TIMESTAMPS]);
     }
 
     #[Rest\Post(
