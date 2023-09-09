@@ -70,7 +70,7 @@ class Event extends AbstractEntity
     )]
     private File $image;
 
-    #[ORM\ManyToMany(targetEntity: Location::class)]
+    #[ORM\ManyToMany(targetEntity: Location::class, inversedBy: 'events')]
     #[ORM\JoinTable(name: 'event.events_locations')]
     #[ORM\JoinColumn(name: 'event_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\InverseJoinColumn(name: 'location_id', referencedColumnName: 'id', nullable: false)]

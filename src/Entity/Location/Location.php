@@ -3,9 +3,11 @@
 namespace App\Entity\Location;
 
 use App\Entity\AbstractEntity;
+use App\Entity\Event\Event;
 use App\Enum\SerializationGroup\Event\EventGroups;
 use App\Enum\SerializationGroup\Location\LocationGroups;
 use App\Enum\SerializationGroup\Project\ReservationGroups;
+use App\Repository\LocationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -15,7 +17,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: LocationRepository::class)]
 #[ORM\Table]
 #[UniqueEntity(fields: ['name'])]
 class Location extends AbstractEntity
@@ -45,9 +47,16 @@ class Location extends AbstractEntity
     ])]
     private Collection $stands;
 
+    #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'locations')]
+    #[Property(
+        description: 'The events in which the location is used',
+    )]
+    private Collection $events;
+
     public function __construct()
     {
         $this->stands = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     public function getName(): string
@@ -80,6 +89,34 @@ class Location extends AbstractEntity
     public function removeStand(Stand $stand): self
     {
         $this->stands->removeElement($stand);
+
+        return $this;
+    }
+
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function setEvents(Collection $events): self
+    {
+        $this->events = $events;
+
+        return $this;
+    }
+
+    public function addEvent(Event $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events[] = $event;
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): self
+    {
+        $this->events->removeElement($event);
 
         return $this;
     }

@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Entity\Event\Day;
 use App\Entity\Location\Location;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,18 +14,30 @@ final class LocationRepository extends AbstractRepository
         parent::__construct($registry, Location::class);
     }
 
-    public function indexReservedByDay(Day $day): QueryBuilder
+    public function indexReservedByDay(string $dayId): QueryBuilder
     {
         $query = $this->index();
 
         $query
             ->innerJoin('e.stands', 's')
-            ->innerJoin('s.reservations', 'r')
+            ->innerJoin('s.reservations', 'r', Join::WITH, 'r.confirmed = true')
             ->andWhere('r.day = :day')
-            ->andWhere('r.confirmed = true')
-            ->setParameter('day', $day)
+            ->setParameter('day', $dayId)
         ;
 
         return $query;
+    }
+
+    public function findWithParentByDay(string $id, string $eventId, string $dayId): ?Location
+    {
+        $query = $this->indexReservedByDay($dayId);
+        $query
+            ->innerJoin('e.events', 'events', Join::WITH, 'events.id = :eventId')
+            ->andWhere('e.id = :id')
+            ->setParameter('id', $id)
+            ->setParameter('eventId', $eventId)
+        ;
+
+        return $query->getQuery()->getOneOrNullResult();
     }
 }

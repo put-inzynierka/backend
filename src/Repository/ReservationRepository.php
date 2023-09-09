@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Event\Day;
+use App\Entity\Location\Location;
 use App\Entity\Location\Stand;
 use App\Entity\Project\Project;
 use App\Entity\Project\Reservation;
@@ -63,6 +64,24 @@ class ReservationRepository extends AbstractRepository
             ->andWhere('e.project = :project')
             ->orderBy('d.date', 'desc')
             ->setParameter('project', $project)
+        ;
+
+        return $query;
+    }
+
+    public function indexByLocationAndDay(Location $location, Day $day): QueryBuilder
+    {
+        $query = parent::index();
+        $query
+            ->innerJoin('e.day', 'd')
+            ->innerJoin('e.stand', 's')
+            ->innerJoin('e.timeframe', 't')
+            ->andWhere('s.location = :location')
+            ->andWhere('e.day = :day')
+            ->setParameter('location', $location)
+            ->setParameter('day', $day)
+            ->orderBy('t.hourFrom', 'ASC')
+            ->addOrderBy('t.hourTo', 'ASC')
         ;
 
         return $query;
