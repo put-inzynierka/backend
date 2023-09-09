@@ -18,7 +18,7 @@ use OpenApi\Attributes\Tag;
 final class LocationController extends AbstractController
 {
     #[Rest\Get(
-        path: '/event/{id}/day/{day_id}/reserved-locations',
+        path: '/events/{id}/days/{day_id}/reserved-locations',
         name: 'event_reserved_locations',
         requirements: [
             'day_id' => '\d+',
