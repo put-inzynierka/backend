@@ -5,7 +5,6 @@ namespace App\Entity\Team;
 use App\Entity\AbstractEntity;
 use App\Entity\User\User;
 use App\Enum\SerializationGroup\Team\TeamMemberGroups;
-use App\Enum\SerializationGroup\User\UserGroups;
 use App\Enum\TeamMemberRole;
 use App\Repository\TeamMemberRepository;
 use Doctrine\DBAL\Types\Types;
@@ -31,12 +30,12 @@ class TeamMember extends AbstractEntity
     private Team $team;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn]
     #[Groups([
         TeamMemberGroups::SHOW,
         TeamMemberGroups::INDEX,
     ])]
-    private User $user;
+    private ?User $user;
 
     #[ORM\Column(type: Types::STRING, enumType: TeamMemberRole::class)]
     #[Constraints\Choice(callback: [TeamMemberRole::class, 'cases'])]
@@ -79,7 +78,7 @@ class TeamMember extends AbstractEntity
     )]
     private bool $accepted = false;
 
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }
