@@ -57,7 +57,7 @@ class Reservation extends AbstractEntity implements Timeframeable, ContainmentVa
     ])]
     private Day $day;
 
-    #[ORM\ManyToOne(targetEntity: Stand::class)]
+    #[ORM\ManyToOne(targetEntity: Stand::class, inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
     #[Constraints\NotBlank(allowNull: false, groups: [ReservationGroups::CREATE])]
     #[Groups([

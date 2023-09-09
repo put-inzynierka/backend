@@ -8,6 +8,7 @@ use App\Entity\Timeframe;
 use App\Enum\SerializationGroup\Event\EventGroups;
 use App\Enum\SerializationGroup\Event\VolunteerGroups;
 use App\Enum\SerializationGroup\Project\ReservationGroups;
+use App\Repository\DayRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,7 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints;
 use DateTimeImmutable;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: DayRepository::class)]
 #[ORM\Table]
 class Day extends AbstractEntity implements Timeframeable
 {

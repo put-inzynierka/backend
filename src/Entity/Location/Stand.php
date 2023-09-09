@@ -3,11 +3,14 @@
 namespace App\Entity\Location;
 
 use App\Entity\AbstractEntity;
+use App\Entity\Project\Reservation;
 use App\Enum\SerializationGroup\Event\EventGroups;
 use App\Enum\SerializationGroup\Location\StandGroups;
 use App\Enum\SerializationGroup\Project\ReservationGroups;
 use App\Enum\StandType;
 use App\Repository\StandRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Attributes\Property;
@@ -62,6 +65,17 @@ class Stand extends AbstractEntity
     ])]
     private Location $location;
 
+    #[ORM\OneToMany(mappedBy: 'stand', targetEntity: Reservation::class, cascade: ['remove'])]
+    #[Groups([
+        StandGroups::SHOW,
+    ])]
+    private Collection $reservations;
+
+    public function __construct()
+    {
+        $this->reservations = new ArrayCollection();
+    }
+
     public function getName(): string
     {
         return $this->name;
@@ -94,6 +108,28 @@ class Stand extends AbstractEntity
     public function setLocation(Location $location): self
     {
         $this->location = $location;
+
+        return $this;
+    }
+
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setStand($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        $this->reservations->removeElement($reservation);
 
         return $this;
     }
