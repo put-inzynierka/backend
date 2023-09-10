@@ -32,7 +32,7 @@ class VolunteerAvailability extends AbstractEntity implements Timeframeable
     private Day $day;
 
     #[ORM\ManyToMany(targetEntity: Timeframe::class, cascade: ['persist', 'remove'])]
-    #[ORM\JoinTable(name: 'event.volunteer_availabilities_timeframes')]
+    #[ORM\JoinTable(name: 'events.volunteer_availabilities_timeframes')]
     #[ORM\JoinColumn(name: 'volunteer_availability_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\InverseJoinColumn(name: 'timeframe_id', referencedColumnName: 'id', nullable: false)]
     #[Constraints\NotBlank(allowNull: false, groups: [EventGroups::CREATE])]
