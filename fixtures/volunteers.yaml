@@ -1,0 +1,25 @@
+App\Entity\User\User:
+  user-volunteer{1..10}:
+    email: 'volunteer<current()>\@gmail.com'
+    firstName: '<firstName()>'
+    lastName: '<lastName()>'
+    password: '\$2y\$13\$hURxRm.99HmUBhSVjIVHL.ZAVuhprFaW9bHhgIKgbOdYLVG6k66lu' # "haslo"
+    active: true
+    role: 'user'
+
+App\Entity\Event\Volunteer:
+  volunteer{1..10}:
+    event: '@robo-day'
+    user: '@user-volunteer<current()>'
+
+App\Entity\Timeframe:
+  volunteer-availability-timeframe{1..30}:
+    hourFrom: '<identity(new \DateTimeImmutable("08:00"))>'
+    hourTo: '<identity(new \DateTimeImmutable("18:00"))>'
+
+App\Entity\Event\VolunteerAvailability:
+  volunteer-availability{1..30}:
+    volunteer: '@volunteer<identity($current % 10 + 1)>'
+    day: '@robo-day-days<identity($current % 3 + 1)>'
+    timeframes: ['@volunteer-availability-timeframe<current()>']
+

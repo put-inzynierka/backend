@@ -1,0 +1,34 @@
+App\Entity\File\File:
+  line-follower-image:
+    __construct: ['line_follower.png', '<identity(App\Enum\File\FileExtension::PNG)>', '<identity(App\Enum\File\MimeType::IMAGE_PNG)>', '<identity(App\Enum\File\FileType::EVENT_IMAGE)>', null]
+
+App\Entity\Project\Project:
+  line-follower:
+    name: 'Line follower'
+    description: 'The Line Follower Robot project is an exciting venture into the world of robotics that challenges enthusiasts, engineers, and students to create an autonomous robot capable of following a predefined path or track using sensors and advanced control systems. This project combines elements of programming, electronics, and mechanics to design and build a robot that can navigate its environment with precision.'
+    team: '@robocops'
+    image: '@line-follower-image'
+
+App\Entity\Timeframe:
+  line-follower-timeframe{1..3}:
+    hourFrom: '<identity(new \DateTimeImmutable("08:00"))>'
+    hourTo: '<identity(new \DateTimeImmutable("18:00"))>'
+  line-follower-presentation-timeframe:
+    hourFrom: '<identity(new \DateTimeImmutable("12:00"))>'
+    hourTo: '<identity(new \DateTimeImmutable("14:00"))>'
+
+App\Entity\Project\Reservation:
+  line-follower-reservation{1..3}:
+    project: '@line-follower'
+    event: '@robo-day'
+    day: '@robo-day-days<current()>'
+    stand: '@building-a1-stand-5'
+    timeframe: '@line-follower-timeframe<current()>'
+    confirmed: 'true'
+  line-follower-presentation-reservation:
+    project: '@line-follower'
+    event: '@robo-day'
+    day: '@robo-day-days2'
+    stand: '@lecture-hall-main-stage'
+    timeframe: '@line-follower-presentation-timeframe'
+    confirmed: 'false'
