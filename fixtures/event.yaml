@@ -1,6 +1,10 @@
 App\Entity\File\File:
   robo-day-image:
     __construct: ['roboday.png', '<identity(App\Enum\File\FileExtension::PNG)>', '<identity(App\Enum\File\MimeType::IMAGE_PNG)>', '<identity(App\Enum\File\FileType::EVENT_IMAGE)>', null]
+  phpers-image:
+    __construct: ['phpers.png', '<identity(App\Enum\File\FileExtension::PNG)>', '<identity(App\Enum\File\MimeType::IMAGE_PNG)>', '<identity(App\Enum\File\FileType::EVENT_IMAGE)>', null]
+  tech-talks-image:
+    __construct: ['techtalks.png', '<identity(App\Enum\File\FileExtension::PNG)>', '<identity(App\Enum\File\MimeType::IMAGE_PNG)>', '<identity(App\Enum\File\FileType::EVENT_IMAGE)>', null]
 
 App\Entity\Event\Event:
   robo-day:
@@ -10,14 +14,42 @@ App\Entity\Event\Event:
     image: '@robo-day-image'
     teamRegistrationEndsAt: '<identity(new \DateTimeImmutable("2023-10-10"))>'
     volunteerRegistrationEndsAt: '<identity(new \DateTimeImmutable("2023-10-10"))>'
+  phpers:
+    name: 'PHPers Summit'
+    description: "The PHPers Summit is the premier annual gathering for PHP developers and enthusiasts from around the world. This dynamic event is designed to bring together the PHP community to foster collaboration, knowledge sharing, and inspiration. Whether you're a seasoned PHP professional or just getting started, the PHPers Summit offers something for everyone passionate about PHP."
+    locations: ['@building-a1', '@building-a3']
+    image: '@phpers-image'
+    teamRegistrationEndsAt: '<identity(new \DateTimeImmutable("2023-12-10"))>'
+    volunteerRegistrationEndsAt: '<identity(new \DateTimeImmutable("2023-12-10"))>'
+  tech-talks:
+    name: 'Tech Talks'
+    description: 'Prepare to embark on a journey into the boundless realm of technology at the Tech Talks Summit. This captivating event is designed for tech enthusiasts, professionals, and anyone curious about the cutting-edge innovations that shape our digital world. At Tech Talks, we believe that knowledge is the driving force behind progress, and this event is your gateway to unlocking the latest insights, trends, and breakthroughs in the tech industry.'
+    locations: ['@lecture-hall']
+    image: '@tech-talks-image'
+    teamRegistrationEndsAt: '<identity(new \DateTimeImmutable("2023-08-20"))>'
+    volunteerRegistrationEndsAt: '<identity(new \DateTimeImmutable("2023-08-20"))>'
 
 App\Entity\Timeframe:
   robo-day-day-timeframe{1..3}:
     hourFrom: '<identity(new \DateTimeImmutable("08:00"))>'
     hourTo: '<identity(new \DateTimeImmutable("18:00"))>'
+  phpers-day-timeframe{1..3}:
+    hourFrom: '<identity(new \DateTimeImmutable("10:00"))>'
+    hourTo: '<identity(new \DateTimeImmutable("22:00"))>'
+  tech-talks-day-timeframe{1..2}:
+    hourFrom: '<identity(new \DateTimeImmutable("06:00"))>'
+    hourTo: '<identity(new \DateTimeImmutable("20:00"))>'
 
 App\Entity\Event\Day:
   robo-day-days{1..3}:
     date: '<identity(new \DateTimeImmutable("2023-10-1" . $current))>'
     event: '@robo-day'
     timeframe: '@robo-day-day-timeframe<current()>'
+  phpers-days{1..3}:
+    date: '<identity(new \DateTimeImmutable("2023-12-1" . $current))>'
+    event: '@phpers'
+    timeframe: '@phpers-day-timeframe<current()>'
+  tech-talks-days{1..2}:
+    date: '<identity(new \DateTimeImmutable("2023-08-2" . $current))>'
+    event: '@tech-talks'
+    timeframe: '@tech-talks-day-timeframe<current()>'

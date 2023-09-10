@@ -1,6 +1,26 @@
 App\Entity\Team\Team:
   robocops:
     name: 'Robocops'
+  phpers-team{1..20}:
+    name: '<company()>'
+  tech-talks-team{1..50}:
+    name: '<company()>'
+
+App\Entity\User\User:
+  user{1..200}:
+    email: 'user<current()>\@gmail.com'
+    firstName: '<firstName()>'
+    lastName: '<lastName()>'
+    password: '\$2y\$13\$hURxRm.99HmUBhSVjIVHL.ZAVuhprFaW9bHhgIKgbOdYLVG6k66lu' # "haslo"
+    active: true
+    role: 'user'
+  user-owner{1..50}:
+    email: 'user-owner<current()>\@gmail.com'
+    firstName: '<firstName()>'
+    lastName: '<lastName()>'
+    password: '\$2y\$13\$hURxRm.99HmUBhSVjIVHL.ZAVuhprFaW9bHhgIKgbOdYLVG6k66lu' # "haslo"
+    active: true
+    role: 'user'
 
 App\Entity\Team\TeamMember:
   owner:
@@ -23,3 +43,32 @@ App\Entity\Team\TeamMember:
     role: 'member'
     accepted: false
     email: 'random-guy@gmail.com'
+
+  phpers-owner{1..20}:
+    user: '@user-owner<current()>'
+    team: '@phpers-team<current()>'
+    role: 'owner'
+    accepted: true
+    email: '@user-owner<current()>->email'
+
+  phpers-member{1..80}:
+    user: '@user<current()>'
+    team: '@phpers-team<($current % 20 + 1)>'
+    role: '20%? manager : member'
+    accepted: true
+    email: '@user<current()>->email'
+
+  tech-talks-owner{1..50}:
+    user: '@user-owner<current()>'
+    team: '@tech-talks-team<current()>'
+    role: 'owner'
+    accepted: true
+    email: '@user-owner<current()>->email'
+
+  tech-talks-member{1..200}:
+    user: '@user<current()>'
+    team: '@tech-talks-team<($current % 50 + 1)>'
+    role: '20%? manager : member'
+    accepted: true
+    email: '@user<current()>->email'
+
