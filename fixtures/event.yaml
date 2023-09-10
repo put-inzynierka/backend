@@ -7,13 +7,13 @@ App\Entity\File\File:
     __construct: ['techtalks.png', '<identity(App\Enum\File\FileExtension::PNG)>', '<identity(App\Enum\File\MimeType::IMAGE_PNG)>', '<identity(App\Enum\File\FileType::EVENT_IMAGE)>', null]
 
 App\Entity\Event\Event:
-  robo-day:
-    name: 'RoboDay 2023'
-    description: 'RoboDay is an electrifying celebration of the fascinating world of robotics and artificial intelligence that promises to captivate both tech enthusiasts and curious minds alike. This one-of-a-kind event is a nexus where cutting-edge technology, creativity, and innovation converge, showcasing the incredible strides made in the field of robotics.'
-    locations: ['@lecture-hall', '@building-a1']
-    image: '@robo-day-image'
-    teamRegistrationEndsAt: '<identity(new \DateTimeImmutable("2023-10-10"))>'
-    volunteerRegistrationEndsAt: '<identity(new \DateTimeImmutable("2023-10-10"))>'
+  tech-talks:
+    name: 'Tech Talks'
+    description: 'Prepare to embark on a journey into the boundless realm of technology at the Tech Talks Summit. This captivating event is designed for tech enthusiasts, professionals, and anyone curious about the cutting-edge innovations that shape our digital world. At Tech Talks, we believe that knowledge is the driving force behind progress, and this event is your gateway to unlocking the latest insights, trends, and breakthroughs in the tech industry.'
+    locations: [ '@lecture-hall' ]
+    image: '@tech-talks-image'
+    teamRegistrationEndsAt: '<identity(new \DateTimeImmutable("2023-08-20"))>'
+    volunteerRegistrationEndsAt: '<identity(new \DateTimeImmutable("2023-08-20"))>'
   phpers:
     name: 'PHPers Summit'
     description: "The PHPers Summit is the premier annual gathering for PHP developers and enthusiasts from around the world. This dynamic event is designed to bring together the PHP community to foster collaboration, knowledge sharing, and inspiration. Whether you're a seasoned PHP professional or just getting started, the PHPers Summit offers something for everyone passionate about PHP."
@@ -21,13 +21,14 @@ App\Entity\Event\Event:
     image: '@phpers-image'
     teamRegistrationEndsAt: '<identity(new \DateTimeImmutable("2023-12-10"))>'
     volunteerRegistrationEndsAt: '<identity(new \DateTimeImmutable("2023-12-10"))>'
-  tech-talks:
-    name: 'Tech Talks'
-    description: 'Prepare to embark on a journey into the boundless realm of technology at the Tech Talks Summit. This captivating event is designed for tech enthusiasts, professionals, and anyone curious about the cutting-edge innovations that shape our digital world. At Tech Talks, we believe that knowledge is the driving force behind progress, and this event is your gateway to unlocking the latest insights, trends, and breakthroughs in the tech industry.'
-    locations: ['@lecture-hall']
-    image: '@tech-talks-image'
-    teamRegistrationEndsAt: '<identity(new \DateTimeImmutable("2023-08-20"))>'
-    volunteerRegistrationEndsAt: '<identity(new \DateTimeImmutable("2023-08-20"))>'
+  robo-day:
+    name: 'RoboDay 2023'
+    description: 'RoboDay is an electrifying celebration of the fascinating world of robotics and artificial intelligence that promises to captivate both tech enthusiasts and curious minds alike. This one-of-a-kind event is a nexus where cutting-edge technology, creativity, and innovation converge, showcasing the incredible strides made in the field of robotics.'
+    locations: [ '@lecture-hall', '@building-a1' ]
+    image: '@robo-day-image'
+    teamRegistrationEndsAt: '<identity(new \DateTimeImmutable("2023-10-10"))>'
+    volunteerRegistrationEndsAt: '<identity(new \DateTimeImmutable("2023-10-10"))>'
+
 
 App\Entity\Timeframe:
   robo-day-day-timeframe{1..3}:

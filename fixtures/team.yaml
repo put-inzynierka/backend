@@ -1,10 +1,10 @@
 App\Entity\Team\Team:
-  robocops:
-    name: 'Robocops'
-  phpers-team{1..20}:
-    name: '<company()>'
   tech-talks-team{1..50}:
     name: '<company()>'
+  phpers-team{1..20}:
+    name: '<company()>'
+  robocops:
+    name: 'Robocops'
 
 App\Entity\User\User:
   user{1..200}:
