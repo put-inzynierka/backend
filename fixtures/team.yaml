@@ -55,7 +55,7 @@ App\Entity\Team\TeamMember:
     user: '@user<current()>'
     team: '@phpers-team<($current % 20 + 1)>'
     role: '20%? manager : member'
-    accepted: '10%? false : true'
+    accepted: '10%? 0 : 1'
     email: '@user<current()>->email'
 
   tech-talks-owner{1..50}:
@@ -69,6 +69,6 @@ App\Entity\Team\TeamMember:
     user: '@user<current()>'
     team: '@tech-talks-team<($current % 50 + 1)>'
     role: '20%? manager : member'
-    accepted: '10%? false : true'
+    accepted: '10%? 0 : 1'
     email: '@user<current()>->email'
 
