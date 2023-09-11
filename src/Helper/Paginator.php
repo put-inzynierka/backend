@@ -66,11 +66,13 @@ class Paginator
         $immutableBuilder = clone $builder;
         $alias = $immutableBuilder->getRootAliases()[0];
 
-        return $immutableBuilder
+        $counts = $immutableBuilder
             ->resetDQLPart('orderBy')
             ->select('count(' . $alias . '.id)')
             ->getQuery()
-            ->getSingleScalarResult()
+            ->getScalarResult()
         ;
+        
+        return count($counts) === 1 ? (int) $counts[0][1] : count($counts);
     }
 }
