@@ -15,7 +15,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use OpenApi\Attributes\Tag;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -56,7 +55,6 @@ class ReservationController extends AbstractController
     #[Tag('Reservation')]
     #[Param\Path('id', description: 'The ID of the reservation')]
     #[Param\Instance(Reservation::class, ReservationGroups::ADMIN_UPDATE)]
-    #[ParamConverter(data: ['name' => 'reservation'], class: Reservation::class)]
     #[Resp\ObjectResponse(
         description: 'Updates the specific reservation',
         class: Reservation::class,
