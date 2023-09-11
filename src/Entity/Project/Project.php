@@ -67,7 +67,7 @@ class Project extends AbstractEntity
     private Team $team;
 
     #[ORM\ManyToOne(targetEntity: File::class)]
-    #[ORM\JoinColumn(referencedColumnName: 'uuid', nullable: false)]
+    #[ORM\JoinColumn(referencedColumnName: 'uuid')]
     #[Constraints\NotBlank(allowNull: false, groups: [ProjectGroups::CREATE])]
     #[Groups([
         ProjectGroups::CREATE,

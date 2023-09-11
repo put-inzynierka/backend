@@ -1,20 +1,12 @@
-App\Entity\File\File:
-  line-follower-image:
-    __construct: ['line_follower.png', '<identity(App\Enum\File\FileExtension::PNG)>', '<identity(App\Enum\File\MimeType::IMAGE_PNG)>', '<identity(App\Enum\File\FileType::PROJECT_IMAGE)>', null]
-  project-image{1..100}:
-    __construct: ['project_image<current()>.png', '<identity(App\Enum\File\FileExtension::PNG)>', '<identity(App\Enum\File\MimeType::IMAGE_PNG)>', '<identity(App\Enum\File\FileType::PROJECT_IMAGE)>', null]
-
 App\Entity\Project\Project:
   line-follower:
     name: 'Line follower'
     description: 'The Line Follower Robot project is an exciting venture into the world of robotics that challenges enthusiasts, engineers, and students to create an autonomous robot capable of following a predefined path or track using sensors and advanced control systems. This project combines elements of programming, electronics, and mechanics to design and build a robot that can navigate its environment with precision.'
     team: '@robocops'
-    image: '@line-follower-image'
   project{1..100}:
     name: '<company()>'
     description: '<realText()>'
     team: '@team<numberBetween(1, 50)>'
-    image: '@project-image<current()>'
 
 App\Entity\Timeframe:
   line-follower-timeframe{1..3}:
