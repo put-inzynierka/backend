@@ -17,9 +17,9 @@ class TeamInvitationMailer
     ): void {
         $this->mailer->send(
             $teamMember->getEmail(),
-            'Team invitation',
+            'Team member',
             <<<MSG
-                <p>Hi {$teamMember->getEmail()}!</p>
+                <p>Hi!</p>
                 <p>You have been invited to {$teamMember->getTeam()->getName()}.</p>
                 <p>Please create your account here:</p>
                 <p><a href="{$this->frontendUrl}/en/auth/sign-up">Sign up</a></p>      
