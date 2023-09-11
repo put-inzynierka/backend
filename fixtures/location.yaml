@@ -5,6 +5,9 @@ App\Entity\Location\Location:
   building-a1:
     name: 'Building A1'
 
+  building-a2:
+    name: 'Building A2'
+
   building-a3:
     name: 'Building A3'
 
@@ -32,6 +35,11 @@ App\Entity\Location\Stand:
   building-a1-stand-{1..20}:
     name: 'Stand <current()>'
     location: '@building-a1'
+    type: 'stand'
+
+  building-a2-stand-{1..20}:
+    name: 'Stand <current()>'
+    location: '@building-a2'
     type: 'stand'
 
   building-a3-stand-{1..20}:

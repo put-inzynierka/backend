@@ -1,6 +1,11 @@
+parameters:
+  profileArray: [1, 2]
+
 App\Entity\File\File:
   line-follower-image:
-    __construct: ['line_follower.png', '<identity(App\Enum\File\FileExtension::PNG)>', '<identity(App\Enum\File\MimeType::IMAGE_PNG)>', '<identity(App\Enum\File\FileType::EVENT_IMAGE)>', null]
+    __construct: ['line_follower.png', '<identity(App\Enum\File\FileExtension::PNG)>', '<identity(App\Enum\File\MimeType::IMAGE_PNG)>', '<identity(App\Enum\File\FileType::PROJECT_IMAGE)>', null]
+  project-image{1..100}:
+    __construct: ['project_image<current()>.png', '<identity(App\Enum\File\FileExtension::PNG)>', '<identity(App\Enum\File\MimeType::IMAGE_PNG)>', '<identity(App\Enum\File\FileType::PROJECT_IMAGE)>', null]
 
 App\Entity\Project\Project:
   line-follower:
@@ -8,6 +13,11 @@ App\Entity\Project\Project:
     description: 'The Line Follower Robot project is an exciting venture into the world of robotics that challenges enthusiasts, engineers, and students to create an autonomous robot capable of following a predefined path or track using sensors and advanced control systems. This project combines elements of programming, electronics, and mechanics to design and build a robot that can navigate its environment with precision.'
     team: '@robocops'
     image: '@line-follower-image'
+  project{1..100}:
+    name: '<company()>'
+    description: '<realText()>'
+    team: '@team<numberBetween(1, 50)>'
+    image: '@project-image<current()>'
 
 App\Entity\Timeframe:
   line-follower-timeframe{1..3}:
@@ -16,6 +26,18 @@ App\Entity\Timeframe:
   line-follower-presentation-timeframe:
     hourFrom: '<identity(new \DateTimeImmutable("12:00"))>'
     hourTo: '<identity(new \DateTimeImmutable("14:00"))>'
+  reservation-timeframe{1..20}:
+    hourFrom: '<identity(new \DateTimeImmutable("10:00"))>'
+    hourTo: '<identity(new \DateTimeImmutable("18:00"))>'
+  reservation-timeframe2-{1..20}:
+    hourFrom: '<identity(new \DateTimeImmutable("10:00"))>'
+    hourTo: '<identity(new \DateTimeImmutable("18:00"))>'
+  reservation-tech-talks-timeframe{1..3}:
+    hourFrom: '<identity(new \DateTimeImmutable("10:00"))>'
+    hourTo: '<identity(new \DateTimeImmutable("12:00"))>'
+  reservation-tech-talks-timeframe2-{1..3}:
+    hourFrom: '<identity(new \DateTimeImmutable("11:00"))>'
+    hourTo: '<identity(new \DateTimeImmutable("15:00"))>'
 
 App\Entity\Project\Reservation:
   line-follower-reservation{1..3}:
@@ -24,11 +46,39 @@ App\Entity\Project\Reservation:
     day: '@robo-day-days<current()>'
     stand: '@building-a1-stand-5'
     timeframe: '@line-follower-timeframe<current()>'
-    confirmed: 'true'
+    confirmed: '1'
   line-follower-presentation-reservation:
     project: '@line-follower'
     event: '@robo-day'
     day: '@robo-day-days2'
     stand: '@lecture-hall-main-stage'
     timeframe: '@line-follower-presentation-timeframe'
-    confirmed: 'false'
+    confirmed: '0'
+  project-phpers-reservation-{1..20}:
+    project: '@project<numberBetween(1, 100)>'
+    event: '@phpers'
+    day: '@phpers-days*'
+    stand: '@building-a1-stand-<current()>'
+    timeframe: '@reservation-timeframe<current()>'
+    confirmed: '10%? 0 : 1'
+  project-phpers-reservation2-{1..20}:
+    project: '@project<numberBetween(1, 100)>'
+    event: '@phpers'
+    day: '@phpers-days*'
+    stand: '@building-a3-stand-<current()>'
+    timeframe: '@reservation-timeframe2-<current()>'
+    confirmed: '10%? 0 : 1'
+  project-tech-talks-reservation-{1..3}:
+    project: '@project<numberBetween(1, 100)>'
+    event: '@tech-talks'
+    day: '@tech-talks-days1'
+    stand: '@lecture-hall-lecture-room-<current()>'
+    timeframe: '@reservation-tech-talks-timeframe<current()>'
+    confirmed: '10%? 0 : 1'
+  project-tech-talks-reservation2-{1..3}:
+    project: '@project<numberBetween(1, 100)>'
+    event: '@tech-talks'
+    day: '@tech-talks-days2'
+    stand: '@lecture-hall-lecture-room-<current()>'
+    timeframe: '@reservation-tech-talks-timeframe2-<current()>'
+    confirmed: '10%? 0 : 1'
