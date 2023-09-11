@@ -71,7 +71,7 @@ App\Entity\Project\Reservation:
     day: '@robo-day-days<current()>'
     stand: '@building-a1-stand-5'
     timeframe: '@line-follower-timeframe<current()>'
-    confirmed: '33%? 1'
+    confirmed: '80%? 1'
   line-follower-presentation-reservation:
     project: '@line-follower'
     event: '@robo-day'
