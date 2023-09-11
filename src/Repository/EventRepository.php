@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Event\Event;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use FOS\RestBundle\Request\ParamFetcherInterface;
 
 final class EventRepository extends AbstractRepository
 {
