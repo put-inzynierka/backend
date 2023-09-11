@@ -1,5 +1,5 @@
 App\Entity\User\User:
-  user-volunteer{1..10}:
+  user-volunteer{1..50}:
     email: 'volunteer<current()>\@gmail.com'
     firstName: '<firstName()>'
     lastName: '<lastName()>'
@@ -8,6 +8,12 @@ App\Entity\User\User:
     role: 'user'
 
 App\Entity\Event\Volunteer:
+  volunteer-phpers{1..30}:
+    event: '@phpers'
+    user: '@user-volunteer<current()>'
+  volunteer-tech-talks{20..50}:
+    event: '@tech-talks'
+    user: '@user-volunteer<current()>'
   volunteer{1..10}:
     event: '@robo-day'
     user: '@user-volunteer<current()>'
@@ -16,10 +22,24 @@ App\Entity\Timeframe:
   volunteer-availability-timeframe{1..30}:
     hourFrom: '<identity(new \DateTimeImmutable("08:00"))>'
     hourTo: '<identity(new \DateTimeImmutable("18:00"))>'
+  volunteer-availability-phpers-timeframe{1..30}:
+    hourFrom: '<identity(new \DateTimeImmutable("08:00"))>'
+    hourTo: '<identity(new \DateTimeImmutable("18:00"))>'
+  volunteer-availability-tech-talks-timeframe{20..50}:
+    hourFrom: '<identity(new \DateTimeImmutable("10:00"))>'
+    hourTo: '<identity(new \DateTimeImmutable("15:00"))>'
 
 App\Entity\Event\VolunteerAvailability:
+  volunteer--availability{20..50}:
+    volunteer: '@volunteer-tech-talks<current()>'
+    day: '@phpers-days<($current % 2 + 1)>'
+    timeframes: [ '@volunteer-availability-tech-talks-timeframe<current()>' ]
+  volunteer-phpers-availability{1..30}:
+    volunteer: '@volunteer-phpers<current()>'
+    day: '@phpers-days<($current % 3 + 1)>'
+    timeframes: [ '@volunteer-availability-phpers-timeframe<current()>' ]
   volunteer-availability{1..30}:
-    volunteer: '@volunteer<identity($current % 10 + 1)>'
-    day: '@robo-day-days<identity($current % 3 + 1)>'
+    volunteer: '@volunteer<($current % 10 + 1)>'
+    day: '@robo-day-days<($current % 3 + 1)>'
     timeframes: ['@volunteer-availability-timeframe<current()>']
 
