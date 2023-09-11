@@ -20,9 +20,11 @@ final class EventRepository extends AbstractRepository
 
         if ($upcoming !== null) {
             $query
+                ->select('e')
                 ->innerJoin('e.days', 'd')
                 ->andWhere('d.date > :now')
-                ->orderBy('d.date', 'ASC')
+                ->orderBy('min(d.date)', 'ASC')
+                ->groupBy('e.id')
                 ->setParameter('now', new \DateTime());
         }
 
