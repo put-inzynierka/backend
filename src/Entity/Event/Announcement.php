@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AnnouncementRepository::class)]
 #[ORM\Table]
-final class Announcement extends AbstractEntity
+class Announcement extends AbstractEntity
 {
     #[ORM\ManyToOne(targetEntity: Event::class)]
     #[ORM\JoinColumn(nullable: false)]
