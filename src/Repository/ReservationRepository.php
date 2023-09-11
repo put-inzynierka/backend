@@ -86,4 +86,18 @@ class ReservationRepository extends AbstractRepository
 
         return $query;
     }
+
+    public function findWithParent(string $id, string $projectId): ?Reservation
+    {
+        $query = parent::index();
+
+        $query
+            ->andWhere('e.id = :id')
+            ->andWhere('e.project = :projectId')
+            ->setParameter('id', $id)
+            ->setParameter('projectId', $projectId)
+        ;
+
+        return $query->getQuery()->getOneOrNullResult();
+    }
 }

@@ -25,7 +25,7 @@ final class EventRepository extends AbstractRepository
                 ->andWhere('d.date > :now')
                 ->orderBy('min(d.date)', 'ASC')
                 ->groupBy('e.id')
-                ->setParameter('now', new \DateTime());
+                ->setParameter('now', (new \DateTime())->format('Y-m-d'));
         }
 
         return $query;

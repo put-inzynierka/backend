@@ -15,7 +15,7 @@ use App\Voter\Qualifier;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use OpenApi\Attributes\Tag;
@@ -68,7 +68,6 @@ class ReservationController extends AbstractController
         description: 'The ID of the project',
     )]
     #[Param\Instance(Reservation::class, ReservationGroups::CREATE)]
-    #[ParamConverter(data: ['name' => 'project'], class: Project::class)]
     #[Resp\ObjectResponse(
         description: 'Creates a new reservation for the project',
         class: Reservation::class,
@@ -135,8 +134,6 @@ class ReservationController extends AbstractController
         description: 'The ID of the reservation',
     )]
     #[Param\Instance(Reservation::class, ReservationGroups::UPDATE)]
-    #[ParamConverter(data: ['name' => 'project'], class: Project::class, options: ['id' => 'project_id'])]
-    #[ParamConverter(data: ['name' => 'reservation'], class: Reservation::class)]
     #[Resp\ObjectResponse(
         description: 'Updates the specific reservation for project',
         class: Reservation::class,
@@ -146,10 +143,10 @@ class ReservationController extends AbstractController
         Instantiator $instantiator,
         Request $request,
         EntityManagerInterface $manager,
-        Project $project,
+        #[MapEntity(expr: 'repository.findWithParent(id, project_id)')]
         Reservation $reservation
     ): Response {
-        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $project->getTeam());
+        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $reservation->getProject()->getTeam());
 
         /** @var Reservation $reservation */
         $reservation = $instantiator->deserialize(
@@ -194,17 +191,15 @@ class ReservationController extends AbstractController
         name: 'id',
         description: 'The ID of the reservation',
     )]
-    #[ParamConverter(data: ['name' => 'project'], class: Project::class, options: ['id' => 'project_id'])]
-    #[ParamConverter(data: ['name' => 'reservation'], class: Reservation::class)]
     #[Resp\EmptyResponse(
         description: 'Removes the specific reservation from the project',
     )]
     public function remove(
         EntityManagerInterface $manager,
-        Project $project,
+        #[MapEntity(expr: 'repository.findWithParent(id, project_id)')]
         Reservation $reservation
     ): Response {
-        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $project->getTeam());
+        $this->denyAccessUnlessGranted(Qualifier::IS_OWNER, $reservation->getProject()->getTeam());
 
         $manager->remove($reservation);
         $manager->flush();

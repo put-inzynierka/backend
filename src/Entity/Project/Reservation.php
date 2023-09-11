@@ -11,18 +11,18 @@ use App\Entity\Event\Event;
 use App\Entity\Location\Stand;
 use App\Entity\Timeframe;
 use App\Enum\SerializationGroup\Project\ReservationGroups;
+use App\Repository\ReservationRepository;
 use App\Service\Validation\StandValidator;
 use App\Service\Validation\TimeframeValidator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints;
 use DateTimeImmutable;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ReservationRepository::class)]
 #[ORM\Table]
 class Reservation extends AbstractEntity implements Timeframeable, ContainmentValidatable
 {
