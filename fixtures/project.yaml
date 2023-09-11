@@ -43,14 +43,14 @@ App\Entity\Project\Reservation:
     day: '@tech-talks-days1'
     stand: '@lecture-hall-lecture-room-<current()>'
     timeframe: '@reservation-tech-talks-timeframe<current()>'
-    confirmed: '10%? 0 : 1'
+    confirmed: '33%? 0 : 1'
   project-tech-talks-reservation2-{1..3}:
     project: '@project<numberBetween(1, 100)>'
     event: '@tech-talks'
     day: '@tech-talks-days2'
     stand: '@lecture-hall-lecture-room-<current()>'
     timeframe: '@reservation-tech-talks-timeframe2-<current()>'
-    confirmed: '10%? 0 : 1'
+    confirmed: '33%? 0 : 1'
   project-phpers-reservation-{1..20}:
     project: '@project<numberBetween(1, 100)>'
     event: '@phpers'
@@ -64,19 +64,19 @@ App\Entity\Project\Reservation:
     day: '@phpers-days*'
     stand: '@building-a3-stand-<current()>'
     timeframe: '@reservation-timeframe2-<current()>'
-    confirmed: '15%? 0 : 1'
+    confirmed: '50%? 1'
   line-follower-reservation{1..3}:
     project: '@line-follower'
     event: '@robo-day'
     day: '@robo-day-days<current()>'
     stand: '@building-a1-stand-5'
     timeframe: '@line-follower-timeframe<current()>'
-    confirmed: '1'
+    confirmed: '33%? 1'
   line-follower-presentation-reservation:
     project: '@line-follower'
     event: '@robo-day'
     day: '@robo-day-days2'
     stand: '@lecture-hall-main-stage'
     timeframe: '@line-follower-presentation-timeframe'
-    confirmed: '0'
+    confirmed: null
 
