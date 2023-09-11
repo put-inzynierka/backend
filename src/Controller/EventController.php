@@ -7,6 +7,7 @@ use App\Component\Attribute\Response as Resp;
 use App\Entity\Event\Event;
 use App\Enum\SerializationGroup\Event\EventGroups;
 use App\Helper\Paginator;
+use App\Repository\EventRepository;
 use App\Repository\RepositoryFactory;
 use App\Service\Instantiator;
 use App\Voter\Qualifier;
@@ -23,6 +24,7 @@ class EventController extends AbstractController
     #[Tag('Event')]
     #[Param\Limit]
     #[Param\Page]
+    #[Param\QueryParam('upcoming')]
     #[Resp\PageResponse(
         description: 'Returns the list of events',
         class: Event::class,
@@ -30,10 +32,10 @@ class EventController extends AbstractController
     )]
     public function index(
         ParamFetcherInterface $paramFetcher,
-        RepositoryFactory $repositoryFactory
+        EventRepository $eventRepository,
+        Request $request
     ): Response {
-        $repository = $repositoryFactory->create(Event::class);
-        $list = $repository->index();
+        $list = $eventRepository->indexByUpcoming($request->get('upcoming'));
 
         $page = Paginator::paginate(
             $list,
