@@ -1,19 +1,12 @@
 ### Uruchamianie projektu
-Utwórz plik `.env.local` na podstawie pliku `.env` oraz plik `./docker/.env`
-na podstawie pliku `./docker/.env.dist`. Zbuduj kontenery dockerowe poleceniem
-`docker-compose up -d --build`.
+Utwórz plik `.env.local` na podstawie pliku `.env`. Skonfiguruj w nim połączenie z bazą danych oraz dane potrzebne do wysyłki maili.
 
-Wewnątrz kontenera core-php (możesz do niego wejść poleceniem `docke exec -it
-core-php bash`), korzystając z PHP8 i Composera, zainstaluj zależności
-komendą `composer install`.
+Korzystając z PHP8.2 i Composera, zainstaluj zależności komendą `composer install`.
 
-By zapełnić bazę testowymi danymi, wykonaj wewnątrz kontenera polecenie
+Inicjalizuj bazę danych przy pomocy poleceń `bin/console doctrine:database:create` oraz `bin/console doctrine:schema:update --forcez`. By zapełnić bazę testowymi danymi, wykonaj polecenie
 `bin/console app:fixtures:load`.
+
+Uruchom serwer developerski poleceniem `php -S 127.0.0.1:8000 -t public`.
 
 Po skonfigurowaniu aplikacji w ten sposób będziesz mieć do niej dostęp pod
 adresem 127.0.0.1, na porcie 8000.
-
-### Zadanie
-Zapoznaj się z design patternem Factory, a następnie zaproponuj implementację
-klasy `App\Service\KeyGenerator\KeyGeneratorFactory`. Utwórz kontroler z akcją
-umożliwiającą wygenerowanie klucza dla danej platformy i gry.
